@@ -1412,7 +1412,6 @@ def page_home():
     col1, col2 = st.columns([1.15, 0.85], gap="large")
 
     with col1:
-        st.markdown("""
         <div style="position:relative;z-index:2;">
             <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
 
@@ -1439,20 +1438,17 @@ def page_home():
                 <a class="btn-ghost-dark" href="#properties">🏘️ View Properties</a>
             </div>
         </div>
-        """, unsafe_allow_html=True)
 
     with col2:
         hero_img = get_first_img(
-            ["images/land1.png", "images/land1.jpg", "images/land2.png", "images/land2.jpg"],
+            ["images/land1.png", "images/land1.jpg", "images/logo.png", "images/logo.jpg"],
             "Aranya Farms",
-            """
             width:100%;
             height:360px;
             object-fit:cover;
             border-radius:18px;
             box-shadow:0 20px 64px rgba(0,0,0,0.35);
             display:block;
-            """
         )
 
         if hero_img:
@@ -1464,16 +1460,16 @@ def page_home():
         logo_img = img_tag(
             "images/logo1.png",
             "Aranya Farms Logo",
-            """
+            
             width:280px;
             max-width:90%;
             display:block;
             margin:0 auto 18px auto;
             object-fit:contain;
-            """
+
         )
 
-        st.markdown(f"""
+      
         <div style="
             position:relative;
             z-index:2;
@@ -1504,12 +1500,12 @@ def page_home():
 
             </div>
         </div>
-        """, unsafe_allow_html=True)
+    
 
-    st.markdown("</div>", unsafe_allow_html=True)
+
 
     # ── STATS STRIP ──
-    st.markdown("""
+  
     <div class="stats-strip">
         <div class="strip-item">
             <span class="strip-val">55+</span>
@@ -1532,20 +1528,20 @@ def page_home():
             <span class="strip-lbl">Ready Possession</span>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+
 
     # ── WHY ARANYA ──
     with st.container():
-        st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
+
         section_header(
             "Why Choose Us",
             "The Aranya Farms <em>Difference</em>",
             "A unique blend of luxury living and nature's serenity — thoughtfully designed for families who seek more than just a home."
         )
-        st.markdown("</div>", unsafe_allow_html=True)
+      
 
     with st.container():
-        st.markdown('<div style="padding:0 80px 88px;background:var(--cream);">', unsafe_allow_html=True)
+      
 
         c1, c2, c3, c4 = st.columns(4, gap="medium")
 
@@ -1566,19 +1562,18 @@ def page_home():
                 </div>
                 """, unsafe_allow_html=True)
 
-        st.markdown("</div>", unsafe_allow_html=True)
 
     # ── AMENITIES ──
     with st.container():
-        st.markdown('<div class="sec sec-white">', unsafe_allow_html=True)
+      
         section_header(
             "World-Class Amenities",
             "Everything You Need to <em>Live Well</em>"
         )
-        st.markdown("</div>", unsafe_allow_html=True)
+        
 
     with st.container():
-        st.markdown('<div style="padding:0 80px 88px;background:white;">', unsafe_allow_html=True)
+       
 
         amenities = [
             ("🏊", "Swimming Pool"),
@@ -1601,15 +1596,11 @@ def page_home():
             cols = st.columns(4, gap="small")
             for col, (icon, name) in zip(cols, row):
                 with col:
-                    st.markdown(
-                        f'<div class="amenity-chip"><span class="ac-icon">{icon}</span><span class="ac-name">{name}</span></div>',
-                        unsafe_allow_html=True
-                    )
+                 
 
-        st.markdown("</div>", unsafe_allow_html=True)
 
     # ── CTA TEXT ──
-    st.markdown("""
+
     <div class="sec sec-dark" style="text-align:center;">
 
         <div class="eyebrow eyebrow-center">
@@ -1638,13 +1629,12 @@ def page_home():
         </p>
 
     </div>
-    """, unsafe_allow_html=True)
+  
 
     # ── CTA BUTTONS ──
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.markdown("""
         <div style="text-align:center;">
             <a class="btn-gold"
                href="tel:+919640222237"
@@ -1652,10 +1642,10 @@ def page_home():
                 📅 Book Free Site Visit
             </a>
         </div>
-        """, unsafe_allow_html=True)
+       
 
     with col2:
-        st.markdown("""
+     
         <div style="text-align:center;">
             <a class="btn-ghost"
                href="tel:+919640222237"
@@ -1663,7 +1653,7 @@ def page_home():
                 📞 Talk to Expert
             </a>
         </div>
-        """, unsafe_allow_html=True)
+       
 
     with col3:
         with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
@@ -1675,7 +1665,7 @@ def page_home():
                 use_container_width=True
             )
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
+
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 2 — ABOUT
 # ═══════════════════════════════════════════════════════════════════════════
