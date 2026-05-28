@@ -29,24 +29,29 @@ def inject_css():
     #MainMenu, footer, header { visibility: hidden; }
     .stApp { background: #faf7f0; }
 
-    :root {
-        --forest:       #0a1f12;
-        --deep:         #142d1e;
-        --mid:          #2d6a4f;
-        --sage:         #4a8c68;
-        --leaf:         #7abf94;
-        --gold:         #c9a84c;
-        --gold-light:   #e8c97e;
-        --gold-pale:    #f5e9c5;
-        --cream:        #faf7f0;
-        --sand:         #f0ead8;
-        --parchment:    #e8dfc8;
-        --white:        #ffffff;
-        --ink:          #1a2b1e;
-        --moss:         #1e3526;
-        --mist:         #8fad96;
-        --shadow-dark:  rgba(10, 31, 18, 0.18);
-    }
+   :root {
+    --forest:       #020b06;
+    --deep:         #08150d;
+    --mid:          #0f2418;
+    --sage:         #183524;
+    --leaf:         #245238;
+
+    --gold:         #c9a84c;
+    --gold-light:   #e8c97e;
+    --gold-pale:    #f5e9c5;
+
+    --cream:        #0d1410;
+    --sand:         #121b15;
+    --parchment:    #18231c;
+
+    --white:        #f8f8f8;
+
+    --ink:          #f5f5f5;
+    --moss:         #d6e4d8;
+    --mist:         #8ea596;
+
+    --shadow-dark:  rgba(0, 0, 0, 0.45);
+}
 
     /* ══ SCROLLBAR ══ */
     ::-webkit-scrollbar { width: 6px; }
@@ -327,28 +332,32 @@ def inject_css():
         box-shadow: 0 14px 40px rgba(201,168,76,0.6);
     }
     .btn-ghost {
-        background: transparent;
-        color: #faf7f0;
-        padding: 14px 34px;
-        border-radius: 4px;
-        font-weight: 500;
-        font-size: 0.78rem;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        border: 1px solid rgba(250,247,240,0.3);
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s;
-        font-family: 'Cinzel', serif;
-    }
-    .btn-ghost:hover {
-        border-color: var(--gold);
-        color: var(--gold);
-        background: rgba(201,168,76,0.08);
-    }
+    background: rgba(255,255,255,0.03);
+    color: #f5e9c5;
+    padding: 14px 34px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(232,201,126,0.28);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    font-family: 'Cinzel', serif;
+    backdrop-filter: blur(6px);
+}
+
+.btn-ghost:hover {
+    background: rgba(201,168,76,0.12);
+    color: #e8c97e;
+    border: 1px solid rgba(232,201,126,0.65);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.18);
+}
     .btn-green {
         background: linear-gradient(135deg, var(--mid), var(--deep));
         color: #fff;
