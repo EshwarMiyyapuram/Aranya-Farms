@@ -1324,24 +1324,19 @@ def page_home():
         if hero_img:
             st.markdown(f'<div style="position:relative;z-index:2;">{hero_img}</div>', unsafe_allow_html=True)
         else:
-            st.markdown("""
-            <div style="position:relative;z-index:2;">
-                <div style="border:1px solid rgba(201,168,76,0.25);border-radius:18px;padding:80px 48px;
-                            text-align:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
-                    <div style="font-family:'Cormorant Garamond',serif;font-size:6rem;
-                                color:var(--gold);opacity:0.25;line-height:1;">🌾</div>
-                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;
-                                font-style:italic;color:rgba(255,255,255,0.55);margin-top:20px;">
-                        Aranya Farms
-                    </div>
-                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.28);
-                                letter-spacing:4px;text-transform:uppercase;margin-top:10px;">
-                        Achampet · Toopran · Telangana
-                    </div>
-                </div>
-            </div>""", unsafe_allow_html=True)
+            else:
+    logo_img = img_tag(
+        "images/logo.png",
+        "Aranya Farms Logo",
+        "width:340px;border-radius:18px;box-shadow:0 20px 64px rgba(0,0,0,0.25);display:block;margin:auto;"
+    )
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    if logo_img:
+        st.markdown(f"""
+        <div style="position:relative;z-index:2;text-align:center;">
+            {logo_img}
+        </div>
+        """, unsafe_allow_html=True)
 
     # ── STATS STRIP ──
     st.markdown("""
