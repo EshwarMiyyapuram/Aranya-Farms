@@ -1811,7 +1811,6 @@ def page_properties():
                     Register your interest today for access to special pre-launch rates and complimentary site visit.
                 </p>
                 <div class="cta-row" style="justify-content:center;">
-                    <a class="btn-gold" href="#">📅 Register Interest</a>
                     <a class="btn-wa" href="https://wa.me/919640222238" target="_blank">💬 WhatsApp Us</a>
                 </div>
             </div>""", unsafe_allow_html=True)
