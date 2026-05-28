@@ -2334,11 +2334,11 @@ def render_footer():
                     55 acres of lush greenery at Achampet, Toopran, Telangana.
                 </p>
                 <div style="margin-top:24px;display:flex;gap:10px;">
-                    <a href="https://wa.me/919640222238" target="_blank"
+                    <a href="https://wa.me/919640222237" target="_blank"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(37,211,102,0.15);
                               border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">💬</a>
-                    <a href="tel:+919640222238"
+                    <a href="tel:+919640222237"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,0.1);
                               border:1px solid rgba(201,168,76,0.25);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">📞</a>
