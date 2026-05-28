@@ -1326,7 +1326,7 @@ def render_navbar():
                 💬 WhatsApp
             </a>
             <a class="nav-call-btn" href="tel:+919640222237">
-                📞 +91 96402 22238
+                📞 +91 96402 22237
             </a>
         </div>
     </div>
