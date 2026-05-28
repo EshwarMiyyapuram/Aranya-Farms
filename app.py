@@ -571,11 +571,24 @@ def inject_css():
 
 # ─── NAV BAR ────────────────────────────────────────────────────────────────
 def render_navbar():
-    st.markdown("""
+    import os
+    logo_path = "images/logo.png"
+    if os.path.exists(logo_path):
+        import base64
+        with open(logo_path, "rb") as f:
+            logo_b64 = base64.b64encode(f.read()).decode()
+        logo_html = f'<img src="data:image/png;base64,{logo_b64}" style="height:44px;object-fit:contain;" alt="Aranya Farms Logo">'
+    else:
+        logo_html = '<div class="nav-logo">🌿 Aranya Farms<span>Silver Oaks Agro Farms · Achampet, Toopran</span></div>'
+
+    st.markdown(f"""
     <div class="top-nav">
-        <div class="nav-logo">
-            🌿 Aranya Farms
-            <span>Silver Oaks Agro Farms · Achampet, Toopran</span>
+        <div style="display:flex;align-items:center;gap:14px;">
+            {logo_html}
+            <div>
+                <div class="nav-logo" style="font-size:1.2rem;line-height:1.1;">Aranya Farms</div>
+                <span style="color:#fff;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;font-family:'Lato',sans-serif;font-weight:300;opacity:0.7;">Silver Oaks Agro Farms · Achampet, Toopran</span>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -645,13 +658,17 @@ def page_home():
         """, unsafe_allow_html=True)
 
     with col2:
-        st.markdown(f"""
-        <div class="hero-img-placeholder">
-            <div class="ph-icon">🌅</div>
-            <div class="ph-label">Hero / Aerial Photo</div>
-            <div class="ph-desc">Replace with aerial view of Aranya Farms</div>
-        </div>
-        """, unsafe_allow_html=True)
+        import os
+        if os.path.exists("images/land1.jpg"):
+            st.image("images/land1.jpg", use_container_width=True)
+        else:
+            st.markdown("""
+            <div class="hero-img-placeholder">
+                <div class="ph-icon">🌅</div>
+                <div class="ph-label">Add images/land1.jpg</div>
+                <div class="ph-desc">Upload land photos to images/ folder</div>
+            </div>
+            """, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -986,6 +1003,34 @@ def page_gallery():
     </div>
     """, unsafe_allow_html=True)
 
+    import os
+
+    # ── REAL LAND PHOTOS ──
+    land_photos = [
+        ("images/land1.jpg", "View 1 — Farm Land"),
+        ("images/land2.jpg", "View 2 — Young Plantation"),
+        ("images/land3.jpg", "View 3 — Coconut Grove"),
+        ("images/land4.jpg", "View 4 — Saplings Row"),
+    ]
+    real_photos = [(p, c) for p, c in land_photos if os.path.exists(p)]
+
+    st.markdown('<div class="section section-beige">', unsafe_allow_html=True)
+
+    if real_photos:
+        st.markdown("""
+        <div class="gallery-category">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+                <span style="font-size:1.6rem;">🌾</span>
+                <span class="gallery-cat-title">Land — Aranya Farms, Achampet</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        cols = st.columns(len(real_photos), gap="small")
+        for col, (path, caption) in zip(cols, real_photos):
+            with col:
+                st.image(path, caption=caption, use_container_width=True)
+        st.markdown("<div style='height:40px'></div>", unsafe_allow_html=True)
+
     gallery_data = [
         ("🏰", "Villas & Farm Houses", ["Front Elevation", "Living Room", "Master Bedroom", "Kitchen", "Balcony View", "Rear Garden"]),
         ("🏛️", "Clubhouse", ["Lobby", "Lounge Area", "Dining Hall", "Event Space", "Meeting Room", "Terrace"]),
@@ -997,7 +1042,6 @@ def page_gallery():
         ("📍", "Location Map", ["Google Map View", "Satellite View", "RRR Junction", "ORR Route", "Landmark View", "Entry Gate"]),
     ]
 
-    st.markdown('<div class="section section-beige">', unsafe_allow_html=True)
     for icon, cat, images in gallery_data:
         st.markdown(f"""
         <div class="gallery-category">
