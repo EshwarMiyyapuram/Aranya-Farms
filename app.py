@@ -177,7 +177,8 @@ def inject_css():
 
     /* ══ HERO ══ */
     .hero {
-        background: linear-gradient(155deg, var(--forest) 0%, #0f2416 30%, #162e20 60%, #1a3d27 85%, #1f4a2e 100%);
+       background: var(--cream);
+        border-bottom: 1px solid rgba(201,168,76,0.15);
         padding: 120px 80px 110px;
         position: relative;
         overflow: hidden;
@@ -200,7 +201,7 @@ def inject_css():
         bottom: -200px; left: -80px;
         width: 600px; height: 600px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(74,140,104,0.09) 0%, transparent 65%);
+       background: radial-gradient(circle, rgba(45,106,79,0.04) 0%, transparent 65%);
         animation: pulse-glow2 12s ease-in-out infinite;
     }
     .hero-grid-lines {
@@ -243,21 +244,21 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: clamp(2.8rem, 5.5vw, 5.5rem);
         font-weight: 300;
-        color: #faf7f0;
+        color: var(--ink);
         line-height: 1.08;
         margin-bottom: 26px;
         letter-spacing: -0.5px;
     }
     .hero-h1 em {
-        color: var(--gold-light);
+        color: var(--gold);
         font-style: italic;
     }
     .hero-h1 strong {
         font-weight: 600;
-        color: #faf7f0;
+        color: var(--ink);
     }
     .hero-para {
-        color: rgba(250,247,240,0.78);
+        color: var(--moss);
         font-size: 1.05rem;
         line-height: 1.85;
         max-width: 500px;
@@ -290,13 +291,13 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: 1.2rem;
         font-weight: 700;
-        color: var(--gold-light);
+        color: var(--gold);
         line-height: 1;
         display: block;
     }
     .stat-badge .sb-lbl {
         font-size: 0.6rem;
-        color: rgba(255,255,255,0.62);
+        color: var(--moss);
         letter-spacing: 2px;
         text-transform: uppercase;
         display: block;
@@ -306,7 +307,7 @@ def inject_css():
     /* ── CTA BUTTONS ── */
     .btn-gold {
         background: linear-gradient(135deg, var(--gold) 0%, #d4b05a 50%, var(--gold-light) 100%);
-        color: var(--forest);
+        color:var(--forest) !important;
         padding: 15px 36px;
         border-radius: 4px;
         font-weight: 700;
@@ -315,7 +316,8 @@ def inject_css():
         text-transform: uppercase;
         border: none;
         cursor: pointer;
-        text-decoration: none;
+        text-decoration: none 
+        !important;
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -326,19 +328,21 @@ def inject_css():
     .btn-gold:hover {
         transform: translateY(-3px);
         box-shadow: 0 14px 40px rgba(201,168,76,0.6);
+        color: var(--forest) !important;
     }
     .btn-ghost {
         background: transparent;
-        color: #faf7f0;
+        color: #142d1e !important;
         padding: 14px 34px;
         border-radius: 4px;
         font-weight: 500;
         font-size: 0.78rem;
         letter-spacing: 2.5px;
         text-transform: uppercase;
-        border: 1px solid rgba(250,247,240,0.3);
+        border: 1px solid rgba(20,45,30,0.25) !important;
         cursor: pointer;
-        text-decoration: none;
+        text-decoration: none
+        !important;
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -346,9 +350,8 @@ def inject_css():
         font-family: 'Cinzel', serif;
     }
     .btn-ghost:hover {
-        border-color: var(--gold);
-        color: var(--gold);
-        background: rgba(201,168,76,0.08);
+         border-color: var(--gold) !important;
+        color: var(--gold) !important;
     }
     .btn-green {
         background: linear-gradient(135deg, var(--mid), var(--deep));
@@ -1414,19 +1417,18 @@ def page_home():
         )
         if hero_img:
             st.markdown(f'<div style="position:relative;z-index:2;">{hero_img}</div>', unsafe_allow_html=True)
-        else:
+            
             st.markdown("""
             <div style="position:relative;z-index:2;">
                 <div style="border:1px solid rgba(201,168,76,0.3);border-radius:18px;padding:90px 32px;
-                            text-align:center;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);
-                            -webkit-backdrop-filter:blur(10px);box-shadow:0 20px 50px rgba(0,0,0,0.3);">
+                     text-align:center;background:#ffffff;box-shadow:0 20px 50px rgba(20,45,30,0.08);">
                     <div style="font-family:'Cormorant Garamond',serif;font-size:6.5rem;
                                 color:var(--gold);opacity:0.25;line-height:1;margin-bottom:15px;">🌾</div>
                     <h2 style="font-family:'Cinzel',serif;font-size:3.5rem;font-weight:700;
                                color:var(--gold);letter-spacing:3px;margin:0 0 16px;line-height:1.1;">
                         Aranya Farms
                     </h2>
-                    <p style="font-family:'DM Sans',sans-serif;font-size:1.15rem;color:rgba(255,255,255,0.85);
+                  style="font-family:'DM Sans',sans-serif;font-size:1.15rem;color:var(--moss);
                               margin:0;letter-spacing:1px;font-weight:300;line-height:1.6;">
                         Silver Oaks Agro Farms &middot; Achampet, Toopran
                     </p>
