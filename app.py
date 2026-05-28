@@ -242,7 +242,7 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: clamp(2.8rem, 5.5vw, 5.5rem);
         font-weight: 300;
-        color: #142d1e;
+        color: rgba(255,255,255,0.95);
         line-height: 1.08;
         margin-bottom: 26px;
         letter-spacing: -0.5px;
@@ -253,10 +253,10 @@ def inject_css():
     }
     .hero-h1 strong {
         font-weight: 600;
-        color: #142d1e;
+        color: #ffffff;
     }
     .hero-para {
-        color: rgba(20,45,30,0.78);
+        color: rgba(255,255,255,0.75);
         font-size: 1.05rem;
         line-height: 1.85;
         max-width: 500px;
@@ -295,7 +295,7 @@ def inject_css():
     }
     .stat-badge .sb-lbl {
         font-size: 0.6rem;
-        color: rgba(20,45,30,0.65);
+        color: rgba(255,255,255,0.55);
         letter-spacing: 2px;
         text-transform: uppercase;
         display: block;
@@ -327,6 +327,30 @@ def inject_css():
         box-shadow: 0 14px 40px rgba(201,168,76,0.6);
     }
     .btn-ghost {
+        background: rgba(255,255,255,0.06);
+        color: rgba(255,255,255,0.9);
+        padding: 14px 34px;
+        border-radius: 4px;
+        font-weight: 500;
+        font-size: 0.78rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        border: 1px solid rgba(255,255,255,0.3);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        font-family: 'Cinzel', serif;
+    }
+    .btn-ghost:hover {
+        border-color: var(--gold);
+        color: var(--gold-light);
+        background: rgba(201,168,76,0.12);
+    }
+    /* Ghost button variant for light backgrounds */
+    .btn-ghost-dark {
         background: transparent;
         color: #142d1e;
         padding: 14px 34px;
@@ -344,10 +368,10 @@ def inject_css():
         transition: all 0.3s;
         font-family: 'Cinzel', serif;
     }
-    .btn-ghost:hover {
+    .btn-ghost-dark:hover {
         border-color: var(--gold);
-        color: var(--gold);
-        background: rgba(201,168,76,0.08);
+        color: var(--mid);
+        background: rgba(20,45,30,0.05);
     }
     .btn-green {
         background: linear-gradient(135deg, var(--mid), var(--deep));
@@ -1068,25 +1092,42 @@ def inject_css():
     .stTextInput > div > div > input,
     .stTextArea > div > div > textarea {
         border-radius: 8px !important;
-        border: 1px solid var(--parchment) !important;
+        border: 1px solid rgba(20,45,30,0.18) !important;
         font-family: 'DM Sans', sans-serif !important;
         font-size: 0.9rem !important;
+        color: #142d1e !important;
         background: white !important;
-        transition: border-color 0.2s !important;
+        box-shadow: 0 2px 8px rgba(20,45,30,0.06) !important;
+        transition: border-color 0.2s, box-shadow 0.2s !important;
         padding: 12px 16px !important;
+    }
+    .stTextInput > div > div > input::placeholder,
+    .stTextArea > div > div > textarea::placeholder {
+        color: rgba(20,45,30,0.4) !important;
     }
     .stTextInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus {
         border-color: var(--gold) !important;
-        box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+        box-shadow: 0 0 0 3px rgba(201,168,76,0.15), 0 2px 8px rgba(20,45,30,0.06) !important;
+    }
+    .stTextInput label, .stTextArea label, .stSelectbox label {
+        color: #142d1e !important;
+        font-weight: 500 !important;
+        font-size: 0.88rem !important;
     }
     .stSelectbox > div > div {
         border-radius: 8px !important;
-        border: 1px solid var(--parchment) !important;
+        border: 1px solid rgba(20,45,30,0.18) !important;
+        color: #142d1e !important;
+        background: white !important;
+        box-shadow: 0 2px 8px rgba(20,45,30,0.06) !important;
+    }
+    .stSelectbox > div > div > div {
+        color: #142d1e !important;
     }
     .stSelectbox > div > div:focus-within {
         border-color: var(--gold) !important;
-        box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+        box-shadow: 0 0 0 3px rgba(201,168,76,0.15) !important;
     }
     [data-testid="stFormSubmitButton"] > button {
         background: linear-gradient(135deg, var(--gold), var(--gold-light)) !important;
@@ -1848,38 +1889,243 @@ def load_enquiries():
     return pd.DataFrame(columns=ENQUIRY_COLUMNS)
 
 
+def delete_enquiry_by_index(idx: int):
+    """Delete a single enquiry row by its integer index and save."""
+    df = load_enquiries()
+    if 0 <= idx < len(df):
+        df = df.drop(index=idx).reset_index(drop=True)
+        df.to_csv(ENQUIRY_FILE, index=False)
+        return True
+    return False
+
+
+def delete_all_enquiries():
+    """Wipe all enquiries from the CSV file."""
+    pd.DataFrame(columns=ENQUIRY_COLUMNS).to_csv(ENQUIRY_FILE, index=False)
+
+
 def render_admin_section():
-    """Render the password-protected admin section below the contact form."""
+    """Render the password-protected premium admin dashboard."""
     with st.container():
-        st.markdown('<div style="padding:48px 80px 64px;background:var(--sand);">', unsafe_allow_html=True)
+        st.markdown('<div style="padding:48px 80px 80px;background:var(--sand);">', unsafe_allow_html=True)
         st.markdown("""
-        <div style="margin-bottom:20px;">
-            <div class="eyebrow">Admin</div>
+        <div style="margin-bottom:28px;">
+            <div class="eyebrow">Admin Access</div>
             <div class="sec-h2">Enquiry <em>Dashboard</em></div>
             <div class="rule"></div>
+            <p style="color:rgba(20,45,30,0.6);font-size:0.9rem;margin-top:-8px;">
+                Secure admin panel · Password protected
+            </p>
         </div>""", unsafe_allow_html=True)
 
-        admin_pass = st.text_input("Enter Admin Password", type="password", key="admin_password_input",
-                                   placeholder="Password required to view enquiries")
+        admin_pass = st.text_input(
+            "Admin Password",
+            type="password",
+            key="admin_password_input",
+            placeholder="Enter password to access dashboard",
+        )
 
-        if admin_pass:
-            if admin_pass == ADMIN_PASSWORD:
-                df = load_enquiries()
-                if df.empty:
-                    st.info("No enquiries submitted yet.")
-                else:
-                    st.success(f"✅ Access granted. Total enquiries: **{len(df)}**")
-                    st.dataframe(df, use_container_width=True, hide_index=True)
+        if not admin_pass:
+            st.markdown("""
+            <div style="background:white;border:1px solid rgba(201,168,76,0.2);border-radius:12px;
+                        padding:24px 28px;display:flex;align-items:center;gap:16px;
+                        box-shadow:0 2px 12px rgba(20,45,30,0.05);max-width:480px;">
+                <div style="font-size:2rem;">🔒</div>
+                <div>
+                    <div style="color:#142d1e;font-weight:600;font-size:0.92rem;margin-bottom:4px;">
+                        Admin Access Required
+                    </div>
+                    <div style="color:rgba(20,45,30,0.55);font-size:0.82rem;line-height:1.5;">
+                        Enter your admin password above to view and manage enquiries.
+                    </div>
+                </div>
+            </div>""", unsafe_allow_html=True)
+
+        elif admin_pass != ADMIN_PASSWORD:
+            st.error("❌ Incorrect password. Please try again.")
+
+        else:
+            # ── LOAD DATA ──
+            df = load_enquiries()
+
+            # ── STAT CARDS ──
+            latest_name  = df.iloc[-1]["Full Name"]       if not df.empty else "—"
+            latest_phone = df.iloc[-1]["Phone Number"]    if not df.empty else "—"
+            latest_time  = df.iloc[-1]["Submission Date & Time"] if not df.empty else "—"
+            total        = len(df)
+
+            st.markdown(f"""
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;">
+                <div style="background:white;border-radius:14px;padding:22px 24px;
+                            border:1px solid rgba(201,168,76,0.18);
+                            box-shadow:0 4px 18px rgba(20,45,30,0.07);">
+                    <div style="font-size:1.8rem;margin-bottom:6px;">📋</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;
+                                font-weight:700;color:#142d1e;line-height:1;">{total}</div>
+                    <div style="color:rgba(20,45,30,0.55);font-size:0.72rem;letter-spacing:2px;
+                                text-transform:uppercase;margin-top:6px;">Total Enquiries</div>
+                </div>
+                <div style="background:white;border-radius:14px;padding:22px 24px;
+                            border:1px solid rgba(201,168,76,0.18);
+                            box-shadow:0 4px 18px rgba(20,45,30,0.07);">
+                    <div style="font-size:1.8rem;margin-bottom:6px;">👤</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;
+                                font-weight:600;color:#142d1e;line-height:1.2;">{latest_name}</div>
+                    <div style="color:rgba(20,45,30,0.55);font-size:0.72rem;letter-spacing:2px;
+                                text-transform:uppercase;margin-top:6px;">Latest Enquiry</div>
+                </div>
+                <div style="background:white;border-radius:14px;padding:22px 24px;
+                            border:1px solid rgba(201,168,76,0.18);
+                            box-shadow:0 4px 18px rgba(20,45,30,0.07);">
+                    <div style="font-size:1.8rem;margin-bottom:6px;">📞</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;
+                                font-weight:600;color:#142d1e;line-height:1.2;">{latest_phone}</div>
+                    <div style="color:rgba(20,45,30,0.55);font-size:0.72rem;letter-spacing:2px;
+                                text-transform:uppercase;margin-top:6px;">Latest Phone</div>
+                </div>
+                <div style="background:white;border-radius:14px;padding:22px 24px;
+                            border:1px solid rgba(201,168,76,0.18);
+                            box-shadow:0 4px 18px rgba(20,45,30,0.07);">
+                    <div style="font-size:1.8rem;margin-bottom:6px;">🕐</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;
+                                font-weight:600;color:#142d1e;line-height:1.3;">{latest_time}</div>
+                    <div style="color:rgba(20,45,30,0.55);font-size:0.72rem;letter-spacing:2px;
+                                text-transform:uppercase;margin-top:6px;">Latest Timestamp</div>
+                </div>
+            </div>""", unsafe_allow_html=True)
+
+            if df.empty:
+                st.info("📭 No enquiries submitted yet. They will appear here once received.")
+            else:
+                # ── SEARCH & FILTER ──
+                st.markdown("""
+                <div style="font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:3px;
+                            text-transform:uppercase;color:var(--gold);margin-bottom:12px;">
+                    🔍 Search & Filter Enquiries
+                </div>""", unsafe_allow_html=True)
+
+                fcol1, fcol2, fcol3 = st.columns([2, 1.5, 1])
+                with fcol1:
+                    search_query = st.text_input(
+                        "Search by name, phone or interest",
+                        placeholder="Type to search…",
+                        key="admin_search",
+                        label_visibility="collapsed",
+                    )
+                with fcol2:
+                    interest_options = ["All"] + sorted(df["Interested In"].dropna().unique().tolist())
+                    filter_interest = st.selectbox(
+                        "Filter by interest",
+                        interest_options,
+                        key="admin_filter_interest",
+                        label_visibility="collapsed",
+                    )
+                with fcol3:
+                    sort_order = st.selectbox(
+                        "Sort",
+                        ["Newest First", "Oldest First"],
+                        key="admin_sort",
+                        label_visibility="collapsed",
+                    )
+
+                # Apply filters
+                filtered = df.copy()
+                if search_query:
+                    mask = (
+                        filtered["Full Name"].str.contains(search_query, case=False, na=False) |
+                        filtered["Phone Number"].str.contains(search_query, case=False, na=False) |
+                        filtered["Interested In"].str.contains(search_query, case=False, na=False) |
+                        filtered["Email Address"].str.contains(search_query, case=False, na=False)
+                    )
+                    filtered = filtered[mask]
+                if filter_interest != "All":
+                    filtered = filtered[filtered["Interested In"] == filter_interest]
+                if sort_order == "Newest First":
+                    filtered = filtered.iloc[::-1].reset_index(drop=True)
+
+                st.markdown(f"""
+                <div style="color:rgba(20,45,30,0.55);font-size:0.8rem;margin-bottom:10px;">
+                    Showing <strong style="color:#142d1e;">{len(filtered)}</strong> of {total} enquiries
+                </div>""", unsafe_allow_html=True)
+
+                # ── TABLE ──
+                st.dataframe(filtered, use_container_width=True, hide_index=True)
+
+                # ── ACTIONS ROW ──
+                st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+                st.markdown("""
+                <div style="font-family:'Cinzel',serif;font-size:0.68rem;letter-spacing:3px;
+                            text-transform:uppercase;color:var(--gold);margin-bottom:16px;">
+                    ⚙️ Manage Enquiries
+                </div>""", unsafe_allow_html=True)
+
+                acol1, acol2 = st.columns([2, 1])
+
+                # ── DOWNLOAD ──
+                with acol2:
                     csv_data = df.to_csv(index=False).encode("utf-8")
                     st.download_button(
-                        label="⬇️ Download enquiries.csv",
+                        label="⬇️ Download CSV",
                         data=csv_data,
-                        file_name="enquiries.csv",
+                        file_name=f"enquiries_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
                         mime="text/csv",
-                        use_container_width=False,
+                        use_container_width=True,
                     )
-            else:
-                st.error("Incorrect password. Please try again.")
+
+                # ── DELETE SINGLE ──
+                with acol1:
+                    # Build display labels for selection
+                    row_labels = [
+                        f"#{i+1} — {row['Full Name']} | {row['Phone Number']} | {row['Interested In']} | {row['Submission Date & Time']}"
+                        for i, row in df.iterrows()
+                    ]
+                    selected_label = st.selectbox(
+                        "Select enquiry to delete",
+                        ["— Select an enquiry —"] + row_labels,
+                        key="admin_delete_select",
+                    )
+
+                dcol1, dcol2 = st.columns(2)
+                with dcol1:
+                    if st.button("🗑️ Delete Selected Enquiry", key="admin_delete_btn",
+                                 use_container_width=True):
+                        if selected_label == "— Select an enquiry —":
+                            st.warning("Please select an enquiry to delete.")
+                        else:
+                            # Extract original index from label (#N)
+                            try:
+                                orig_idx = int(selected_label.split("—")[0].replace("#", "").strip()) - 1
+                                if delete_enquiry_by_index(orig_idx):
+                                    st.success("✅ Enquiry deleted successfully.")
+                                    st.rerun()
+                                else:
+                                    st.error("Could not delete — enquiry not found.")
+                            except Exception:
+                                st.error("Could not parse selection. Please try again.")
+
+                # ── DELETE ALL ──
+                with dcol2:
+                    st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
+
+                st.markdown("""
+                <div style="background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.15);
+                            border-radius:10px;padding:18px 22px;margin-top:12px;">
+                    <div style="color:#b91c1c;font-size:0.8rem;font-weight:600;margin-bottom:10px;">
+                        ⚠️ Danger Zone — Delete All Enquiries
+                    </div>""", unsafe_allow_html=True)
+
+                confirm_delete_all = st.checkbox(
+                    "I understand this will permanently delete ALL enquiries",
+                    key="admin_confirm_delete_all",
+                )
+                if st.button("🗑️ Delete All Enquiries", key="admin_delete_all_btn",
+                             use_container_width=False,
+                             disabled=not confirm_delete_all):
+                    delete_all_enquiries()
+                    st.success("✅ All enquiries have been deleted.")
+                    st.rerun()
+
+                st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
 
