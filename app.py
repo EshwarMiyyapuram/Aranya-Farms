@@ -1410,17 +1410,21 @@ def page_home():
     st.markdown('<div class="hero-grid-lines"></div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns([1.15, 0.85], gap="large")
+
     with col1:
         st.markdown("""
         <div style="position:relative;z-index:2;">
             <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
+
             <h1 class="hero-h1">
                 <strong>Luxury</strong> Farm Living<br>at <em>Aranya Farms</em>
             </h1>
+
             <p class="hero-para">
                 A premium gated community across 55 acres of lush green land at Achampet, Toopran —
                 where nature's serenity meets refined, modern living.
             </p>
+
             <div class="badge-row">
                 <div class="stat-badge"><span class="sb-val">55</span><span class="sb-lbl">Acres</span></div>
                 <div class="stat-badge"><span class="sb-val">Gated</span><span class="sb-lbl">Community</span></div>
@@ -1429,38 +1433,78 @@ def page_home():
                 <div class="stat-badge"><span class="sb-val">30 min</span><span class="sb-lbl">From ORR</span></div>
                 <div class="stat-badge"><span class="sb-val">₹49L+</span><span class="sb-lbl">Starting</span></div>
             </div>
+
             <div class="cta-row">
-                <a class="btn-gold" href="#">📅 Book Site Visit</a>
-                <a class="btn-ghost" href="#">🏘️ View Properties</a>
+                <a class="btn-gold" href="tel:+919640222237">📅 Book Site Visit</a>
+                <a class="btn-ghost-dark" href="#properties">🏘️ View Properties</a>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
         hero_img = get_first_img(
-            ["images/land1.png","images/land1.jpg","images/land2.png","images/land2.jpg"],
+            ["images/land1.png", "images/land1.jpg", "images/land2.png", "images/land2.jpg"],
             "Aranya Farms",
-            "width:100%;border-radius:18px;box-shadow:0 20px 64px rgba(0,0,0,0.45);display:block;"
+            """
+            width:100%;
+            height:360px;
+            object-fit:cover;
+            border-radius:18px;
+            box-shadow:0 20px 64px rgba(0,0,0,0.35);
+            display:block;
+            """
         )
+
         if hero_img:
-            st.markdown(f'<div style="position:relative;z-index:2;">{hero_img}</div>', unsafe_allow_html=True)
-            
-            st.markdown("""
-            <div style="position:relative;z-index:2;">
-                <div style="border:1px solid rgba(201,168,76,0.3);border-radius:18px;padding:90px 32px;
-                     text-align:center;background:#ffffff;box-shadow:0 20px 50px rgba(20,45,30,0.08);">
-                    <div style="font-family:'Cormorant Garamond',serif;font-size:6.5rem;
-                                color:var(--gold);opacity:0.25;line-height:1;margin-bottom:15px;">🌾</div>
-                    <h2 style="font-family:'Cinzel',serif;font-size:3.5rem;font-weight:700;
-                               color:var(--gold);letter-spacing:3px;margin:0 0 16px;line-height:1.1;">
-                        Aranya Farms
-                    </h2>
-                  style="font-family:'DM Sans',sans-serif;font-size:1.15rem;color:var(--moss);
-                              margin:0;letter-spacing:1px;font-weight:300;line-height:1.6;">
-                        Silver Oaks Agro Farms &middot; Achampet, Toopran
-                    </p>
-                </div>
-            </div>""", unsafe_allow_html=True)
+            st.markdown(
+                f'<div style="position:relative;z-index:2;">{hero_img}</div>',
+                unsafe_allow_html=True
+            )
+
+        logo_img = img_tag(
+            "images/logo1.png",
+            "Aranya Farms Logo",
+            """
+            width:280px;
+            max-width:90%;
+            display:block;
+            margin:0 auto 18px auto;
+            object-fit:contain;
+            """
+        )
+
+        st.markdown(f"""
+        <div style="
+            position:relative;
+            z-index:2;
+            margin-top:16px;
+        ">
+            <div style="
+                border:1px solid rgba(201,168,76,0.3);
+                border-radius:18px;
+                padding:55px 32px;
+                text-align:center;
+                background:#ffffff;
+                box-shadow:0 20px 50px rgba(20,45,30,0.08);
+            ">
+
+                {logo_img if logo_img else ""}
+
+                <p style="
+                    font-family:'DM Sans',sans-serif;
+                    font-size:1.05rem;
+                    color:var(--moss);
+                    margin:0;
+                    letter-spacing:1px;
+                    font-weight:300;
+                    line-height:1.7;
+                ">
+                    Silver Oaks Agro Farms · Achampet, Toopran
+                </p>
+
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1493,19 +1537,25 @@ def page_home():
     # ── WHY ARANYA ──
     with st.container():
         st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
-        section_header("Why Choose Us", "The Aranya Farms <em>Difference</em>",
-                       "A unique blend of luxury living and nature's serenity — thoughtfully designed for families who seek more than just a home.")
+        section_header(
+            "Why Choose Us",
+            "The Aranya Farms <em>Difference</em>",
+            "A unique blend of luxury living and nature's serenity — thoughtfully designed for families who seek more than just a home."
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
         st.markdown('<div style="padding:0 80px 88px;background:var(--cream);">', unsafe_allow_html=True)
+
         c1, c2, c3, c4 = st.columns(4, gap="medium")
+
         features = [
             ("🌿", "Pure Nature", "Lush greenery with fresh air, organic surroundings, and breathtaking sunrise views from your doorstep."),
             ("🏡", "Premium Homes", "Thoughtfully designed 3-BHK farm houses with modern architecture and natural aesthetics."),
             ("🛡️", "Gated Security", "24×7 security, CCTV surveillance, and managed access for total peace of mind."),
             ("🌊", "Riverside Living", "Adjacent to the serene Haldi River — nature's own backyard at your doorstep."),
         ]
+
         for col, (icon, title, desc) in zip([c1, c2, c3, c4], features):
             with col:
                 st.markdown(f"""
@@ -1513,74 +1563,119 @@ def page_home():
                     <div class="feat-icon-wrap">{icon}</div>
                     <h4>{title}</h4>
                     <p>{desc}</p>
-                </div>""", unsafe_allow_html=True)
+                </div>
+                """, unsafe_allow_html=True)
+
         st.markdown("</div>", unsafe_allow_html=True)
 
     # ── AMENITIES ──
     with st.container():
         st.markdown('<div class="sec sec-white">', unsafe_allow_html=True)
-        section_header("World-Class Amenities", "Everything You Need to <em>Live Well</em>")
+        section_header(
+            "World-Class Amenities",
+            "Everything You Need to <em>Live Well</em>"
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
         st.markdown('<div style="padding:0 80px 88px;background:white;">', unsafe_allow_html=True)
+
         amenities = [
-            ("🏊", "Swimming Pool"),     ("🎾", "Sports Arena"),
-            ("🌿", "Organic Farming"),   ("🐄", "Goshala"),
-            ("🌸", "Gazebo & Gardens"),  ("🏋️", "Fitness Centre"),
-            ("🍽️", "Clubhouse & Dining"), ("🛕", "Meditation Zone"),
-            ("🎠", "Children's Play Area"), ("🌳", "Tree Plantation"),
-            ("🚗", "Ample Parking"),     ("💧", "24×7 Water Supply"),
+            ("🏊", "Swimming Pool"),
+            ("🎾", "Sports Arena"),
+            ("🌿", "Organic Farming"),
+            ("🐄", "Goshala"),
+            ("🌸", "Gazebo & Gardens"),
+            ("🏋️", "Fitness Centre"),
+            ("🍽️", "Clubhouse & Dining"),
+            ("🛕", "Meditation Zone"),
+            ("🎠", "Children's Play Area"),
+            ("🌳", "Tree Plantation"),
+            ("🚗", "Ample Parking"),
+            ("💧", "24×7 Water Supply"),
         ]
+
         rows = [amenities[i:i+4] for i in range(0, len(amenities), 4)]
+
         for row in rows:
             cols = st.columns(4, gap="small")
             for col, (icon, name) in zip(cols, row):
                 with col:
-                    st.markdown(f'<div class="amenity-chip"><span class="ac-icon">{icon}</span><span class="ac-name">{name}</span></div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="amenity-chip"><span class="ac-icon">{icon}</span><span class="ac-name">{name}</span></div>',
+                        unsafe_allow_html=True
+                    )
+
         st.markdown("</div>", unsafe_allow_html=True)
 
-# ── CTA BANNER ─────────────────────────────────────────────
-
-
-# ── CTA BUTTONS ────────────────────────────────────────────
-col1, col2, col3 = st.columns(3)
-
-with col1:
+    # ── CTA TEXT ──
     st.markdown("""
-    <div style="text-align:center;">
-        <a class="btn-gold"
-           href="tel:+919640222237"
-           style="text-decoration:none;">
-            📅 Book Free Site Visit
-        </a>
+    <div class="sec sec-dark" style="text-align:center;">
+
+        <div class="eyebrow eyebrow-center">
+            Limited Plots Available
+        </div>
+
+        <div class="sec-h2-white" style="text-align:center;">
+            Ready to Find Your Perfect <em>Farm Plot?</em>
+        </div>
+
+        <div class="rule rule-center"></div>
+
+        <p style="
+            color:rgba(255,255,255,0.60);
+            font-size:1.02rem;
+            margin-bottom:40px;
+            font-weight:300;
+            max-width:620px;
+            margin-left:auto;
+            margin-right:auto;
+            line-height:1.9;
+        ">
+            Plots starting from ₹49 Lakhs.
+            Register now for exclusive pre-launch pricing
+            and a complimentary site visit.
+        </p>
+
     </div>
     """, unsafe_allow_html=True)
 
-with col2:
-    st.markdown("""
-    <div style="text-align:center;">
-        <a class="btn-ghost"
-           href="tel:+919640222237"
-           style="text-decoration:none;">
-            📞 Talk to Expert
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
+    # ── CTA BUTTONS ──
+    col1, col2, col3 = st.columns(3)
 
-with col3:
-    with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
-        st.download_button(
-            label="📄 Download Brochure",
-            data=pdf_file,
-            file_name="Aranya-Farms-Brochure.pdf",
-            mime="application/pdf",
-            use_container_width=True
-        )
+    with col1:
+        st.markdown("""
+        <div style="text-align:center;">
+            <a class="btn-gold"
+               href="tel:+919640222237"
+               style="text-decoration:none;">
+                📅 Book Free Site Visit
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
 
-# spacing
-st.markdown("<br><br>", unsafe_allow_html=True)
+    with col2:
+        st.markdown("""
+        <div style="text-align:center;">
+            <a class="btn-ghost"
+               href="tel:+919640222237"
+               style="text-decoration:none;">
+                📞 Talk to Expert
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
 
+    with col3:
+        with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
+            st.download_button(
+                label="📄 Download Brochure",
+                data=pdf_file,
+                file_name="Aranya-Farms-Brochure.pdf",
+                mime="application/pdf",
+                use_container_width=True
+            )
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 2 — ABOUT
 # ═══════════════════════════════════════════════════════════════════════════
