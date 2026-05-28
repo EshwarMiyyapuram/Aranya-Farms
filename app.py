@@ -242,7 +242,7 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: clamp(2.8rem, 5.5vw, 5.5rem);
         font-weight: 300;
-        color: rgba(255,255,255,0.95);
+        color: #142d1e;
         line-height: 1.08;
         margin-bottom: 26px;
         letter-spacing: -0.5px;
@@ -253,10 +253,10 @@ def inject_css():
     }
     .hero-h1 strong {
         font-weight: 600;
-        color: #ffffff;
+        color: #142d1e;
     }
     .hero-para {
-        color: rgba(255,255,255,0.75);
+        color: rgba(20,45,30,0.78);
         font-size: 1.05rem;
         line-height: 1.85;
         max-width: 500px;
@@ -295,7 +295,7 @@ def inject_css():
     }
     .stat-badge .sb-lbl {
         font-size: 0.6rem;
-        color: rgba(255,255,255,0.55);
+        color: rgba(20,45,30,0.65);
         letter-spacing: 2px;
         text-transform: uppercase;
         display: block;
