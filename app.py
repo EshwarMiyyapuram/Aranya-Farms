@@ -242,7 +242,7 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: clamp(2.8rem, 5.5vw, 5.5rem);
         font-weight: 300;
-        color: #142d1e;
+        color: #faf7f0;
         line-height: 1.08;
         margin-bottom: 26px;
         letter-spacing: -0.5px;
@@ -253,10 +253,10 @@ def inject_css():
     }
     .hero-h1 strong {
         font-weight: 600;
-        color: #142d1e;
+        color: #faf7f0;
     }
     .hero-para {
-        color: rgba(20,45,30,0.78);
+        color: rgba(250,247,240,0.78);
         font-size: 1.05rem;
         line-height: 1.85;
         max-width: 500px;
@@ -295,7 +295,7 @@ def inject_css():
     }
     .stat-badge .sb-lbl {
         font-size: 0.6rem;
-        color: rgba(20,45,30,0.65);
+        color: rgba(255,255,255,0.62);
         letter-spacing: 2px;
         text-transform: uppercase;
         display: block;
@@ -1068,25 +1068,50 @@ def inject_css():
     .stTextInput > div > div > input,
     .stTextArea > div > div > textarea {
         border-radius: 8px !important;
-        border: 1px solid var(--parchment) !important;
+        border: 1px solid rgba(20,45,30,0.18) !important;
         font-family: 'DM Sans', sans-serif !important;
-        font-size: 0.9rem !important;
-        background: white !important;
-        transition: border-color 0.2s !important;
+        font-size: 0.92rem !important;
+        color: #142d1e !important;
+        background: #ffffff !important;
+        transition: border-color 0.2s, box-shadow 0.2s !important;
         padding: 12px 16px !important;
+        box-shadow: 0 2px 8px rgba(20,45,30,0.05) !important;
+    }
+    .stTextInput > div > div > input::placeholder,
+    .stTextArea > div > div > textarea::placeholder {
+        color: rgba(20,45,30,0.38) !important;
+        font-style: italic !important;
     }
     .stTextInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus {
         border-color: var(--gold) !important;
-        box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+        box-shadow: 0 0 0 3px rgba(201,168,76,0.15), 0 2px 8px rgba(20,45,30,0.05) !important;
+        outline: none !important;
+    }
+    .stTextInput label,
+    .stTextArea label,
+    .stSelectbox label,
+    .stNumberInput label {
+        color: #142d1e !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.4px !important;
+        margin-bottom: 4px !important;
     }
     .stSelectbox > div > div {
         border-radius: 8px !important;
-        border: 1px solid var(--parchment) !important;
+        border: 1px solid rgba(20,45,30,0.18) !important;
+        background: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(20,45,30,0.05) !important;
+        color: #142d1e !important;
     }
     .stSelectbox > div > div:focus-within {
         border-color: var(--gold) !important;
-        box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+        box-shadow: 0 0 0 3px rgba(201,168,76,0.15) !important;
+    }
+    .stSelectbox [data-baseweb="select"] > div {
+        color: #142d1e !important;
     }
     [data-testid="stFormSubmitButton"] > button {
         background: linear-gradient(135deg, var(--gold), var(--gold-light)) !important;
@@ -1112,9 +1137,109 @@ def inject_css():
         border-radius: 6px !important;
         font-family: 'DM Sans', sans-serif !important;
         font-weight: 500 !important;
+        color: #142d1e !important;
+        border: 1px solid rgba(20,45,30,0.22) !important;
         transition: all 0.2s !important;
+        background: transparent !important;
     }
-    .stButton > button:hover { transform: translateY(-1px) !important; }
+    .stButton > button:hover {
+        transform: translateY(-1px) !important;
+        background: rgba(20,45,30,0.05) !important;
+        border-color: rgba(20,45,30,0.4) !important;
+    }
+
+    /* ══ ADMIN DASHBOARD ══ */
+    .admin-stat-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 24px 28px;
+        border: 1px solid rgba(201,168,76,0.2);
+        box-shadow: 0 4px 20px rgba(20,45,30,0.07);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .admin-stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    }
+    .admin-stat-card .asc-val {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #142d1e;
+        line-height: 1;
+        display: block;
+    }
+    .admin-stat-card .asc-lbl {
+        font-size: 0.65rem;
+        color: rgba(20,45,30,0.55);
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        margin-top: 6px;
+        display: block;
+        font-weight: 500;
+    }
+    .admin-preview-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 22px 26px;
+        border: 1px solid rgba(201,168,76,0.2);
+        box-shadow: 0 4px 20px rgba(20,45,30,0.06);
+    }
+    .admin-preview-card h4 {
+        font-family: 'Cinzel', serif;
+        color: #142d1e;
+        font-size: 0.72rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        opacity: 0.7;
+    }
+    .admin-preview-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+    .apr-label {
+        font-size: 0.73rem;
+        color: rgba(20,45,30,0.5);
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        min-width: 100px;
+    }
+    .apr-value {
+        font-size: 0.78rem;
+        color: #142d1e;
+        font-weight: 500;
+        text-align: right;
+        flex: 1;
+    }
+    .admin-section-title {
+        font-family: 'Cinzel', serif;
+        color: #142d1e;
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin: 28px 0 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(201,168,76,0.25);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .danger-zone {
+        background: rgba(220,38,38,0.04);
+        border: 1px solid rgba(220,38,38,0.18);
+        border-radius: 12px;
+        padding: 22px 24px;
+        margin-top: 10px;
+    }
 
     /* ══ DATAFRAME STYLING ══ */
     [data-testid="stDataFrame"] {
@@ -1853,33 +1978,221 @@ def render_admin_section():
     with st.container():
         st.markdown('<div style="padding:48px 80px 64px;background:var(--sand);">', unsafe_allow_html=True)
         st.markdown("""
-        <div style="margin-bottom:20px;">
-            <div class="eyebrow">Admin</div>
+        <div style="margin-bottom:24px;">
+            <div class="eyebrow">Admin Panel</div>
             <div class="sec-h2">Enquiry <em>Dashboard</em></div>
             <div class="rule"></div>
+            <p class="sec-lead">Password-protected dashboard for managing and reviewing all customer enquiries.</p>
         </div>""", unsafe_allow_html=True)
 
-        admin_pass = st.text_input("Enter Admin Password", type="password", key="admin_password_input",
-                                   placeholder="Password required to view enquiries")
+        admin_pass = st.text_input(
+            "Admin Password",
+            type="password",
+            key="admin_password_input",
+            placeholder="Enter password to access dashboard…",
+        )
 
-        if admin_pass:
-            if admin_pass == ADMIN_PASSWORD:
-                df = load_enquiries()
-                if df.empty:
-                    st.info("No enquiries submitted yet.")
-                else:
-                    st.success(f"✅ Access granted. Total enquiries: **{len(df)}**")
-                    st.dataframe(df, use_container_width=True, hide_index=True)
-                    csv_data = df.to_csv(index=False).encode("utf-8")
-                    st.download_button(
-                        label="⬇️ Download enquiries.csv",
-                        data=csv_data,
-                        file_name="enquiries.csv",
-                        mime="text/csv",
-                        use_container_width=False,
-                    )
+        if not admin_pass:
+            st.markdown("</div>", unsafe_allow_html=True)
+            return
+
+        if admin_pass != ADMIN_PASSWORD:
+            st.error("⛔ Incorrect password. Please try again.")
+            st.markdown("</div>", unsafe_allow_html=True)
+            return
+
+        # ── ACCESS GRANTED ──
+        df = load_enquiries()
+        total = len(df)
+
+        # ── STAT CARDS ──
+        st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+        sc1, sc2, sc3, sc4 = st.columns(4, gap="medium")
+        with sc1:
+            latest_date = df["Submission Date & Time"].iloc[-1] if total > 0 else "—"
+            st.markdown(f"""
+            <div class="admin-stat-card">
+                <span class="asc-val">{total}</span>
+                <span class="asc-lbl">Total Enquiries</span>
+            </div>""", unsafe_allow_html=True)
+        with sc2:
+            today_str = datetime.now().strftime("%Y-%m-%d")
+            today_count = 0
+            if total > 0:
+                today_count = df[df["Submission Date & Time"].str.startswith(today_str)].shape[0]
+            st.markdown(f"""
+            <div class="admin-stat-card">
+                <span class="asc-val">{today_count}</span>
+                <span class="asc-lbl">Today's Enquiries</span>
+            </div>""", unsafe_allow_html=True)
+        with sc3:
+            top_interest = "—"
+            if total > 0:
+                top_interest = df["Interested In"].value_counts().idxmax()
+                top_interest_short = top_interest[:16] + "…" if len(top_interest) > 16 else top_interest
             else:
-                st.error("Incorrect password. Please try again.")
+                top_interest_short = "—"
+            st.markdown(f"""
+            <div class="admin-stat-card">
+                <span class="asc-val" style="font-size:1.3rem;padding-top:4px;">{top_interest_short}</span>
+                <span class="asc-lbl">Top Interest</span>
+            </div>""", unsafe_allow_html=True)
+        with sc4:
+            this_week = 0
+            if total > 0:
+                try:
+                    df["_dt"] = pd.to_datetime(df["Submission Date & Time"], errors="coerce")
+                    cutoff = pd.Timestamp.now() - pd.Timedelta(days=7)
+                    this_week = df[df["_dt"] >= cutoff].shape[0]
+                    df.drop(columns=["_dt"], inplace=True)
+                except Exception:
+                    pass
+            st.markdown(f"""
+            <div class="admin-stat-card">
+                <span class="asc-val">{this_week}</span>
+                <span class="asc-lbl">This Week</span>
+            </div>""", unsafe_allow_html=True)
+
+        st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+
+        if df.empty:
+            st.info("📭 No enquiries have been submitted yet.")
+            st.markdown("</div>", unsafe_allow_html=True)
+            return
+
+        # ── LATEST ENQUIRY PREVIEW ──
+        latest = df.iloc[-1]
+        st.markdown(f"""
+        <div class="admin-preview-card">
+            <h4>🕐 Latest Enquiry</h4>
+            <div class="admin-preview-row">
+                <span class="apr-label">Name</span>
+                <span class="apr-value">{latest.get("Full Name","—")}</span>
+            </div>
+            <div class="admin-preview-row">
+                <span class="apr-label">Phone</span>
+                <span class="apr-value">{latest.get("Phone Number","—")}</span>
+            </div>
+            <div class="admin-preview-row">
+                <span class="apr-label">Interest</span>
+                <span class="apr-value">{latest.get("Interested In","—")}</span>
+            </div>
+            <div class="admin-preview-row">
+                <span class="apr-label">Submitted</span>
+                <span class="apr-value">{latest.get("Submission Date & Time","—")}</span>
+            </div>
+        </div>""", unsafe_allow_html=True)
+
+        st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+
+        # ── SEARCH & FILTER ──
+        st.markdown('<div class="admin-section-title">🔍 Search & Filter</div>', unsafe_allow_html=True)
+        sf1, sf2 = st.columns([2, 1], gap="medium")
+        with sf1:
+            search_query = st.text_input(
+                "Search enquiries",
+                placeholder="Search by name, phone, email, or interest…",
+                key="admin_search",
+                label_visibility="collapsed",
+            )
+        with sf2:
+            filter_interest = st.selectbox(
+                "Filter by interest",
+                ["All"] + sorted(df["Interested In"].dropna().unique().tolist()),
+                key="admin_filter_interest",
+                label_visibility="collapsed",
+            )
+
+        # Apply filters
+        display_df = df.copy()
+        if search_query:
+            mask = display_df.apply(
+                lambda row: search_query.lower() in " ".join(row.astype(str).values).lower(), axis=1
+            )
+            display_df = display_df[mask]
+        if filter_interest != "All":
+            display_df = display_df[display_df["Interested In"] == filter_interest]
+
+        # ── ENQUIRY TABLE ──
+        st.markdown('<div class="admin-section-title">📋 All Enquiries</div>', unsafe_allow_html=True)
+        st.caption(f"Showing {len(display_df)} of {total} enquiries")
+        st.dataframe(display_df.reset_index(drop=True), use_container_width=True, hide_index=True)
+
+        # ── DOWNLOAD CSV ──
+        csv_data = df.to_csv(index=False).encode("utf-8")
+        dl_col, _ = st.columns([1, 2])
+        with dl_col:
+            st.download_button(
+                label="⬇️ Download All as CSV",
+                data=csv_data,
+                file_name=f"aranya_enquiries_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
+                mime="text/csv",
+                use_container_width=True,
+            )
+
+        # ── DELETE SINGLE ENQUIRY ──
+        st.markdown('<div class="admin-section-title">🗑️ Delete an Enquiry</div>', unsafe_allow_html=True)
+        if total > 0:
+            enquiry_options = {
+                f"#{i+1} — {row['Full Name']} | {row['Phone Number']} | {row['Interested In']} | {row['Submission Date & Time']}": i
+                for i, row in df.iterrows()
+            }
+            selected_label = st.selectbox(
+                "Select enquiry to delete",
+                list(enquiry_options.keys()),
+                key="admin_delete_select",
+                label_visibility="collapsed",
+            )
+            selected_idx = enquiry_options[selected_label]
+
+            # Preview selected row
+            sel_row = df.iloc[selected_idx]
+            st.markdown(f"""
+            <div style="background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.15);
+                        border-radius:10px;padding:14px 18px;margin:8px 0 14px;">
+                <span style="font-size:0.72rem;color:rgba(20,45,30,0.55);letter-spacing:1px;
+                             text-transform:uppercase;font-weight:600;">Selected for deletion:</span>
+                <div style="margin-top:6px;font-size:0.85rem;color:#142d1e;">
+                    <strong>{sel_row.get("Full Name","—")}</strong> &nbsp;·&nbsp;
+                    {sel_row.get("Phone Number","—")} &nbsp;·&nbsp;
+                    {sel_row.get("Interested In","—")} &nbsp;·&nbsp;
+                    <span style="color:rgba(20,45,30,0.5);">{sel_row.get("Submission Date & Time","—")}</span>
+                </div>
+            </div>""", unsafe_allow_html=True)
+
+            del_btn_col, _ = st.columns([1, 3])
+            with del_btn_col:
+                if st.button("🗑️ Delete Selected Enquiry", key="admin_delete_one",
+                             use_container_width=True, type="secondary"):
+                    df_updated = df.drop(index=selected_idx).reset_index(drop=True)
+                    df_updated.to_csv(ENQUIRY_FILE, index=False)
+                    st.success(f"✅ Enquiry from **{sel_row.get('Full Name','—')}** has been deleted.")
+                    st.rerun()
+
+        # ── DELETE ALL ENQUIRIES ──
+        st.markdown('<div class="admin-section-title">⚠️ Danger Zone</div>', unsafe_allow_html=True)
+        st.markdown('<div class="danger-zone">', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="margin-bottom:12px;">
+            <strong style="color:#dc2626;font-size:0.9rem;">Delete All Enquiries</strong>
+            <p style="color:rgba(20,45,30,0.6);font-size:0.82rem;margin:4px 0 0;">
+                This will permanently erase all enquiry records from the CSV file. This action cannot be undone.
+            </p>
+        </div>""", unsafe_allow_html=True)
+        confirm_delete_all = st.checkbox(
+            "I understand this is permanent and cannot be undone. Delete all enquiries.",
+            key="admin_confirm_delete_all",
+        )
+        if confirm_delete_all:
+            da_col, _ = st.columns([1, 3])
+            with da_col:
+                if st.button("🔥 Delete ALL Enquiries", key="admin_delete_all",
+                             use_container_width=True, type="secondary"):
+                    empty_df = pd.DataFrame(columns=ENQUIRY_COLUMNS)
+                    empty_df.to_csv(ENQUIRY_FILE, index=False)
+                    st.success("✅ All enquiries have been deleted. The file has been reset.")
+                    st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
 
