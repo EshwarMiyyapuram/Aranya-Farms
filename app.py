@@ -1,3 +1,4 @@
+
 import streamlit as st
 import os
 import base64
@@ -43,7 +44,7 @@ def inject_css():
         --parchment:    #e8dfc8;
         --white:        #ffffff;
         --ink:          #1a2b1e;
-        --moss:         #3d5a45;
+        --moss:         #1e3526;
         --mist:         #8fad96;
         --shadow-dark:  rgba(10, 31, 18, 0.18);
     }
@@ -328,14 +329,14 @@ def inject_css():
     }
     .btn-ghost {
         background: transparent;
-        color: #142d1e;
+        color: #faf7f0;
         padding: 14px 34px;
         border-radius: 4px;
         font-weight: 500;
         font-size: 0.78rem;
         letter-spacing: 2.5px;
         text-transform: uppercase;
-        border: 1px solid rgba(20,45,30,0.25);
+        border: 1px solid rgba(250,247,240,0.3);
         cursor: pointer;
         text-decoration: none;
         display: inline-flex;
@@ -1264,11 +1265,17 @@ def inject_css():
 
 # ─── IMAGE HELPERS ───────────────────────────────────────────────────────────
 def load_img_b64(path):
-    if not os.path.exists(path):
+    if not os.path.isabs(path):
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        full_path = os.path.join(base_dir, path)
+    else:
+        full_path = path
+
+    if not os.path.exists(full_path):
         return None
-    with open(path, "rb") as f:
+    with open(full_path, "rb") as f:
         data = base64.b64encode(f.read()).decode()
-    ext = path.rsplit(".", 1)[-1].lower()
+    ext = full_path.rsplit(".", 1)[-1].lower()
     mime = "image/png" if ext == "png" else "image/jpeg"
     return data, mime
 
@@ -1410,18 +1417,19 @@ def page_home():
         else:
             st.markdown("""
             <div style="position:relative;z-index:2;">
-                <div style="border:1px solid rgba(201,168,76,0.25);border-radius:18px;padding:80px 48px;
-                            text-align:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
-                    <div style="font-family:'Cormorant Garamond',serif;font-size:6rem;
-                                color:var(--gold);opacity:0.25;line-height:1;">🌾</div>
-                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;
-                                font-style:italic;color:rgba(255,255,255,0.55);margin-top:20px;">
+                <div style="border:1px solid rgba(201,168,76,0.3);border-radius:18px;padding:90px 32px;
+                            text-align:center;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);
+                            -webkit-backdrop-filter:blur(10px);box-shadow:0 20px 50px rgba(0,0,0,0.3);">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:6.5rem;
+                                color:var(--gold);opacity:0.25;line-height:1;margin-bottom:15px;">🌾</div>
+                    <h2 style="font-family:'Cinzel',serif;font-size:3.5rem;font-weight:700;
+                               color:var(--gold);letter-spacing:3px;margin:0 0 16px;line-height:1.1;">
                         Aranya Farms
-                    </div>
-                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.28);
-                                letter-spacing:4px;text-transform:uppercase;margin-top:10px;">
-                        Achampet · Toopran · Telangana
-                    </div>
+                    </h2>
+                    <p style="font-family:'DM Sans',sans-serif;font-size:1.15rem;color:rgba(255,255,255,0.85);
+                              margin:0;letter-spacing:1px;font-weight:300;line-height:1.6;">
+                        Silver Oaks Agro Farms &middot; Achampet, Toopran
+                    </p>
                 </div>
             </div>""", unsafe_allow_html=True)
 
@@ -2374,9 +2382,7 @@ def render_footer():
     """, unsafe_allow_html=True)
 
 
-# ═══════════════════════════════════════════════════════════════════════════
-#  MAIN
-# ═══════════════════════════════════════════════════════════════════════════
+# ─── MAIN ───────────────────────────────────────────────────────────────────
 def main():
     inject_css()
 
@@ -2404,3 +2410,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
