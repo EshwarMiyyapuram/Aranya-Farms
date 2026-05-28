@@ -1542,43 +1542,46 @@ st.markdown("""
         and a complimentary site visit.
     </p>
 
-    <div class="cta-row" style="
-        justify-content:center;
-        margin-top:30px;
-        gap:18px;
-        flex-wrap:wrap;
-    ">
-
-        <a class="btn-gold"
-           href="tel:+919640222237">
-            📅 Book Free Site Visit
-        </a>
-
-        <a class="btn-ghost"
-           href="tel:+919640222237">
-            📞 Talk to Expert
-        </a>
-
-    </div>
-
 </div>
 """, unsafe_allow_html=True)
 
-# Download brochure button
-st.markdown(
-    "<div style='text-align:center;margin-top:-20px;margin-bottom:80px;'>",
-    unsafe_allow_html=True
-)
+# ── CTA BUTTONS ────────────────────────────────────────────
+col1, col2, col3 = st.columns(3)
 
-with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
-    st.download_button(
-        label="📄 Download Brochure",
-        data=pdf_file,
-        file_name="Aranya-Farms-Brochure.pdf",
-        mime="application/pdf"
-    )
+with col1:
+    st.markdown("""
+    <div style="text-align:center;">
+        <a class="btn-gold"
+           href="tel:+919640222237"
+           style="text-decoration:none;">
+            📅 Book Free Site Visit
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.markdown("</div>", unsafe_allow_html=True)
+with col2:
+    st.markdown("""
+    <div style="text-align:center;">
+        <a class="btn-ghost"
+           href="tel:+919640222237"
+           style="text-decoration:none;">
+            📞 Talk to Expert
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
+        st.download_button(
+            label="📄 Download Brochure",
+            data=pdf_file,
+            file_name="Aranya-Farms-Brochure.pdf",
+            mime="application/pdf",
+            use_container_width=True
+        )
+
+# spacing
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 2 — ABOUT
