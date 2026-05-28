@@ -1525,13 +1525,27 @@ def page_home():
                   font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.8;">
             Plots starting from ₹49 Lakhs. Register now for exclusive pre-launch pricing and a
             complimentary site visit.
-        </p>
-        <div class="cta-row" style="justify-content:center;">
-            <a class="btn-gold" href="#">📅 Book Free Site Visit</a>
-            <a class="btn-ghost" href="#">📞 Talk to Expert</a>
-            <a class="btn-ghost" href="#">📄 Download Brochure</a>
-        </div>
-    </div>
+   </p>
+<div class="cta-row" style="justify-content:center;">
+    <a class="btn-gold" href="tel:+919640222237">📅 Book Free Site Visit</a>
+
+    <a class="btn-ghost" href="tel:+919640222237">
+        📞 Talk to Expert
+    </a>
+</div>
+""", unsafe_allow_html=True)
+
+with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
+    st.download_button(
+        label="📄 Download Brochure",
+        data=pdf_file,
+        file_name="Aranya-Farms-Brochure.pdf",
+        mime="application/pdf",
+        use_container_width=False
+    )
+
+st.markdown("""
+</div>
     """, unsafe_allow_html=True)
 
 
