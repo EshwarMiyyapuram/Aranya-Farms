@@ -1312,11 +1312,11 @@ def render_navbar():
             </div>
         </div>
         <div class="nav-right">
-            <a class="nav-wa-btn" href="https://wa.me/919640222238" target="_blank">
+            <a class="nav-wa-btn" href="https://wa.me/919640222237" target="_blank">
                 💬 WhatsApp
             </a>
-            <a class="nav-call-btn" href="tel:+919640222238">
-                📞 +91 96402 22238
+            <a class="nav-call-btn" href="tel:+919640222237">
+                📞 +91 96402 22237
             </a>
         </div>
     </div>
@@ -1516,14 +1516,48 @@ def page_home():
             Plots starting from ₹49 Lakhs. Register now for exclusive pre-launch pricing and a
             complimentary site visit.
         </p>
-        <div class="cta-row" style="justify-content:center;">
-            <a class="btn-gold" href="#">📅 Book Free Site Visit</a>
-            <a class="btn-ghost" href="#">📞 Talk to Expert</a>
-            <a class="btn-ghost" href="#">📄 Download Brochure</a>
-        </div>
     </div>
     """, unsafe_allow_html=True)
+# ── CTA BUTTONS ─────────────────────────────────────────
+col1, col2, col3 = st.columns(3)
 
+with col1:
+    st.markdown("""
+    <a class="btn-gold"
+       href="tel:+919640222237"
+       style="
+           text-decoration:none;
+           display:block;
+           text-align:center;
+       ">
+        📅 Book Free Site Visit
+    </a>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <a class="btn-ghost"
+       href="tel:+919640222237"
+       style="
+           text-decoration:none;
+           display:block;
+           text-align:center;
+       ">
+        📞 Talk to Expert
+    </a>
+    """, unsafe_allow_html=True)
+
+with col3:
+    with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
+        st.download_button(
+            label="📄 Download Brochure",
+            data=pdf_file,
+            file_name="Aranya-Farms-Brochure.pdf",
+            mime="application/pdf",
+            use_container_width=True
+        )
+
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 2 — ABOUT
@@ -2257,11 +2291,11 @@ def render_footer():
                     55 acres of lush greenery at Achampet, Toopran, Telangana.
                 </p>
                 <div style="margin-top:24px;display:flex;gap:10px;">
-                    <a href="https://wa.me/919640222238" target="_blank"
+                    <a href="https://wa.me/919640222237" target="_blank"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(37,211,102,0.15);
                               border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">💬</a>
-                    <a href="tel:+919640222238"
+                    <a href="tel:+919640222237"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,0.1);
                               border:1px solid rgba(201,168,76,0.25);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">📞</a>
