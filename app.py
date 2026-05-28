@@ -1396,10 +1396,6 @@ def page_home():
                     <div class="stat-badge"><span class="sb-val" style="color:#000000;">30 min</span><span class="sb-lbl" style="color:#000000;">From ORR</span></div>
                     <div class="stat-badge"><span class="sb-val" style="color:#000000;">&#8377;49L+</span><span class="sb-lbl" style="color:#000000;">Starting</span></div>
                 </div>
-                <div class="cta-row">
-                    <a class="btn-gold" href="#">&#128197; Book Site Visit</a>
-                    <a class="btn-ghost" href="#">&#127960;&#65039; View Properties</a>
-                </div>
             </div>
             <div style="flex:0.85;min-width:0;">
                 <div style="border:1px solid rgba(201,168,76,0.25);border-radius:18px;padding:80px 48px;text-align:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
