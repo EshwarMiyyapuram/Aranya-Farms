@@ -2,6 +2,7 @@ import streamlit as st
 import os
 import base64
 import pandas as pd
+from datetime import datetime
 
 # ─── PAGE CONFIG ────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -241,7 +242,7 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: clamp(2.8rem, 5.5vw, 5.5rem);
         font-weight: 300;
-        color: #ffffff;
+        color: #142d1e;
         line-height: 1.08;
         margin-bottom: 26px;
         letter-spacing: -0.5px;
@@ -252,10 +253,10 @@ def inject_css():
     }
     .hero-h1 strong {
         font-weight: 600;
-        color: white;
+        color: #142d1e;
     }
     .hero-para {
-        color: rgba(255,255,255,0.62);
+        color: rgba(20,45,30,0.78);
         font-size: 1.05rem;
         line-height: 1.85;
         max-width: 500px;
@@ -294,7 +295,7 @@ def inject_css():
     }
     .stat-badge .sb-lbl {
         font-size: 0.6rem;
-        color: rgba(255,255,255,0.45);
+        color: rgba(20,45,30,0.65);
         letter-spacing: 2px;
         text-transform: uppercase;
         display: block;
@@ -327,14 +328,14 @@ def inject_css():
     }
     .btn-ghost {
         background: transparent;
-        color: rgba(255,255,255,0.82);
+        color: #142d1e;
         padding: 14px 34px;
         border-radius: 4px;
         font-weight: 500;
         font-size: 0.78rem;
         letter-spacing: 2.5px;
         text-transform: uppercase;
-        border: 1px solid rgba(255,255,255,0.3);
+        border: 1px solid rgba(20,45,30,0.25);
         cursor: pointer;
         text-decoration: none;
         display: inline-flex;
@@ -1186,11 +1187,11 @@ def render_navbar():
             </div>
         </div>
         <div class="nav-right">
-            <a class="nav-wa-btn" href="https://wa.me/919999999999" target="_blank">
+            <a class="nav-wa-btn" href="https://wa.me/919640222238" target="_blank">
                 💬 WhatsApp
             </a>
-            <a class="nav-call-btn" href="tel:+919999999999">
-                📞 +91 99999 99999
+            <a class="nav-call-btn" href="tel:+919640222238">
+                📞 +91 96402 22238
             </a>
         </div>
     </div>
@@ -1671,7 +1672,7 @@ def page_properties():
                 </p>
                 <div class="cta-row" style="justify-content:center;">
                     <a class="btn-gold" href="#">📅 Register Interest</a>
-                    <a class="btn-wa" href="https://wa.me/919999999999" target="_blank">💬 WhatsApp Us</a>
+                    <a class="btn-wa" href="https://wa.me/919640222238" target="_blank">💬 WhatsApp Us</a>
                 </div>
             </div>""", unsafe_allow_html=True)
 
@@ -1814,6 +1815,76 @@ def page_location():
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+#  ENQUIRY STORAGE HELPERS
+# ═══════════════════════════════════════════════════════════════════════════
+ENQUIRY_FILE = "enquiries.csv"
+ENQUIRY_COLUMNS = ["Full Name", "Phone Number", "Email Address", "Interested In", "Message", "Submission Date & Time"]
+ADMIN_PASSWORD = "nagesh@1243"
+
+
+def save_enquiry(name, phone, email, interest, message):
+    """Save a new enquiry to enquiries.csv, creating the file if needed."""
+    new_row = {
+        "Full Name": name,
+        "Phone Number": phone,
+        "Email Address": email,
+        "Interested In": interest,
+        "Message": message,
+        "Submission Date & Time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    if os.path.exists(ENQUIRY_FILE):
+        df = pd.read_csv(ENQUIRY_FILE)
+    else:
+        df = pd.DataFrame(columns=ENQUIRY_COLUMNS)
+    new_df = pd.DataFrame([new_row])
+    df = pd.concat([df, new_df], ignore_index=True)
+    df.to_csv(ENQUIRY_FILE, index=False)
+
+
+def load_enquiries():
+    """Load all enquiries from CSV. Returns an empty DataFrame if file doesn't exist."""
+    if os.path.exists(ENQUIRY_FILE):
+        return pd.read_csv(ENQUIRY_FILE)
+    return pd.DataFrame(columns=ENQUIRY_COLUMNS)
+
+
+def render_admin_section():
+    """Render the password-protected admin section below the contact form."""
+    with st.container():
+        st.markdown('<div style="padding:48px 80px 64px;background:var(--sand);">', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="margin-bottom:20px;">
+            <div class="eyebrow">Admin</div>
+            <div class="sec-h2">Enquiry <em>Dashboard</em></div>
+            <div class="rule"></div>
+        </div>""", unsafe_allow_html=True)
+
+        admin_pass = st.text_input("Enter Admin Password", type="password", key="admin_password_input",
+                                   placeholder="Password required to view enquiries")
+
+        if admin_pass:
+            if admin_pass == ADMIN_PASSWORD:
+                df = load_enquiries()
+                if df.empty:
+                    st.info("No enquiries submitted yet.")
+                else:
+                    st.success(f"✅ Access granted. Total enquiries: **{len(df)}**")
+                    st.dataframe(df, use_container_width=True, hide_index=True)
+                    csv_data = df.to_csv(index=False).encode("utf-8")
+                    st.download_button(
+                        label="⬇️ Download enquiries.csv",
+                        data=csv_data,
+                        file_name="enquiries.csv",
+                        mime="text/csv",
+                        use_container_width=False,
+                    )
+            else:
+                st.error("Incorrect password. Please try again.")
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 5 — CONTACT
 # ═══════════════════════════════════════════════════════════════════════════
 def page_contact():
@@ -1850,14 +1921,15 @@ def page_contact():
                     if not name or not phone or interest == "Select an option…":
                         st.error("Please fill in Name, Phone, and select your Interest.")
                     else:
-                        st.success(f"✅ Thank you, {name}! We've received your enquiry and will call you within 24 hours.")
+                        save_enquiry(name, phone, email, interest, message)
+                        st.success("Thank you! Your enquiry has been submitted successfully.")
                         st.balloons()
 
             st.markdown("""
             <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
-                <a class="btn-wa" href="https://wa.me/919999999999?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms."
+                <a class="btn-wa" href="https://wa.me/919640222238?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms."
                    target="_blank">💬 WhatsApp Us</a>
-                <a class="btn-call" href="tel:+919999999999">📞 Call Now</a>
+                <a class="btn-call" href="tel:+919640222238">📞 Call Now</a>
                 <a class="btn-green" href="mailto:info@silveroaksrealty.com">📧 Email Us</a>
             </div>""", unsafe_allow_html=True)
 
@@ -1890,8 +1962,7 @@ def page_contact():
                     <div class="ci-icon-wrap">📞</div>
                     <div class="ci-text">
                         <strong>Phone / WhatsApp</strong>
-                        +91 99999 99999<br>
-                        +91 88888 88888
+                        +91 96402 22238
                     </div>
                 </div>
 
@@ -1924,9 +1995,8 @@ def page_contact():
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-
-# ═══════════════════════════════════════════════════════════════════════════
-#  FOOTER
+    # ── ADMIN SECTION ──
+    render_admin_section()
 # ═══════════════════════════════════════════════════════════════════════════
 def render_footer():
     st.markdown("""
@@ -1941,11 +2011,11 @@ def render_footer():
                     55 acres of lush greenery at Achampet, Toopran, Telangana.
                 </p>
                 <div style="margin-top:24px;display:flex;gap:10px;">
-                    <a href="https://wa.me/919999999999" target="_blank"
+                    <a href="https://wa.me/919640222238" target="_blank"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(37,211,102,0.15);
                               border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">💬</a>
-                    <a href="tel:+919999999999"
+                    <a href="tel:+919640222238"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,0.1);
                               border:1px solid rgba(201,168,76,0.25);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">📞</a>
@@ -1973,8 +2043,7 @@ def render_footer():
                 <p style="color:var(--gold-light);font-family:'Cinzel',serif;font-size:0.65rem;
                           letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;">Contact</p>
                 <p style="color:rgba(255,255,255,0.4);font-size:0.87rem;line-height:2.0;font-weight:300;">
-                    +91 99999 99999<br>
-                    +91 88888 88888<br>
+                    +91 96402 22238<br>
                     info@silveroaksrealty.com<br><br>
                     <span style="font-size:0.8rem;">Mon–Sat: 9AM – 7PM</span><br>
                     <span style="font-size:0.8rem;">Sunday: 10AM – 5PM</span>
