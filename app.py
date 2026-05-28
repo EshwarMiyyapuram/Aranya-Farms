@@ -2238,76 +2238,9 @@ def page_contact():
                         st.success("Thank you! Your enquiry has been submitted successfully.")
                         st.balloons()
 
-            st.markdown("""
-            <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
-                <a class="btn-wa" href="https://wa.me/919640222238?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms."
-                   target="_blank">💬 WhatsApp Us</a>
-                <a class="btn-call" href="tel:+919640222238">📞 Call Now</a>
-                <a class="btn-green" href="mailto:info@silveroaksrealty.com">📧 Email Us</a>
-            </div>""", unsafe_allow_html=True)
 
-        with col2:
-            st.markdown("""
-            <div class="contact-info-box">
-                <h3>Silver Oaks Realty</h3>
-                <span class="cib-tagline">Aranya Farms Sales Office</span>
-
-                <div class="contact-line">
-                    <div class="ci-icon-wrap">📍</div>
-                    <div class="ci-text">
-                        <strong>Corporate Office</strong>
-                        2nd & 3rd Floor, 14-A,<br>
-                        NCL Enclave Road, Petbasheerabad,<br>
-                        Kompally, Hyderabad – 500067
-                    </div>
-                </div>
-
-                <div class="contact-line">
-                    <div class="ci-icon-wrap">🏡</div>
-                    <div class="ci-text">
-                        <strong>Project Site Office</strong>
-                        Aranya Farms, Achampet Village,<br>
-                        Toopran Mandal, Medchal-Malkajgiri
-                    </div>
-                </div>
-
-                <div class="contact-line">
-                    <div class="ci-icon-wrap">📞</div>
-                    <div class="ci-text">
-                        <strong>Phone / WhatsApp</strong>
-                        +91 96402 22238
-                    </div>
-                </div>
-
-                <div class="contact-line">
-                    <div class="ci-icon-wrap">📧</div>
-                    <div class="ci-text">
-                        <strong>Email</strong>
-                        info@silveroaksrealty.com<br>
-                        aranyafarms@silveroaks.in
-                    </div>
-                </div>
-
-                <div class="contact-line">
-                    <div class="ci-icon-wrap">⏰</div>
-                    <div class="ci-text">
-                        <strong>Office Hours</strong>
-                        Mon – Sat: 9:00 AM – 7:00 PM<br>
-                        Sunday: 10:00 AM – 5:00 PM
-                    </div>
-                </div>
-
-                <div style="margin-top:6px;padding:16px;background:rgba(201,168,76,0.08);
-                            border-radius:10px;border:1px solid rgba(201,168,76,0.18);">
-                    <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;line-height:1.75;margin:0;">
-                        🌿 Site visits available 7 days a week.<br>
-                        Complimentary pickup from Kompally for groups of 4+.
-                    </p>
-                </div>
-            </div>""", unsafe_allow_html=True)
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
+    
+           
     # ── ADMIN SECTION ──
     render_admin_section()
 # ═══════════════════════════════════════════════════════════════════════════
