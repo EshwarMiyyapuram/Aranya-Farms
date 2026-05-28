@@ -1513,26 +1513,26 @@ def page_home():
                     st.markdown(f'<div class="amenity-chip"><span class="ac-icon">{icon}</span><span class="ac-name">{name}</span></div>', unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # ── CTA BANNER ──
-    st.markdown("""
-    <div class="sec sec-dark" style="text-align:center;">
-        <div class="eyebrow eyebrow-center">Limited Plots Available</div>
-        <div class="sec-h2-white" style="text-align:center;">
-            Ready to Find Your Perfect <em>Farm Plot?</em>
-        </div>
-        <div class="rule rule-center"></div>
-        <p style="color:rgba(255,255,255,0.55);font-size:1.02rem;margin-bottom:40px;
-                  font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.8;">
-            Plots starting from ₹49 Lakhs. Register now for exclusive pre-launch pricing and a
-            complimentary site visit.
+  # ── CTA BANNER ──
 st.markdown("""
-   </p>
-<div class="cta-row" style="justify-content:center;">
-    <a class="btn-gold" href="tel:+919640222237">📅 Book Free Site Visit</a>
+<div class="sec sec-dark" style="text-align:center;">
+    <div class="eyebrow eyebrow-center">Limited Plots Available</div>
+    <div class="sec-h2-white" style="text-align:center;">
+        Ready to Find Your Perfect <em>Farm Plot?</em>
+    </div>
+    <div class="rule rule-center"></div>
+    <p style="color:rgba(255,255,255,0.55);font-size:1.02rem;margin-bottom:40px;
+              font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.8;">
+        Plots starting from ₹49 Lakhs. Register now for exclusive pre-launch pricing and a
+        complimentary site visit.
+    </p>
 
-    <a class="btn-ghost" href="tel:+919640222237">
-        📞 Talk to Expert
-    </a>
+    <div class="cta-row" style="justify-content:center;">
+        <a class="btn-gold" href="tel:+919640222237">📅 Book Free Site Visit</a>
+        <a class="btn-ghost" href="tel:+919640222237">📞 Talk to Expert</a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
     st.download_button(
@@ -1542,9 +1542,6 @@ with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
         mime="application/pdf",
         use_container_width=False
     )
-</div>
-    """, unsafe_allow_html=True)
-
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 2 — ABOUT
