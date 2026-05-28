@@ -1514,36 +1514,7 @@ def page_home():
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ── CTA BANNER ─────────────────────────────────────────────
-st.markdown("""
-<div class="sec sec-dark" style="text-align:center;">
 
-    <div class="eyebrow eyebrow-center">
-        Limited Plots Available
-    </div>
-
-    <div class="sec-h2-white" style="text-align:center;">
-        Ready to Find Your Perfect <em>Farm Plot?</em>
-    </div>
-
-    <div class="rule rule-center"></div>
-
-    <p style="
-        color:rgba(255,255,255,0.60);
-        font-size:1.02rem;
-        margin-bottom:40px;
-        font-weight:300;
-        max-width:620px;
-        margin-left:auto;
-        margin-right:auto;
-        line-height:1.9;
-    ">
-        Plots starting from ₹49 Lakhs.
-        Register now for exclusive pre-launch pricing
-        and a complimentary site visit.
-    </p>
-
-</div>
-""", unsafe_allow_html=True)
 
 # ── CTA BUTTONS ────────────────────────────────────────────
 col1, col2, col3 = st.columns(3)
