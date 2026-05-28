@@ -2250,9 +2250,9 @@ def page_contact():
 
             st.markdown("""
             <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
-                <a class="btn-wa" href="https://wa.me/919640222238?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms."
+                <a class="btn-wa" href="https://wa.me/919640222237?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms."
                    target="_blank">💬 WhatsApp Us</a>
-                <a class="btn-call" href="tel:+919640222238">📞 Call Now</a>
+                <a class="btn-call" href="tel:+919640222237">📞 Call Now</a>
                 <a class="btn-green" href="mailto:info@silveroaksrealty.com">📧 Email Us</a>
             </div>""", unsafe_allow_html=True)
 
@@ -2285,7 +2285,7 @@ def page_contact():
                     <div class="ci-icon-wrap">📞</div>
                     <div class="ci-text">
                         <strong>Phone / WhatsApp</strong>
-                        +91 96402 22238
+                        +91 96402 22237
                     </div>
                 </div>
 
