@@ -876,52 +876,79 @@ def inject_css():
     .mob-text { color: white; font-size: 0.78rem; font-weight: 500; line-height: 1.4; }
     .mob-text small { color: rgba(255,255,255,0.5); font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; display: block; }
 
-    /* ══ CONTACT ══ */
-    .contact-info-box {
-        background: linear-gradient(155deg, #142d1e 0%, #0a1f12 100%);
-        border-radius: 20px;
-        padding: 40px 36px;
-        border: 1px solid rgba(201,168,76,0.18);
-        height: 100%;
-        box-shadow: 0 12px 48px rgba(0,0,0,0.25);
-    }
-    .contact-info-box h3 {
-        font-family: 'Cormorant Garamond', serif;
-        color: var(--gold-light);
-        font-size: 1.7rem;
-        font-weight: 600;
-        margin-bottom: 6px;
-    }
-    .cib-tagline {
-        color: rgba(255,255,255,0.38);
-        font-size: 0.62rem;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        margin-bottom: 30px;
-        display: block;
-    }
-    .contact-line {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 24px;
-        align-items: flex-start;
-        padding-bottom: 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .contact-line:last-of-type { border-bottom: none; }
-    .ci-icon-wrap {
-        width: 38px; height: 38px;
-        border-radius: 10px;
-        background: rgba(201,168,76,0.12);
-        border: 1px solid rgba(201,168,76,0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-    }
-    .ci-text { color: rgba(255,255,255,0.7); font-size: 0.88rem; line-height: 1.75; }
-    .ci-text strong { color: rgba(255,255,255,0.95); display: block; margin-bottom: 3px; font-size: 0.82rem; letter-spacing: 0.5px; }
+   /* ══ CONTACT ══ */
+.contact-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 24px;
+}
+
+.contact-info-box {
+    background: linear-gradient(155deg, #142d1e 0%, #0a1f12 100%);
+    border-radius: 20px;
+    padding: 40px 36px;
+    border: 1px solid rgba(201,168,76,0.18);
+    height: 100%;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+}
+
+.contact-info-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-light);
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.cib-tagline {
+    color: rgba(255,255,255,0.38);
+    font-size: 0.62rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    display: block;
+}
+
+.contact-line {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: flex-start;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.contact-line:last-of-type {
+    border-bottom: none;
+}
+
+.ci-icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.ci-text {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.88rem;
+    line-height: 1.75;
+}
+
+.ci-text strong {
+    color: rgba(255,255,255,0.95);
+    display: block;
+    margin-bottom: 3px;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+}
 
     /* ══ QUOTE BLOCK ══ */
     .quote-block {
