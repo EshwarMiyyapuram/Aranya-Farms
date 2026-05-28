@@ -43,7 +43,7 @@ def inject_css():
         --parchment:    #e8dfc8;
         --white:        #ffffff;
         --ink:          #1a2b1e;
-        --moss:         #3d5a45;
+        --moss:         #1e3526;
         --mist:         #8fad96;
         --shadow-dark:  rgba(10, 31, 18, 0.18);
     }
@@ -328,14 +328,14 @@ def inject_css():
     }
     .btn-ghost {
         background: transparent;
-        color: #142d1e;
+        color: #faf7f0;
         padding: 14px 34px;
         border-radius: 4px;
         font-weight: 500;
         font-size: 0.78rem;
         letter-spacing: 2.5px;
         text-transform: uppercase;
-        border: 1px solid rgba(20,45,30,0.25);
+        border: 1px solid rgba(250,247,240,0.3);
         cursor: pointer;
         text-decoration: none;
         display: inline-flex;
