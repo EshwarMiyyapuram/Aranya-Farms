@@ -1564,16 +1564,18 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── DOWNLOAD BROCHURE BUTTON ─────────────────────────────
-st.markdown("<div style='text-align:center;margin-top:-20px;margin-bottom:80px;'>", unsafe_allow_html=True)
+# Download brochure button
+st.markdown(
+    "<div style='text-align:center;margin-top:-20px;margin-bottom:80px;'>",
+    unsafe_allow_html=True
+)
 
 with open("Aranya Farms - Brochure.pdf", "rb") as pdf_file:
     st.download_button(
         label="📄 Download Brochure",
         data=pdf_file,
         file_name="Aranya-Farms-Brochure.pdf",
-        mime="application/pdf",
-        use_container_width=False
+        mime="application/pdf"
     )
 
 st.markdown("</div>", unsafe_allow_html=True)
