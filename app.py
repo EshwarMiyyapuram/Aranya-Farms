@@ -1,4 +1,3 @@
-
 import streamlit as st
 import os
 import base64
@@ -44,7 +43,7 @@ def inject_css():
         --parchment:    #e8dfc8;
         --white:        #ffffff;
         --ink:          #1a2b1e;
-        --moss:         #1e3526;
+        --moss:         #3d5a45;
         --mist:         #8fad96;
         --shadow-dark:  rgba(10, 31, 18, 0.18);
     }
@@ -177,8 +176,7 @@ def inject_css():
 
     /* ══ HERO ══ */
     .hero {
-       background: var(--cream);
-        border-bottom: 1px solid rgba(201,168,76,0.15);
+        background: linear-gradient(155deg, var(--forest) 0%, #0f2416 30%, #162e20 60%, #1a3d27 85%, #1f4a2e 100%);
         padding: 120px 80px 110px;
         position: relative;
         overflow: hidden;
@@ -201,7 +199,7 @@ def inject_css():
         bottom: -200px; left: -80px;
         width: 600px; height: 600px;
         border-radius: 50%;
-       background: radial-gradient(circle, rgba(45,106,79,0.04) 0%, transparent 65%);
+        background: radial-gradient(circle, rgba(74,140,104,0.09) 0%, transparent 65%);
         animation: pulse-glow2 12s ease-in-out infinite;
     }
     .hero-grid-lines {
@@ -244,21 +242,21 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: clamp(2.8rem, 5.5vw, 5.5rem);
         font-weight: 300;
-        color: var(--ink);
+        color: #faf7f0;
         line-height: 1.08;
         margin-bottom: 26px;
         letter-spacing: -0.5px;
     }
     .hero-h1 em {
-        color: var(--gold);
+        color: var(--gold-light);
         font-style: italic;
     }
     .hero-h1 strong {
         font-weight: 600;
-        color: var(--ink);
+        color: #faf7f0;
     }
     .hero-para {
-        color: var(--moss);
+        color: rgba(250,247,240,0.78);
         font-size: 1.05rem;
         line-height: 1.85;
         max-width: 500px;
@@ -291,13 +289,13 @@ def inject_css():
         font-family: 'Cormorant Garamond', serif;
         font-size: 1.2rem;
         font-weight: 700;
-        color: var(--gold);
+        color: var(--gold-light);
         line-height: 1;
         display: block;
     }
     .stat-badge .sb-lbl {
         font-size: 0.6rem;
-        color: var(--moss);
+        color: rgba(255,255,255,0.62);
         letter-spacing: 2px;
         text-transform: uppercase;
         display: block;
@@ -307,7 +305,7 @@ def inject_css():
     /* ── CTA BUTTONS ── */
     .btn-gold {
         background: linear-gradient(135deg, var(--gold) 0%, #d4b05a 50%, var(--gold-light) 100%);
-        color:var(--forest) !important;
+        color: var(--forest);
         padding: 15px 36px;
         border-radius: 4px;
         font-weight: 700;
@@ -316,8 +314,7 @@ def inject_css():
         text-transform: uppercase;
         border: none;
         cursor: pointer;
-        text-decoration: none 
-        !important;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -328,21 +325,19 @@ def inject_css():
     .btn-gold:hover {
         transform: translateY(-3px);
         box-shadow: 0 14px 40px rgba(201,168,76,0.6);
-        color: var(--forest) !important;
     }
     .btn-ghost {
         background: transparent;
-        color: #142d1e !important;
+        color: #142d1e;
         padding: 14px 34px;
         border-radius: 4px;
         font-weight: 500;
         font-size: 0.78rem;
         letter-spacing: 2.5px;
         text-transform: uppercase;
-        border: 1px solid rgba(20,45,30,0.25) !important;
+        border: 1px solid rgba(20,45,30,0.25);
         cursor: pointer;
-        text-decoration: none
-        !important;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -350,8 +345,9 @@ def inject_css():
         font-family: 'Cinzel', serif;
     }
     .btn-ghost:hover {
-         border-color: var(--gold) !important;
-        color: var(--gold) !important;
+        border-color: var(--gold);
+        color: var(--gold);
+        background: rgba(201,168,76,0.08);
     }
     .btn-green {
         background: linear-gradient(135deg, var(--mid), var(--deep));
@@ -876,79 +872,52 @@ def inject_css():
     .mob-text { color: white; font-size: 0.78rem; font-weight: 500; line-height: 1.4; }
     .mob-text small { color: rgba(255,255,255,0.5); font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; display: block; }
 
-   /* ══ CONTACT ══ */
-.contact-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0 24px;
-}
-
-.contact-info-box {
-    background: linear-gradient(155deg, #142d1e 0%, #0a1f12 100%);
-    border-radius: 20px;
-    padding: 40px 36px;
-    border: 1px solid rgba(201,168,76,0.18);
-    height: 100%;
-    box-shadow: 0 12px 48px rgba(0,0,0,0.25);
-}
-
-.contact-info-box h3 {
-    font-family: 'Cormorant Garamond', serif;
-    color: var(--gold-light);
-    font-size: 1.7rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.cib-tagline {
-    color: rgba(255,255,255,0.38);
-    font-size: 0.62rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-    display: block;
-}
-
-.contact-line {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    align-items: flex-start;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.contact-line:last-of-type {
-    border-bottom: none;
-}
-
-.ci-icon-wrap {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: rgba(201,168,76,0.12);
-    border: 1px solid rgba(201,168,76,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-
-.ci-text {
-    color: rgba(255,255,255,0.7);
-    font-size: 0.88rem;
-    line-height: 1.75;
-}
-
-.ci-text strong {
-    color: rgba(255,255,255,0.95);
-    display: block;
-    margin-bottom: 3px;
-    font-size: 0.82rem;
-    letter-spacing: 0.5px;
-}
+    /* ══ CONTACT ══ */
+    .contact-info-box {
+        background: linear-gradient(155deg, #142d1e 0%, #0a1f12 100%);
+        border-radius: 20px;
+        padding: 40px 36px;
+        border: 1px solid rgba(201,168,76,0.18);
+        height: 100%;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+    }
+    .contact-info-box h3 {
+        font-family: 'Cormorant Garamond', serif;
+        color: var(--gold-light);
+        font-size: 1.7rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    .cib-tagline {
+        color: rgba(255,255,255,0.38);
+        font-size: 0.62rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+        display: block;
+    }
+    .contact-line {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        align-items: flex-start;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .contact-line:last-of-type { border-bottom: none; }
+    .ci-icon-wrap {
+        width: 38px; height: 38px;
+        border-radius: 10px;
+        background: rgba(201,168,76,0.12);
+        border: 1px solid rgba(201,168,76,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+    .ci-text { color: rgba(255,255,255,0.7); font-size: 0.88rem; line-height: 1.75; }
+    .ci-text strong { color: rgba(255,255,255,0.95); display: block; margin-bottom: 3px; font-size: 0.82rem; letter-spacing: 0.5px; }
 
     /* ══ QUOTE BLOCK ══ */
     .quote-block {
@@ -1295,17 +1264,11 @@ def inject_css():
 
 # ─── IMAGE HELPERS ───────────────────────────────────────────────────────────
 def load_img_b64(path):
-    if not os.path.isabs(path):
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        full_path = os.path.join(base_dir, path)
-    else:
-        full_path = path
-
-    if not os.path.exists(full_path):
+    if not os.path.exists(path):
         return None
-    with open(full_path, "rb") as f:
+    with open(path, "rb") as f:
         data = base64.b64encode(f.read()).decode()
-    ext = full_path.rsplit(".", 1)[-1].lower()
+    ext = path.rsplit(".", 1)[-1].lower()
     mime = "image/png" if ext == "png" else "image/jpeg"
     return data, mime
 
@@ -1349,11 +1312,11 @@ def render_navbar():
             </div>
         </div>
         <div class="nav-right">
-            <a class="nav-wa-btn" href="https://wa.me/919640222237" target="_blank">
+            <a class="nav-wa-btn" href="https://wa.me/919640222238" target="_blank">
                 💬 WhatsApp
             </a>
-            <a class="nav-call-btn" href="tel:+919640222237">
-                📞 +91 96402 22237
+            <a class="nav-call-btn" href="tel:+919640222238">
+                📞 +91 96402 22238
             </a>
         </div>
     </div>
@@ -1404,20 +1367,163 @@ def hero_mini(eyebrow, title, subtitle):
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 1 — HOME
 # ═══════════════════════════════════════════════════════════════════════════
-def page_home():# ── HERO ──st.markdown('', unsafe_allow_html=True)st.markdown('', unsafe_allow_html=True)
+def page_home():
+    # ── HERO ──
+    st.markdown('<div class="hero">', unsafe_allow_html=True)
+    st.markdown('<div class="hero-grid-lines"></div>', unsafe_allow_html=True)
 
-col1, col2 = st.columns([1.15, 0.85], gap="large")
-with col1:
+    col1, col2 = st.columns([1.15, 0.85], gap="large")
+    with col1:
+        st.markdown("""
+        <div style="position:relative;z-index:2;">
+            <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
+            <h1 class="hero-h1">
+                <strong>Luxury</strong> Farm Living<br>at <em>Aranya Farms</em>
+            </h1>
+            <p class="hero-para">
+                A premium gated community across 55 acres of lush green land at Achampet, Toopran —
+                where nature's serenity meets refined, modern living.
+            </p>
+            <div class="badge-row">
+                <div class="stat-badge"><span class="sb-val">55</span><span class="sb-lbl">Acres</span></div>
+                <div class="stat-badge"><span class="sb-val">Gated</span><span class="sb-lbl">Community</span></div>
+                <div class="stat-badge"><span class="sb-val">3-BHK</span><span class="sb-lbl">Farm Houses</span></div>
+                <div class="stat-badge"><span class="sb-val">5 min</span><span class="sb-lbl">From RRR</span></div>
+                <div class="stat-badge"><span class="sb-val">30 min</span><span class="sb-lbl">From ORR</span></div>
+                <div class="stat-badge"><span class="sb-val">₹49L+</span><span class="sb-lbl">Starting</span></div>
+            </div>
+            <div class="cta-row">
+                <a class="btn-gold" href="#">📅 Book Site Visit</a>
+                <a class="btn-ghost" href="#">🏘️ View Properties</a>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        hero_img = get_first_img(
+            ["images/land1.png","images/land1.jpg","images/land2.png","images/land2.jpg"],
+            "Aranya Farms",
+            "width:100%;border-radius:18px;box-shadow:0 20px 64px rgba(0,0,0,0.45);display:block;"
+        )
+        if hero_img:
+            st.markdown(f'<div style="position:relative;z-index:2;">{hero_img}</div>', unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div style="position:relative;z-index:2;">
+                <div style="border:1px solid rgba(201,168,76,0.25);border-radius:18px;padding:80px 48px;
+                            text-align:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:6rem;
+                                color:var(--gold);opacity:0.25;line-height:1;">🌾</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;
+                                font-style:italic;color:rgba(255,255,255,0.55);margin-top:20px;">
+                        Aranya Farms
+                    </div>
+                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.28);
+                                letter-spacing:4px;text-transform:uppercase;margin-top:10px;">
+                        Achampet · Toopran · Telangana
+                    </div>
+                </div>
+            </div>""", unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── STATS STRIP ──
     st.markdown("""
-    <div style="position:relative;z-index:2;">
-        <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
-        <h1 class="hero-h1">
-            <strong>Luxury</strong> Farm Living<br>at <em>Aranya Farms</em>
-        </h1>
-        <p class="hero-para">
-            A premium gated community across 55 acres of lush green land at Achampet, Toopran —
-            where nature's serenity meets refined, modern living.
+    <div class="stats-strip">
+        <div class="strip-item">
+            <span class="strip-val">55+</span>
+            <span class="strip-lbl">Acres of Green</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">200+</span>
+            <span class="strip-lbl">Happy Families</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">18+</span>
+            <span class="strip-lbl">World-Class Amenities</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">₹49L</span>
+            <span class="strip-lbl">Starting Price</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">2024</span>
+            <span class="strip-lbl">Ready Possession</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── WHY ARANYA ──
+    with st.container():
+        st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
+        section_header("Why Choose Us", "The Aranya Farms <em>Difference</em>",
+                       "A unique blend of luxury living and nature's serenity — thoughtfully designed for families who seek more than just a home.")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with st.container():
+        st.markdown('<div style="padding:0 80px 88px;background:var(--cream);">', unsafe_allow_html=True)
+        c1, c2, c3, c4 = st.columns(4, gap="medium")
+        features = [
+            ("🌿", "Pure Nature", "Lush greenery with fresh air, organic surroundings, and breathtaking sunrise views from your doorstep."),
+            ("🏡", "Premium Homes", "Thoughtfully designed 3-BHK farm houses with modern architecture and natural aesthetics."),
+            ("🛡️", "Gated Security", "24×7 security, CCTV surveillance, and managed access for total peace of mind."),
+            ("🌊", "Riverside Living", "Adjacent to the serene Haldi River — nature's own backyard at your doorstep."),
+        ]
+        for col, (icon, title, desc) in zip([c1, c2, c3, c4], features):
+            with col:
+                st.markdown(f"""
+                <div class="feat-card">
+                    <div class="feat-icon-wrap">{icon}</div>
+                    <h4>{title}</h4>
+                    <p>{desc}</p>
+                </div>""", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── AMENITIES ──
+    with st.container():
+        st.markdown('<div class="sec sec-white">', unsafe_allow_html=True)
+        section_header("World-Class Amenities", "Everything You Need to <em>Live Well</em>")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with st.container():
+        st.markdown('<div style="padding:0 80px 88px;background:white;">', unsafe_allow_html=True)
+        amenities = [
+            ("🏊", "Swimming Pool"),     ("🎾", "Sports Arena"),
+            ("🌿", "Organic Farming"),   ("🐄", "Goshala"),
+            ("🌸", "Gazebo & Gardens"),  ("🏋️", "Fitness Centre"),
+            ("🍽️", "Clubhouse & Dining"), ("🛕", "Meditation Zone"),
+            ("🎠", "Children's Play Area"), ("🌳", "Tree Plantation"),
+            ("🚗", "Ample Parking"),     ("💧", "24×7 Water Supply"),
+        ]
+        rows = [amenities[i:i+4] for i in range(0, len(amenities), 4)]
+        for row in rows:
+            cols = st.columns(4, gap="small")
+            for col, (icon, name) in zip(cols, row):
+                with col:
+                    st.markdown(f'<div class="amenity-chip"><span class="ac-icon">{icon}</span><span class="ac-name">{name}</span></div>', unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── CTA BANNER ──
+    st.markdown("""
+    <div class="sec sec-dark" style="text-align:center;">
+        <div class="eyebrow eyebrow-center">Limited Plots Available</div>
+        <div class="sec-h2-white" style="text-align:center;">
+            Ready to Find Your Perfect <em>Farm Plot?</em>
+        </div>
+        <div class="rule rule-center"></div>
+        <p style="color:rgba(255,255,255,0.55);font-size:1.02rem;margin-bottom:40px;
+                  font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.8;">
+            Plots starting from ₹49 Lakhs. Register now for exclusive pre-launch pricing and a
+            complimentary site visit.
         </p>
+        <div class="cta-row" style="justify-content:center;">
+            <a class="btn-gold" href="#">📅 Book Free Site Visit</a>
+            <a class="btn-ghost" href="#">📞 Talk to Expert</a>
+            <a class="btn-ghost" href="#">📄 Download Brochure</a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 2 — ABOUT
@@ -2132,6 +2238,75 @@ def page_contact():
                         st.success("Thank you! Your enquiry has been submitted successfully.")
                         st.balloons()
 
+            st.markdown("""
+            <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a class="btn-wa" href="https://wa.me/919640222238?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms."
+                   target="_blank">💬 WhatsApp Us</a>
+                <a class="btn-call" href="tel:+919640222238">📞 Call Now</a>
+                <a class="btn-green" href="mailto:info@silveroaksrealty.com">📧 Email Us</a>
+            </div>""", unsafe_allow_html=True)
+
+        with col2:
+            st.markdown("""
+            <div class="contact-info-box">
+                <h3>Silver Oaks Realty</h3>
+                <span class="cib-tagline">Aranya Farms Sales Office</span>
+
+                <div class="contact-line">
+                    <div class="ci-icon-wrap">📍</div>
+                    <div class="ci-text">
+                        <strong>Corporate Office</strong>
+                        2nd & 3rd Floor, 14-A,<br>
+                        NCL Enclave Road, Petbasheerabad,<br>
+                        Kompally, Hyderabad – 500067
+                    </div>
+                </div>
+
+                <div class="contact-line">
+                    <div class="ci-icon-wrap">🏡</div>
+                    <div class="ci-text">
+                        <strong>Project Site Office</strong>
+                        Aranya Farms, Achampet Village,<br>
+                        Toopran Mandal, Medchal-Malkajgiri
+                    </div>
+                </div>
+
+                <div class="contact-line">
+                    <div class="ci-icon-wrap">📞</div>
+                    <div class="ci-text">
+                        <strong>Phone / WhatsApp</strong>
+                        +91 96402 22238
+                    </div>
+                </div>
+
+                <div class="contact-line">
+                    <div class="ci-icon-wrap">📧</div>
+                    <div class="ci-text">
+                        <strong>Email</strong>
+                        info@silveroaksrealty.com<br>
+                        aranyafarms@silveroaks.in
+                    </div>
+                </div>
+
+                <div class="contact-line">
+                    <div class="ci-icon-wrap">⏰</div>
+                    <div class="ci-text">
+                        <strong>Office Hours</strong>
+                        Mon – Sat: 9:00 AM – 7:00 PM<br>
+                        Sunday: 10:00 AM – 5:00 PM
+                    </div>
+                </div>
+
+                <div style="margin-top:6px;padding:16px;background:rgba(201,168,76,0.08);
+                            border-radius:10px;border:1px solid rgba(201,168,76,0.18);">
+                    <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;line-height:1.75;margin:0;">
+                        🌿 Site visits available 7 days a week.<br>
+                        Complimentary pickup from Kompally for groups of 4+.
+                    </p>
+                </div>
+            </div>""", unsafe_allow_html=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
     # ── ADMIN SECTION ──
     render_admin_section()
@@ -2149,11 +2324,11 @@ def render_footer():
                     55 acres of lush greenery at Achampet, Toopran, Telangana.
                 </p>
                 <div style="margin-top:24px;display:flex;gap:10px;">
-                    <a href="https://wa.me/919640222237" target="_blank"
+                    <a href="https://wa.me/919640222238" target="_blank"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(37,211,102,0.15);
                               border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">💬</a>
-                    <a href="tel:+919640222237"
+                    <a href="tel:+919640222238"
                        style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,0.1);
                               border:1px solid rgba(201,168,76,0.25);display:flex;align-items:center;
                               justify-content:center;font-size:1rem;text-decoration:none;">📞</a>
@@ -2199,7 +2374,9 @@ def render_footer():
     """, unsafe_allow_html=True)
 
 
-# ─── MAIN ───────────────────────────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════════════════════
+#  MAIN
+# ═══════════════════════════════════════════════════════════════════════════
 def main():
     inject_css()
 
@@ -2227,4 +2404,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
