@@ -1322,10 +1322,10 @@ def render_navbar():
             </div>
         </div>
         <div class="nav-right">
-            <a class="nav-wa-btn" href="https://wa.me/919640222238" target="_blank">
+            <a class="nav-wa-btn" href="https://wa.me/919640222237" target="_blank">
                 💬 WhatsApp
             </a>
-            <a class="nav-call-btn" href="tel:+919640222238">
+            <a class="nav-call-btn" href="tel:+919640222237">
                 📞 +91 96402 22238
             </a>
         </div>
