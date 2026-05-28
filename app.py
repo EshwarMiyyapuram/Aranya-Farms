@@ -111,7 +111,7 @@ def inject_css():
 
     /* ── HERO ── */
     .hero-section {
-        background: linear-gradient(135deg, #0d2218 0%, #1a3a2a 45%, #2d6a4f 100%);
+        background: linear-gradient(135deg, #0a1a10 0%, #1a3a2a 45%, #2d6a4f 100%);
         padding: 100px 60px 90px;
         position: relative;
         overflow: hidden;
@@ -119,18 +119,23 @@ def inject_css():
     .hero-section::before {
         content: '';
         position: absolute;
-        top: -100px; right: -100px;
-        width: 500px; height: 500px;
+        top: -120px; right: -100px;
+        width: 600px; height: 600px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(201,168,76,0.12), transparent 70%);
+        background: radial-gradient(circle, rgba(201,168,76,0.15), transparent 65%);
+        animation: pulse-gold 6s ease-in-out infinite;
     }
     .hero-section::after {
         content: '';
         position: absolute;
-        bottom: -80px; left: -80px;
-        width: 400px; height: 400px;
+        bottom: -100px; left: -80px;
+        width: 500px; height: 500px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(82,183,136,0.1), transparent 70%);
+        background: radial-gradient(circle, rgba(82,183,136,0.12), transparent 65%);
+    }
+    @keyframes pulse-gold {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.08); }
     }
     .hero-tag {
         font-size: 0.72rem;
@@ -283,16 +288,28 @@ def inject_css():
     /* ── FEATURE CARDS (About) ── */
     .feature-card {
         background: white;
-        border-radius: 12px;
+        border-radius: 14px;
         padding: 32px 28px;
         box-shadow: 0 4px 24px rgba(0,0,0,0.07);
         border-bottom: 4px solid var(--gold);
         text-align: center;
         height: 100%;
-        transition: transform 0.25s, box-shadow 0.25s;
+        transition: transform 0.3s cubic-bezier(.22,.61,.36,1), box-shadow 0.3s, border-color 0.3s;
+        position: relative;
+        overflow: hidden;
     }
-    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.12); }
-    .feature-card .fc-icon { font-size: 2.4rem; margin-bottom: 14px; }
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gold), var(--gold-light));
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 16px 44px rgba(26,58,42,0.14); border-color: var(--green-mid); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card .fc-icon { font-size: 2.6rem; margin-bottom: 16px; display: block; }
     .feature-card h4 {
         font-family: 'Playfair Display', serif;
         color: var(--green-deep);
@@ -301,16 +318,18 @@ def inject_css():
     }
     .feature-card p { color: var(--text-mid); font-size: 0.92rem; line-height: 1.7; margin: 0; }
 
-    /* ── PROPERTY CARDS ── */
+    /* ── PROPERTY CARDS — enhanced ── */
     .prop-card {
         background: white;
-        border-radius: 14px;
+        border-radius: 16px;
         overflow: hidden;
         box-shadow: 0 4px 28px rgba(0,0,0,0.09);
-        transition: transform 0.25s, box-shadow 0.25s;
+        transition: transform 0.3s cubic-bezier(.22,.61,.36,1), box-shadow 0.3s;
         height: 100%;
+        border: 1px solid rgba(0,0,0,0.05);
     }
-    .prop-card:hover { transform: translateY(-5px); box-shadow: 0 16px 44px rgba(0,0,0,0.14); }
+    .prop-card:hover { transform: translateY(-8px); box-shadow: 0 24px 56px rgba(26,58,42,0.18); }
+    .prop-card:hover .prop-badge { background: linear-gradient(135deg, var(--green-mid), var(--green-light)); color: white; }
     .prop-img-placeholder {
         background: linear-gradient(135deg, #2d6a4f, #1a3a2a);
         height: 210px;
@@ -328,15 +347,17 @@ def inject_css():
     .prop-img-placeholder .ph-label2 { color: var(--gold-light); font-size: 0.82rem; font-weight: 600; }
     .prop-badge {
         display: inline-block;
-        background: var(--gold);
+        background: linear-gradient(135deg, var(--gold), var(--gold-light));
         color: var(--green-deep);
         font-size: 0.68rem;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 4px 12px;
+        padding: 5px 14px;
         border-radius: 20px;
         margin-bottom: 10px;
+        transition: all 0.3s;
+        box-shadow: 0 2px 8px rgba(201,168,76,0.3);
     }
     .prop-body { padding: 24px; }
     .prop-body h3 {
@@ -405,9 +426,15 @@ def inject_css():
         display: flex;
         align-items: flex-start;
         gap: 16px;
-        padding: 18px 0;
-        border-bottom: 1px solid var(--beige-dark);
+        padding: 16px 14px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border-left: 4px solid var(--green-light);
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
     }
+    .loc-highlight:hover { transform: translateX(4px); box-shadow: 0 4px 18px rgba(26,58,42,0.1); border-color: var(--gold); }
     .loc-icon { font-size: 1.6rem; min-width: 40px; }
     .loc-content h4 { color: var(--green-deep); font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
     .loc-content p { color: var(--text-mid); font-size: 0.88rem; margin: 0; }
@@ -595,7 +622,7 @@ def render_navbar():
 
 
 # ─── PAGE NAV BUTTONS ────────────────────────────────────────────────────────
-PAGES = ["🏡 Home", "🌿 About", "🏘️ Properties", "📷 Gallery", "📍 Location", "📞 Contact"]
+PAGES = ["🏡 Home", "🌿 About", "🏘️ Properties", "📍 Location", "📞 Contact"]
 
 def render_page_nav():
     st.markdown("<div style='background:#f5f0e8; padding:10px 40px; border-bottom:1px solid #e0d8cc;'>", unsafe_allow_html=True)
@@ -615,6 +642,17 @@ def img_placeholder(label, desc="Add photo here", height=210, icon="🖼️"):
         <div class="ph-label2">{label}</div>
         <div style="color:rgba(255,255,255,0.4);font-size:0.7rem;">{desc}</div>
     </div>"""
+
+def land_img_html(path, alt="Land photo", height=210):
+    """Return an <img> tag if the file exists, else a styled placeholder."""
+    import os, base64
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+        ext = path.rsplit(".", 1)[-1].lower()
+        mime = "image/png" if ext == "png" else "image/jpeg"
+        return f'<img src="data:{mime};base64,{b64}" alt="{alt}" style="width:100%;height:{height}px;object-fit:cover;display:block;">'
+    return img_placeholder(alt, "Add photo", height, "🌾")
 
 def gallery_thumb(label, sub="Add photo"):
     return f"""
@@ -658,14 +696,23 @@ def page_home():
         """, unsafe_allow_html=True)
 
     with col2:
-        import os
-        if os.path.exists("images/land1.jpg"):
-            st.image("images/land1.jpg", use_container_width=True)
+        import os, base64 as _b64
+        hero_img = None
+        for _p in ["images/land1.png", "images/land1.jpg"]:
+            if os.path.exists(_p):
+                hero_img = _p
+                break
+        if hero_img:
+            ext = hero_img.rsplit(".", 1)[-1].lower()
+            mime = "image/png" if ext == "png" else "image/jpeg"
+            with open(hero_img, "rb") as f:
+                b64 = _b64.b64encode(f.read()).decode()
+            st.markdown(f'<img src="data:{mime};base64,{b64}" style="width:100%;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.35);" alt="Aranya Farms">', unsafe_allow_html=True)
         else:
             st.markdown("""
             <div class="hero-img-placeholder">
                 <div class="ph-icon">🌅</div>
-                <div class="ph-label">Add images/land1.jpg</div>
+                <div class="ph-label">Add images/land1.png</div>
                 <div class="ph-desc">Upload land photos to images/ folder</div>
             </div>
             """, unsafe_allow_html=True)
@@ -715,6 +762,49 @@ def page_home():
                 </div>
                 """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
+
+    # LAND PHOTOS STRIP
+    import os, base64 as _b64strip
+    land_paths = [
+        ("images/land1.png", "Farm Land View 1"),
+        ("images/land2.png", "Farm Land View 2"),
+        ("images/land3.png", "Farm Land View 3"),
+        ("images/land4.png", "Farm Land View 4"),
+    ]
+    available = [(p, c) for p, c in land_paths if os.path.exists(p)]
+    if available:
+        imgs_html = ""
+        for path, caption in available:
+            with open(path, "rb") as f:
+                b64 = _b64strip.b64encode(f.read()).decode()
+            imgs_html += f"""
+            <div style="position:relative;overflow:hidden;border-radius:12px;flex:1;min-width:0;">
+                <img src="data:image/png;base64,{b64}" alt="{caption}"
+                     style="width:100%;height:260px;object-fit:cover;display:block;
+                            transition:transform 0.5s ease;">
+                <div style="position:absolute;bottom:0;left:0;right:0;
+                            background:linear-gradient(transparent,rgba(10,26,16,0.75));
+                            padding:16px 14px 12px;color:rgba(255,255,255,0.85);
+                            font-size:0.75rem;letter-spacing:1px;">
+                    🌿 {caption}
+                </div>
+            </div>"""
+
+        st.markdown(f"""
+        <div style="background:#0d1f15;padding:50px 60px;">
+            <div style="text-align:center;margin-bottom:28px;">
+                <div class="section-tag" style="text-align:center;color:var(--gold-light);">The Land</div>
+                <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;">
+                    See Aranya Farms in its Natural Glory
+                </div>
+                <div style="width:60px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));
+                            border-radius:2px;margin:14px auto 0;"></div>
+            </div>
+            <div style="display:flex;gap:14px;align-items:stretch;">
+                {imgs_html}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     # AMENITIES
     st.markdown("""
@@ -784,9 +874,20 @@ def page_about():
         st.markdown('<div style="padding:0 60px 60px;background:#f5f0e8;">', unsafe_allow_html=True)
         col1, col2 = st.columns([1, 1], gap="large")
         with col1:
-            st.markdown(f"""
-            {img_placeholder("About Us – Farm Aerial View", "Add aerial/landscape photo", 340, "🏞️")}
-            """, unsafe_allow_html=True)
+            import os, base64 as _b64about
+            about_img = None
+            for _ap in ["images/land3.png", "images/land2.png", "images/land1.png"]:
+                if os.path.exists(_ap):
+                    about_img = _ap
+                    break
+            if about_img:
+                with open(about_img, "rb") as f:
+                    ab64 = _b64about.b64encode(f.read()).decode()
+                st.markdown(f'<img src="data:image/png;base64,{ab64}" style="width:100%;height:340px;object-fit:cover;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);" alt="Aranya Farms Land">', unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                {img_placeholder("About Us – Farm Aerial View", "Add aerial/landscape photo", 340, "🏞️")}
+                """, unsafe_allow_html=True)
         with col2:
             st.markdown("""
             <div style="padding:20px 0;">
@@ -913,6 +1014,7 @@ def page_properties():
             "specs": ["300 sq. yds", "605 sq. yds", "640 sq. yds", "753 sq. yds"],
             "desc": "Open farm plots in a gated, amenity-rich community. Build your dream home or enjoy managed farming. Clear titles, DTCP approved layout.",
             "note": "Plot photo — aerial / ground level",
+            "img": "images/land1.png",
         },
         {
             "badge": "Most Popular",
@@ -922,6 +1024,7 @@ def page_properties():
             "specs": ["1480 sft BUA", "685 sft BUA", "1500 sft BUA"],
             "desc": "Ready-to-move 3-BHK farm houses with contemporary architecture, private garden space, and complete modern amenities.",
             "note": "Farm house exterior / interior photo",
+            "img": "images/land2.png",
         },
         {
             "badge": "Luxury",
@@ -931,6 +1034,7 @@ def page_properties():
             "specs": ["2250 sft BUA", "Large Plot", "Private Garden"],
             "desc": "Exclusive premium villas with expansive built-up areas, landscaped private gardens, and premium finishes for the discerning buyer.",
             "note": "Villa exterior / aerial photo",
+            "img": "images/land3.png",
         },
         {
             "badge": "Investment",
@@ -940,6 +1044,7 @@ def page_properties():
             "specs": ["1+ Acre", "Custom Layout", "Managed Option"],
             "desc": "Bulk farmland parcels ideal for families or investor groups looking for larger green footprints with full community access.",
             "note": "Landscape / large plot photo",
+            "img": "images/land4.png",
         },
     ]
 
@@ -948,9 +1053,10 @@ def page_properties():
         c1, c2 = st.columns(2, gap="medium")
         for i, prop in enumerate(properties):
             with (c1 if i % 2 == 0 else c2):
+                card_img = land_img_html(prop["img"], prop["note"], 230)
                 st.markdown(f"""
                 <div class="prop-card">
-                    {img_placeholder(prop["note"], "Add property photo here", 210, prop["icon"])}
+                    <div style="overflow:hidden;border-radius:14px 14px 0 0;">{card_img}</div>
                     <div class="prop-body">
                         <div class="prop-badge">{prop["badge"]}</div>
                         <h3>{prop["title"]}</h3>
@@ -1117,18 +1223,40 @@ def page_location():
             <div class="gold-divider"></div>
             """, unsafe_allow_html=True)
 
-            # Placeholder map — replace with st.components.v1.iframe() for actual embed
-            st.markdown("""
-            <div class="map-placeholder">
-                <div class="mp-icon">🗺️</div>
-                <div class="mp-label">Google Maps – Aranya Farms</div>
-                <div class="mp-desc">
-                    Achampet, Toopran, Medchal-Malkajgiri Dist., Telangana<br><br>
-                    <em>Embed Google Maps iframe here. Use:<br>
-                    st.components.v1.iframe(src="MAPS_URL")</em>
+            # Satellite image or map embed
+            import os, base64 as _b64sat
+            sat_path = "images/satellite.png"
+            if os.path.exists(sat_path):
+                with open(sat_path, "rb") as f:
+                    sat_b64 = _b64sat.b64encode(f.read()).decode()
+                st.markdown(f"""
+                <div style="position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.18);">
+                    <img src="data:image/png;base64,{sat_b64}" alt="Satellite View – Aranya Farms, Achampet, Toopran"
+                         style="width:100%;height:380px;object-fit:cover;display:block;">
+                    <div style="position:absolute;bottom:0;left:0;right:0;
+                                background:linear-gradient(transparent,rgba(26,58,42,0.85));
+                                padding:20px 24px 16px;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <span style="font-size:1.4rem;">🛰️</span>
+                            <div>
+                                <div style="color:#e8c97e;font-weight:700;font-size:0.9rem;letter-spacing:1px;">SATELLITE VIEW</div>
+                                <div style="color:rgba(255,255,255,0.8);font-size:0.78rem;">Aranya Farms · Achampet, Toopran, Telangana</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown("""
+                <div class="map-placeholder">
+                    <div class="mp-icon">🗺️</div>
+                    <div class="mp-label">Google Maps – Aranya Farms</div>
+                    <div class="mp-desc">
+                        Achampet, Toopran, Medchal-Malkajgiri Dist., Telangana<br><br>
+                        <em>Add images/satellite.png to show satellite view here.</em>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
 
             st.markdown("""
             <div style="margin-top:20px;">
@@ -1319,7 +1447,7 @@ def render_footer():
             <div>
                 <p style="color:var(--gold-light);font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Quick Links</p>
                 <p style="color:rgba(255,255,255,0.5);font-size:0.88rem;line-height:2.2;">
-                    Home<br>About<br>Properties<br>Gallery<br>Location<br>Contact
+                    Home<br>About<br>Properties<br>Location<br>Contact
                 </p>
             </div>
             <div>
@@ -1358,8 +1486,6 @@ def main():
         page_about()
     elif page == "🏘️ Properties":
         page_properties()
-    elif page == "📷 Gallery":
-        page_gallery()
     elif page == "📍 Location":
         page_location()
     elif page == "📞 Contact":
