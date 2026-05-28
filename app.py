@@ -1376,9 +1376,35 @@ def page_home():
     with col1:
         st.markdown("""
         <div style="position:relative;z-index:2;">
+            <div style="
+                background: rgba(45,106,79,0.35);
+                border: 1px solid rgba(122,191,148,0.4);
+                border-radius: 12px;
+                padding: 18px 28px;
+                margin-bottom: 28px;
+                display: inline-block;
+                backdrop-filter: blur(8px);
+            ">
+                <div style="
+                    font-family: 'Cinzel', serif;
+                    font-size: 0.68rem;
+                    letter-spacing: 5px;
+                    color: rgba(255,255,255,0.5);
+                    text-transform: uppercase;
+                    margin-bottom: 6px;
+                ">Welcome to</div>
+                <div style="
+                    font-family: 'Cormorant Garamond', serif;
+                    font-size: 1.55rem;
+                    font-weight: 600;
+                    color: #7abf94;
+                    letter-spacing: 2px;
+                    line-height: 1.2;
+                ">🌿 Silver Oak Agro Farm</div>
+            </div>
             <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
             <h1 class="hero-h1">
-                <strong>Luxury</strong> Farm Living<br>at <em>Aranya Farms</em>
+                <strong style="color:#4a8c68;">Luxury</strong> <span style="color:#7abf94;">Farm Living</span><br>at <em>Aranya Farms</em>
             </h1>
             <p class="hero-para">
                 A premium gated community across 55 acres of lush green land at Achampet, Toopran —
