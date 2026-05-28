@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import base64
+import pandas as pd
 
 # ─── PAGE CONFIG ────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -14,7 +15,7 @@ st.set_page_config(
 def inject_css():
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Cinzel:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Cinzel:wght@400;600;700&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'DM Sans', sans-serif;
@@ -25,10 +26,11 @@ def inject_css():
         max-width: 100% !important;
     }
     #MainMenu, footer, header { visibility: hidden; }
+    .stApp { background: #faf7f0; }
 
     :root {
-        --forest:       #0e2318;
-        --deep:         #1a3a2a;
+        --forest:       #0a1f12;
+        --deep:         #142d1e;
         --mid:          #2d6a4f;
         --sage:         #4a8c68;
         --leaf:         #7abf94;
@@ -42,91 +44,128 @@ def inject_css():
         --ink:          #1a2b1e;
         --moss:         #3d5a45;
         --mist:         #8fad96;
+        --shadow-dark:  rgba(10, 31, 18, 0.18);
     }
 
-    /* ══ NAV ══ */
+    /* ══ SCROLLBAR ══ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ══ TOP NAV ══ */
     .top-nav {
-        background: var(--forest);
-        padding: 0 48px;
+        background: rgba(10, 31, 18, 0.97);
+        padding: 0 56px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 72px;
+        height: 76px;
         position: sticky;
         top: 0;
         z-index: 999;
-        border-bottom: 1px solid rgba(201,168,76,0.25);
+        border-bottom: 1px solid rgba(201,168,76,0.2);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 4px 32px rgba(0,0,0,0.3);
     }
     .nav-brand {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 16px;
     }
-    .nav-brand-icon {
-        width: 40px;
-        height: 40px;
+    .nav-brand-logo {
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--gold), var(--gold-light));
+        background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         flex-shrink: 0;
+        box-shadow: 0 4px 16px rgba(201,168,76,0.4);
     }
     .nav-name {
         font-family: 'Cinzel', serif;
         color: var(--gold);
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         font-weight: 700;
-        letter-spacing: 2px;
+        letter-spacing: 2.5px;
         line-height: 1.1;
     }
     .nav-sub {
-        color: rgba(255,255,255,0.45);
-        font-size: 0.6rem;
-        letter-spacing: 3px;
+        color: rgba(255,255,255,0.38);
+        font-size: 0.58rem;
+        letter-spacing: 3.5px;
         text-transform: uppercase;
         font-weight: 300;
+        margin-top: 2px;
     }
-    .nav-contact-pill {
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .nav-wa-btn {
+        background: rgba(37,211,102,0.15);
+        border: 1px solid rgba(37,211,102,0.35);
+        color: #25d366;
+        padding: 8px 18px;
+        border-radius: 50px;
+        font-size: 0.73rem;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.25s;
+    }
+    .nav-wa-btn:hover { background: rgba(37,211,102,0.25); }
+    .nav-call-btn {
         background: linear-gradient(135deg, var(--gold), var(--gold-light));
         color: var(--forest);
-        padding: 9px 22px;
+        padding: 9px 24px;
         border-radius: 50px;
-        font-size: 0.78rem;
-        font-weight: 600;
+        font-size: 0.73rem;
+        font-weight: 700;
         letter-spacing: 1px;
         text-transform: uppercase;
         text-decoration: none;
-        display: inline-block;
-    }
-
-    /* ══ PAGE NAV ══ */
-    .page-nav-wrap {
-        background: var(--cream);
-        border-bottom: 1px solid var(--parchment);
-        padding: 0 48px;
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 4px;
-        height: 52px;
+        gap: 6px;
+        box-shadow: 0 4px 16px rgba(201,168,76,0.45);
+        transition: all 0.25s;
     }
+    .nav-call-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.55); }
 
-    /* Streamlit button overrides inside page-nav */
+    /* ══ PAGE NAV BAR ══ */
+    .page-nav-outer {
+        background: var(--white);
+        border-bottom: 1px solid rgba(201,168,76,0.2);
+        padding: 0 48px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+        position: sticky;
+        top: 76px;
+        z-index: 998;
+    }
     div[data-testid="stHorizontalBlock"] .stButton > button {
         background: transparent !important;
         color: var(--moss) !important;
         border: none !important;
         border-radius: 0 !important;
-        font-family: 'DM Sans', sans-serif !important;
-        font-size: 0.82rem !important;
-        font-weight: 500 !important;
-        letter-spacing: 1.5px !important;
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 2px !important;
         text-transform: uppercase !important;
-        padding: 8px 20px !important;
+        padding: 18px 22px !important;
         box-shadow: none !important;
-        height: 40px !important;
-        transition: color 0.2s !important;
+        height: 56px !important;
+        transition: all 0.2s !important;
+        border-bottom: 2px solid transparent !important;
     }
     div[data-testid="stHorizontalBlock"] .stButton > button:hover {
         color: var(--gold) !important;
@@ -136,593 +175,969 @@ def inject_css():
 
     /* ══ HERO ══ */
     .hero {
-        background: linear-gradient(160deg, var(--forest) 0%, #142d1e 40%, var(--deep) 75%, #1f4a32 100%);
-        padding: 110px 72px 100px;
+        background: linear-gradient(155deg, var(--forest) 0%, #0f2416 30%, #162e20 60%, #1a3d27 85%, #1f4a2e 100%);
+        padding: 120px 80px 110px;
         position: relative;
         overflow: hidden;
-        min-height: 600px;
+        min-height: 640px;
         display: flex;
         align-items: center;
     }
     .hero::before {
         content: '';
         position: absolute;
-        top: -200px; right: -150px;
-        width: 700px; height: 700px;
+        top: -180px; right: -120px;
+        width: 750px; height: 750px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 60%);
-        animation: shimmer 8s ease-in-out infinite;
+        background: radial-gradient(circle, rgba(201,168,76,0.13) 0%, transparent 65%);
+        animation: pulse-glow 9s ease-in-out infinite;
     }
     .hero::after {
         content: '';
         position: absolute;
-        bottom: -150px; left: -100px;
-        width: 500px; height: 500px;
+        bottom: -200px; left: -80px;
+        width: 600px; height: 600px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(74,140,104,0.1) 0%, transparent 60%);
+        background: radial-gradient(circle, rgba(74,140,104,0.09) 0%, transparent 65%);
+        animation: pulse-glow2 12s ease-in-out infinite;
     }
-    @keyframes shimmer {
-        0%,100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
-        50% { opacity: 1; transform: scale(1.1) rotate(5deg); }
+    .hero-grid-lines {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
     }
-
+    @keyframes pulse-glow {
+        0%,100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.12); }
+    }
+    @keyframes pulse-glow2 {
+        0%,100% { opacity: 0.5; transform: scale(1) rotate(0deg); }
+        50% { opacity: 0.9; transform: scale(1.08) rotate(-5deg); }
+    }
     .hero-eyebrow {
         font-family: 'Cinzel', serif;
-        font-size: 0.7rem;
-        letter-spacing: 5px;
+        font-size: 0.65rem;
+        letter-spacing: 6px;
         color: var(--gold);
         text-transform: uppercase;
-        margin-bottom: 20px;
-        display: flex;
+        margin-bottom: 22px;
+        display: inline-flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
+        opacity: 0.9;
     }
     .hero-eyebrow::before, .hero-eyebrow::after {
         content: '';
-        width: 40px;
+        width: 36px;
         height: 1px;
-        background: var(--gold);
-        opacity: 0.5;
+        background: linear-gradient(90deg, transparent, var(--gold));
+        opacity: 0.6;
     }
+    .hero-eyebrow::after { background: linear-gradient(90deg, var(--gold), transparent); }
     .hero-h1 {
         font-family: 'Cormorant Garamond', serif;
-        font-size: clamp(2.8rem, 5vw, 5rem);
+        font-size: clamp(2.8rem, 5.5vw, 5.5rem);
         font-weight: 300;
         color: #ffffff;
-        line-height: 1.1;
-        margin-bottom: 24px;
-        letter-spacing: -1px;
+        line-height: 1.08;
+        margin-bottom: 26px;
+        letter-spacing: -0.5px;
     }
     .hero-h1 em {
         color: var(--gold-light);
         font-style: italic;
     }
+    .hero-h1 strong {
+        font-weight: 600;
+        color: white;
+    }
     .hero-para {
-        color: rgba(255,255,255,0.65);
+        color: rgba(255,255,255,0.62);
         font-size: 1.05rem;
-        line-height: 1.8;
-        max-width: 520px;
-        margin-bottom: 44px;
+        line-height: 1.85;
+        max-width: 500px;
+        margin-bottom: 40px;
         font-weight: 300;
     }
 
-    /* Badges row */
+    /* ── BADGE ROW ── */
     .badge-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
         margin-bottom: 44px;
     }
     .stat-badge {
-        background: rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.05);
         border: 1px solid rgba(201,168,76,0.3);
-        border-radius: 6px;
+        border-radius: 8px;
         padding: 10px 18px;
         text-align: center;
         backdrop-filter: blur(8px);
+        transition: all 0.25s;
+    }
+    .stat-badge:hover {
+        background: rgba(201,168,76,0.12);
+        border-color: rgba(201,168,76,0.6);
+        transform: translateY(-2px);
     }
     .stat-badge .sb-val {
         font-family: 'Cormorant Garamond', serif;
-        font-size: 1.25rem;
-        font-weight: 600;
+        font-size: 1.2rem;
+        font-weight: 700;
         color: var(--gold-light);
         line-height: 1;
         display: block;
     }
     .stat-badge .sb-lbl {
-        font-size: 0.65rem;
-        color: rgba(255,255,255,0.5);
-        letter-spacing: 1.5px;
+        font-size: 0.6rem;
+        color: rgba(255,255,255,0.45);
+        letter-spacing: 2px;
         text-transform: uppercase;
         display: block;
         margin-top: 4px;
     }
 
-    /* CTA Buttons */
+    /* ── CTA BUTTONS ── */
     .btn-gold {
-        background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+        background: linear-gradient(135deg, var(--gold) 0%, #d4b05a 50%, var(--gold-light) 100%);
         color: var(--forest);
-        padding: 15px 34px;
+        padding: 15px 36px;
         border-radius: 4px;
-        font-weight: 600;
-        font-size: 0.82rem;
-        letter-spacing: 2px;
+        font-weight: 700;
+        font-size: 0.78rem;
+        letter-spacing: 2.5px;
         text-transform: uppercase;
         border: none;
         cursor: pointer;
         text-decoration: none;
-        display: inline-block;
-        box-shadow: 0 6px 24px rgba(201,168,76,0.4);
-        transition: all 0.25s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 28px rgba(201,168,76,0.45);
+        transition: all 0.3s;
+        font-family: 'Cinzel', serif;
     }
-    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(201,168,76,0.55); }
+    .btn-gold:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 40px rgba(201,168,76,0.6);
+    }
     .btn-ghost {
         background: transparent;
-        color: rgba(255,255,255,0.85);
-        padding: 14px 32px;
+        color: rgba(255,255,255,0.82);
+        padding: 14px 34px;
         border-radius: 4px;
         font-weight: 500;
-        font-size: 0.82rem;
-        letter-spacing: 2px;
+        font-size: 0.78rem;
+        letter-spacing: 2.5px;
         text-transform: uppercase;
-        border: 1px solid rgba(255,255,255,0.35);
+        border: 1px solid rgba(255,255,255,0.3);
         cursor: pointer;
         text-decoration: none;
-        display: inline-block;
-        transition: all 0.25s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        font-family: 'Cinzel', serif;
     }
-    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-ghost:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: rgba(201,168,76,0.08);
+    }
     .btn-green {
-        background: linear-gradient(135deg, var(--mid) 0%, var(--deep) 100%);
+        background: linear-gradient(135deg, var(--mid), var(--deep));
         color: #fff;
         padding: 13px 30px;
         border-radius: 4px;
         font-weight: 600;
-        font-size: 0.82rem;
-        letter-spacing: 2px;
+        font-size: 0.78rem;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
         border: none;
         cursor: pointer;
         text-decoration: none;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         box-shadow: 0 4px 16px rgba(45,106,79,0.4);
+        transition: all 0.25s;
     }
+    .btn-green:hover { transform: translateY(-2px); }
     .btn-wa {
-        background: #25d366;
+        background: linear-gradient(135deg, #25d366, #1ebe5e);
         color: #fff;
         padding: 13px 28px;
         border-radius: 4px;
         font-weight: 600;
-        font-size: 0.82rem;
-        letter-spacing: 1px;
+        font-size: 0.78rem;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
         border: none;
         cursor: pointer;
         text-decoration: none;
-        display: inline-block;
-        box-shadow: 0 4px 14px rgba(37,211,102,0.4);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 18px rgba(37,211,102,0.4);
+        transition: all 0.25s;
     }
+    .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.5); }
     .btn-call {
-        background: #1976d2;
+        background: linear-gradient(135deg, #1565c0, #0d47a1);
         color: #fff;
         padding: 13px 28px;
         border-radius: 4px;
         font-weight: 600;
-        font-size: 0.82rem;
-        letter-spacing: 1px;
+        font-size: 0.78rem;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
         border: none;
         cursor: pointer;
         text-decoration: none;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px rgba(21,101,192,0.4);
+        transition: all 0.25s;
     }
-    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-call:hover { transform: translateY(-2px); }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 
-    /* ══ SECTION SHELLS ══ */
-    .sec { padding: 88px 72px; }
+    /* ══ SECTIONS ══ */
+    .sec { padding: 96px 80px; }
+    .sec-sm { padding: 64px 80px; }
     .sec-cream { background: var(--cream); }
     .sec-white { background: var(--white); }
-    .sec-dark  { background: var(--forest); color: white; }
+    .sec-dark  { background: var(--forest); }
+    .sec-deep  { background: var(--deep); }
     .sec-sand  { background: var(--sand); }
-    .sec-mid   { background: #f0ead8; }
 
     .eyebrow {
         font-family: 'Cinzel', serif;
-        font-size: 0.65rem;
-        letter-spacing: 4px;
+        font-size: 0.62rem;
+        letter-spacing: 5px;
         text-transform: uppercase;
         color: var(--gold);
-        margin-bottom: 12px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .eyebrow-center { justify-content: center; }
+    .eyebrow::before {
+        content: '';
+        width: 24px;
+        height: 1px;
+        background: var(--gold);
+        opacity: 0.6;
     }
     .sec-h2 {
         font-family: 'Cormorant Garamond', serif;
-        font-size: 2.8rem;
+        font-size: clamp(2.2rem, 3.5vw, 3.2rem);
         font-weight: 300;
         color: var(--ink);
-        line-height: 1.15;
-        margin-bottom: 10px;
+        line-height: 1.12;
+        margin-bottom: 12px;
         letter-spacing: -0.5px;
     }
     .sec-h2 em { font-style: italic; color: var(--mid); }
     .sec-h2-white {
         font-family: 'Cormorant Garamond', serif;
-        font-size: 2.8rem;
+        font-size: clamp(2.2rem, 3.5vw, 3.2rem);
         font-weight: 300;
         color: #fff;
-        line-height: 1.15;
-        margin-bottom: 10px;
+        line-height: 1.12;
+        margin-bottom: 12px;
     }
     .sec-h2-white em { color: var(--gold-light); font-style: italic; }
     .rule {
-        width: 56px;
+        width: 52px;
         height: 2px;
         background: linear-gradient(90deg, var(--gold), var(--gold-light));
         border-radius: 2px;
-        margin: 16px 0 28px;
+        margin: 18px 0 32px;
     }
-    .rule-center { margin: 16px auto 28px; }
+    .rule-center { margin: 18px auto 32px; }
     .sec-lead {
         color: var(--moss);
         font-size: 1.02rem;
-        line-height: 1.85;
+        line-height: 1.9;
         max-width: 640px;
         font-weight: 300;
     }
+    .sec-lead-center { text-align: center; margin: 0 auto; }
 
     /* ══ STATS STRIP ══ */
-    .strip {
-        background: var(--deep);
-        padding: 36px 72px;
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
-        gap: 24px;
+    .stats-strip {
+        background: linear-gradient(90deg, var(--deep) 0%, #1a3a2a 50%, var(--deep) 100%);
+        padding: 40px 80px;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0;
         border-top: 1px solid rgba(201,168,76,0.2);
         border-bottom: 1px solid rgba(201,168,76,0.2);
     }
-    .strip-item { text-align: center; }
+    .strip-item {
+        text-align: center;
+        padding: 8px 0;
+        position: relative;
+    }
+    .strip-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: 0; top: 10%; height: 80%;
+        width: 1px;
+        background: rgba(201,168,76,0.2);
+    }
     .strip-val {
         font-family: 'Cormorant Garamond', serif;
-        font-size: 2.4rem;
+        font-size: 2.6rem;
         font-weight: 600;
         color: var(--gold-light);
         display: block;
         line-height: 1;
     }
     .strip-lbl {
-        font-size: 0.68rem;
-        color: rgba(255,255,255,0.5);
-        letter-spacing: 2px;
+        font-size: 0.63rem;
+        color: rgba(255,255,255,0.45);
+        letter-spacing: 2.5px;
         text-transform: uppercase;
-        margin-top: 6px;
+        margin-top: 8px;
         display: block;
     }
 
     /* ══ FEATURE CARDS ══ */
     .feat-card {
         background: white;
-        border-radius: 12px;
-        padding: 36px 28px;
-        box-shadow: 0 2px 20px rgba(26,58,42,0.07);
-        border-top: 3px solid transparent;
-        border-image: linear-gradient(90deg, var(--gold), var(--gold-light)) 1;
+        border-radius: 16px;
+        padding: 40px 30px;
+        box-shadow: 0 4px 24px rgba(26,58,42,0.07);
         text-align: center;
         height: 100%;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(201,168,76,0.1);
     }
-    .feat-card:hover { transform: translateY(-6px); box-shadow: 0 16px 44px rgba(26,58,42,0.14); }
-    .feat-icon { font-size: 2.4rem; margin-bottom: 18px; display: block; }
+    .feat-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+        transform: scaleX(0);
+        transition: transform 0.35s ease;
+    }
+    .feat-card:hover { transform: translateY(-8px); box-shadow: 0 20px 52px rgba(26,58,42,0.15); }
+    .feat-card:hover::before { transform: scaleX(1); }
+    .feat-icon-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.05));
+        border: 1px solid rgba(201,168,76,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 22px;
+        font-size: 1.8rem;
+        transition: all 0.35s;
+    }
+    .feat-card:hover .feat-icon-wrap {
+        background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.1));
+        border-color: rgba(201,168,76,0.4);
+        transform: scale(1.08);
+    }
     .feat-card h4 {
-        font-family: 'Cormorant Garamond', serif;
+        font-family: 'Cinzel', serif;
         color: var(--ink);
-        font-size: 1.25rem;
+        font-size: 0.95rem;
         font-weight: 600;
-        margin-bottom: 10px;
+        letter-spacing: 1.5px;
+        margin-bottom: 12px;
     }
-    .feat-card p { color: var(--moss); font-size: 0.9rem; line-height: 1.75; margin: 0; }
+    .feat-card p { color: var(--moss); font-size: 0.9rem; line-height: 1.8; margin: 0; font-weight: 300; }
 
     /* ══ AMENITY CHIPS ══ */
     .amenity-chip {
         display: flex;
         align-items: center;
-        gap: 12px;
-        background: var(--cream);
-        border: 1px solid var(--parchment);
-        border-radius: 8px;
-        padding: 14px 18px;
+        gap: 14px;
+        background: var(--white);
+        border: 1px solid rgba(201,168,76,0.15);
+        border-radius: 10px;
+        padding: 16px 20px;
         margin-bottom: 10px;
-        transition: all 0.2s;
+        transition: all 0.25s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
     .amenity-chip:hover {
-        background: white;
+        background: var(--cream);
         border-color: var(--gold);
-        box-shadow: 0 4px 16px rgba(201,168,76,0.15);
+        box-shadow: 0 6px 20px rgba(201,168,76,0.18);
+        transform: translateX(4px);
     }
-    .ac-icon { font-size: 1.4rem; }
-    .ac-name { color: var(--ink); font-size: 0.9rem; font-weight: 500; }
+    .ac-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .ac-name { color: var(--ink); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.3px; }
 
     /* ══ PROPERTY CARDS ══ */
     .prop-card {
         background: white;
-        border-radius: 14px;
+        border-radius: 18px;
         overflow: hidden;
-        box-shadow: 0 4px 28px rgba(0,0,0,0.08);
-        transition: transform 0.35s ease, box-shadow 0.35s ease;
-        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 6px 32px rgba(0,0,0,0.08);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        border: 1px solid rgba(201,168,76,0.1);
         height: 100%;
+        position: relative;
     }
-    .prop-card:hover { transform: translateY(-8px); box-shadow: 0 24px 56px rgba(26,58,42,0.16); }
+    .prop-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 28px 64px rgba(26,58,42,0.2);
+    }
+    .prop-card-header {
+        background: linear-gradient(160deg, var(--deep), #1f4a32);
+        padding: 36px 28px 32px;
+        position: relative;
+        overflow: hidden;
+    }
+    .prop-card-header::before {
+        content: '';
+        position: absolute;
+        top: -40px; right: -40px;
+        width: 160px; height: 160px;
+        border-radius: 50%;
+        background: rgba(201,168,76,0.08);
+    }
     .prop-badge {
         display: inline-block;
         background: linear-gradient(135deg, var(--gold), var(--gold-light));
         color: var(--forest);
-        font-size: 0.65rem;
+        font-family: 'Cinzel', serif;
+        font-size: 0.6rem;
         font-weight: 700;
         letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 5px 14px;
+        padding: 5px 16px;
         border-radius: 50px;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 1;
     }
-    .prop-body { padding: 26px; }
-    .prop-body h3 {
+    .prop-card-header h3 {
         font-family: 'Cormorant Garamond', serif;
-        color: var(--ink);
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 6px;
+        color: white;
+        font-size: 1.8rem;
+        font-weight: 300;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+        line-height: 1.15;
     }
+    .prop-card-header h3 em { font-style: italic; color: var(--gold-light); }
     .prop-price {
-        color: var(--gold);
         font-family: 'Cormorant Garamond', serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 14px;
-    }
-    .prop-specs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-    .spec-pill {
-        background: var(--cream);
-        color: var(--moss);
-        font-size: 0.72rem;
-        padding: 5px 12px;
-        border-radius: 50px;
-        border: 1px solid var(--parchment);
-    }
-    .prop-body p { color: var(--moss); font-size: 0.88rem; line-height: 1.7; }
-
-    /* ══ CONTACT INFO BOX ══ */
-    .contact-info-box {
-        background: linear-gradient(160deg, var(--deep), var(--forest));
-        border-radius: 16px;
-        padding: 36px 32px;
-        border: 1px solid rgba(201,168,76,0.2);
-        height: 100%;
-    }
-    .contact-info-box h3 {
-        font-family: 'Cormorant Garamond', serif;
-        color: var(--gold-light);
         font-size: 1.6rem;
         font-weight: 600;
-        margin-bottom: 28px;
+        color: var(--gold-light);
+        position: relative;
+        z-index: 1;
     }
-    .contact-line {
+    .prop-body { padding: 28px; }
+    .prop-desc { color: var(--moss); font-size: 0.88rem; line-height: 1.8; margin-bottom: 20px; font-weight: 300; }
+    .prop-specs {
         display: flex;
-        gap: 14px;
-        margin-bottom: 22px;
-        align-items: flex-start;
-    }
-    .ci-icon { font-size: 1.2rem; margin-top: 2px; flex-shrink: 0; }
-    .ci-text { color: rgba(255,255,255,0.75); font-size: 0.9rem; line-height: 1.7; }
-    .ci-text strong { color: rgba(255,255,255,0.95); display: block; margin-bottom: 2px; }
-
-    /* ══ LOCATION HIGHLIGHTS ══ */
-    .loc-item {
-        display: flex;
-        gap: 16px;
-        align-items: flex-start;
-        padding: 18px 20px;
-        background: white;
-        border-radius: 10px;
-        margin-bottom: 12px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-        border-left: 3px solid var(--gold);
-        transition: box-shadow 0.2s;
-    }
-    .loc-item:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.1); }
-    .loc-icon-wrap { font-size: 1.3rem; flex-shrink: 0; }
-    .loc-text h4 {
-        font-family: 'Cormorant Garamond', serif;
-        color: var(--ink);
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 3px;
-    }
-    .loc-text p { color: var(--moss); font-size: 0.85rem; margin: 0; line-height: 1.55; }
-
-    /* ══ MAP PLACEHOLDER ══ */
-    .map-block {
-        background: linear-gradient(135deg, #1a3a2a, #0e2318);
-        border-radius: 16px;
-        height: 380px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border: 1px dashed rgba(201,168,76,0.35);
-        color: rgba(255,255,255,0.6);
-        font-size: 0.85rem;
-        text-align: center;
-        padding: 30px;
-        gap: 12px;
-    }
-    .map-block .mb-icon { font-size: 3.5rem; opacity: 0.45; }
-    .map-block .mb-title { color: var(--gold-light); font-weight: 600; font-size: 1rem; }
-    .map-block .mb-sub { font-size: 0.8rem; color: rgba(255,255,255,0.4); line-height: 1.6; }
-
-    /* ══ GALLERY ══ */
-    .gallery-category { margin-bottom: 52px; }
-    .gallery-cat-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.4rem;
-        color: var(--ink);
-        font-weight: 600;
-    }
-    .gallery-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-    }
-    .gallery-thumb {
-        background: linear-gradient(135deg, var(--mid) 0%, var(--deep) 100%);
-        border-radius: 10px;
-        height: 175px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: rgba(255,255,255,0.55);
-        font-size: 0.72rem;
-        letter-spacing: 0.5px;
+        flex-wrap: wrap;
         gap: 8px;
-        padding: 12px;
-        text-align: center;
-        border: 1px solid rgba(201,168,76,0.15);
+        margin-bottom: 22px;
     }
-    .gt-icon { font-size: 2rem; opacity: 0.4; }
-    .gt-label { color: rgba(255,255,255,0.65); font-size: 0.78rem; font-weight: 500; }
-    .gt-sub { color: rgba(255,255,255,0.3); font-size: 0.68rem; }
-
-    /* ══ FOOTER ══ */
-    .footer {
-        background: var(--forest);
-        padding: 72px 72px 32px;
-        border-top: 1px solid rgba(201,168,76,0.2);
+    .spec-pill {
+        background: var(--cream);
+        border: 1px solid var(--parchment);
+        color: var(--ink);
+        font-size: 0.72rem;
+        padding: 5px 14px;
+        border-radius: 50px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
     }
-    .footer-logo {
-        font-family: 'Cinzel', serif;
+    .prop-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+    .prop-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.82rem;
+        color: var(--moss);
+    }
+    .prop-feature-item::before {
+        content: '✓';
         color: var(--gold);
-        font-size: 1.3rem;
-        letter-spacing: 2px;
-        margin-bottom: 6px;
-    }
-    .footer-tagline {
-        font-family: 'Cormorant Garamond', serif;
-        color: rgba(255,255,255,0.4);
+        font-weight: 700;
         font-size: 0.85rem;
-        letter-spacing: 3px;
-        font-style: italic;
-        margin-bottom: 18px;
-    }
-    .footer-copy {
-        text-align: center;
-        color: rgba(255,255,255,0.3);
-        font-size: 0.78rem;
-        padding-top: 28px;
-        border-top: 1px solid rgba(255,255,255,0.08);
     }
 
-    /* ══ QUOTE BLOCK ══ */
-    .quote-block {
-        background: linear-gradient(135deg, var(--deep), #1f4a32);
-        border-radius: 14px;
-        padding: 44px 48px;
-        border-left: 4px solid var(--gold);
-        margin: 40px 0;
-    }
-    .quote-text {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.55rem;
-        font-weight: 300;
-        font-style: italic;
-        color: rgba(255,255,255,0.9);
-        line-height: 1.65;
-    }
-
-    /* ══ PHILOSOPHY PILLARS ══ */
+    /* ══ PILLAR CARDS ══ */
     .pillar-card {
         background: white;
-        border-radius: 14px;
-        padding: 40px 30px;
-        box-shadow: 0 4px 24px rgba(26,58,42,0.08);
+        border-radius: 18px;
+        padding: 48px 32px;
+        box-shadow: 0 6px 30px rgba(26,58,42,0.08);
         text-align: center;
         height: 100%;
         position: relative;
         overflow: hidden;
+        transition: all 0.35s ease;
+        border: 1px solid rgba(201,168,76,0.1);
     }
     .pillar-card::after {
         content: '';
         position: absolute;
         bottom: 0; left: 0; right: 0;
         height: 4px;
-        background: linear-gradient(90deg, var(--gold), var(--gold-light));
+        background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
     }
-    .pillar-card .pillar-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+    .pillar-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(26,58,42,0.14); }
+    .pillar-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 5rem;
+        font-weight: 700;
+        color: rgba(201,168,76,0.1);
+        position: absolute;
+        top: -10px; right: 16px;
+        line-height: 1;
+        pointer-events: none;
+    }
+    .pillar-icon { font-size: 3rem; margin-bottom: 22px; display: block; }
     .pillar-card h4 {
         font-family: 'Cinzel', serif;
         color: var(--ink);
-        font-size: 1.1rem;
-        letter-spacing: 2px;
-        margin-bottom: 14px;
+        font-size: 1rem;
+        letter-spacing: 3px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 1;
     }
-    .pillar-card p { color: var(--moss); font-size: 0.9rem; line-height: 1.75; }
+    .pillar-card p { color: var(--moss); font-size: 0.88rem; line-height: 1.82; font-weight: 300; }
 
-    /* ══ LIFESTYLE LIST ══ */
+    /* ══ LIFESTYLE ITEMS ══ */
     .lifestyle-item {
         display: flex;
-        gap: 18px;
-        padding: 20px 24px;
+        gap: 20px;
+        padding: 24px 28px;
         background: white;
-        border-radius: 10px;
+        border-radius: 14px;
         margin-bottom: 14px;
-        box-shadow: 0 2px 14px rgba(0,0,0,0.05);
+        box-shadow: 0 3px 18px rgba(0,0,0,0.05);
+        transition: all 0.25s;
+        border: 1px solid rgba(201,168,76,0.1);
     }
-    .lifestyle-item .li-icon { font-size: 2rem; flex-shrink: 0; }
+    .lifestyle-item:hover {
+        box-shadow: 0 10px 36px rgba(26,58,42,0.1);
+        border-color: rgba(201,168,76,0.3);
+        transform: translateX(4px);
+    }
+    .lifestyle-item .li-icon {
+        font-size: 2.2rem;
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.05));
+        border-radius: 12px;
+        border: 1px solid rgba(201,168,76,0.15);
+    }
     .lifestyle-item h4 {
         font-family: 'Cormorant Garamond', serif;
         color: var(--ink);
-        font-size: 1.1rem;
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    .lifestyle-item p { color: var(--moss); font-size: 0.88rem; margin: 0; line-height: 1.7; font-weight: 300; }
+
+    /* ══ LOCATION ITEMS ══ */
+    .loc-item {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+        padding: 20px 24px;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 14px rgba(0,0,0,0.04);
+        border-left: 3px solid var(--gold);
+        transition: all 0.25s;
+    }
+    .loc-item:hover {
+        box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+        transform: translateX(4px);
+    }
+    .loc-icon-wrap { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .loc-text h4 {
+        font-family: 'Cormorant Garamond', serif;
+        color: var(--ink);
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 3px;
+    }
+    .loc-text p { color: var(--moss); font-size: 0.84rem; margin: 0; line-height: 1.6; font-weight: 300; }
+
+    /* ══ CONNECTIVITY CARDS ══ */
+    .conn-card {
+        background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+        border: 1px solid rgba(201,168,76,0.25);
+        border-radius: 14px;
+        padding: 28px 24px;
+        text-align: center;
+        transition: all 0.3s;
+        height: 100%;
+    }
+    .conn-card:hover {
+        background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.07));
+        border-color: rgba(201,168,76,0.5);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(201,168,76,0.18);
+    }
+    .conn-card .cc-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .conn-card .cc-dest {
+        font-family: 'Cormorant Garamond', serif;
+        color: var(--ink);
+        font-size: 1.05rem;
         font-weight: 600;
         margin-bottom: 4px;
     }
-    .lifestyle-item p { color: var(--moss); font-size: 0.87rem; margin: 0; line-height: 1.65; }
+    .conn-card .cc-time {
+        font-family: 'Cinzel', serif;
+        font-size: 1.5rem;
+        color: var(--gold);
+        font-weight: 600;
+        display: block;
+        margin: 8px 0 4px;
+    }
+    .conn-card .cc-via {
+        font-size: 0.72rem;
+        color: var(--mist);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
 
-    /* ══ DATA TABLE STYLING ══ */
-    [data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; }
+    /* ══ MAP BLOCK ══ */
+    .map-embed-block {
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+        border: 1px solid rgba(201,168,76,0.2);
+        position: relative;
+    }
+    .map-embed-block iframe {
+        display: block;
+        border: none;
+    }
+    .map-overlay-badge {
+        position: absolute;
+        top: 20px; left: 20px;
+        background: rgba(10,31,18,0.9);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(201,168,76,0.35);
+        border-radius: 10px;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .map-overlay-badge .mob-dot {
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 0 0 0 3px rgba(201,168,76,0.25);
+        animation: dot-pulse 2s infinite;
+    }
+    @keyframes dot-pulse {
+        0%,100% { box-shadow: 0 0 0 3px rgba(201,168,76,0.25); }
+        50% { box-shadow: 0 0 0 7px rgba(201,168,76,0.1); }
+    }
+    .mob-text { color: white; font-size: 0.78rem; font-weight: 500; line-height: 1.4; }
+    .mob-text small { color: rgba(255,255,255,0.5); font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; display: block; }
 
-    /* ══ FORM STYLING ══ */
+    /* ══ CONTACT ══ */
+    .contact-info-box {
+        background: linear-gradient(155deg, #142d1e 0%, #0a1f12 100%);
+        border-radius: 20px;
+        padding: 40px 36px;
+        border: 1px solid rgba(201,168,76,0.18);
+        height: 100%;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+    }
+    .contact-info-box h3 {
+        font-family: 'Cormorant Garamond', serif;
+        color: var(--gold-light);
+        font-size: 1.7rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    .cib-tagline {
+        color: rgba(255,255,255,0.38);
+        font-size: 0.62rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 30px;
+        display: block;
+    }
+    .contact-line {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        align-items: flex-start;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .contact-line:last-of-type { border-bottom: none; }
+    .ci-icon-wrap {
+        width: 38px; height: 38px;
+        border-radius: 10px;
+        background: rgba(201,168,76,0.12);
+        border: 1px solid rgba(201,168,76,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+    .ci-text { color: rgba(255,255,255,0.7); font-size: 0.88rem; line-height: 1.75; }
+    .ci-text strong { color: rgba(255,255,255,0.95); display: block; margin-bottom: 3px; font-size: 0.82rem; letter-spacing: 0.5px; }
+
+    /* ══ QUOTE BLOCK ══ */
+    .quote-block {
+        background: linear-gradient(135deg, var(--deep) 0%, #1f4a32 100%);
+        border-radius: 18px;
+        padding: 52px 56px;
+        border-left: 4px solid var(--gold);
+        position: relative;
+        overflow: hidden;
+    }
+    .quote-block::before {
+        content: '"';
+        position: absolute;
+        top: -20px; left: 32px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 12rem;
+        color: rgba(201,168,76,0.08);
+        line-height: 1;
+        pointer-events: none;
+    }
+    .quote-text {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.65rem;
+        font-weight: 300;
+        font-style: italic;
+        color: rgba(255,255,255,0.9);
+        line-height: 1.65;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ══ DEVELOPER CARD ══ */
+    .developer-strip {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(201,168,76,0.2);
+        border-radius: 16px;
+        padding: 32px 40px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .dev-icon { font-size: 4rem; }
+    .dev-stats {
+        display: flex;
+        gap: 40px;
+    }
+    .dev-stat .ds-val {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: var(--gold-light);
+        display: block;
+        line-height: 1;
+    }
+    .dev-stat .ds-lbl {
+        font-size: 0.65rem;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* ══ COMPARISON TABLE ══ */
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 28px rgba(0,0,0,0.08);
+        font-size: 0.88rem;
+    }
+    .comparison-table thead tr {
+        background: linear-gradient(90deg, var(--deep), #1f4a32);
+    }
+    .comparison-table thead th {
+        color: var(--gold-light);
+        font-family: 'Cinzel', serif;
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 18px 20px;
+        font-weight: 600;
+        text-align: left;
+    }
+    .comparison-table tbody tr {
+        border-bottom: 1px solid rgba(201,168,76,0.1);
+        transition: background 0.2s;
+    }
+    .comparison-table tbody tr:nth-child(even) { background: rgba(201,168,76,0.03); }
+    .comparison-table tbody tr:hover { background: rgba(201,168,76,0.08); }
+    .comparison-table tbody td {
+        padding: 15px 20px;
+        color: var(--ink);
+        vertical-align: middle;
+    }
+    .comparison-table tbody td:first-child { font-weight: 500; }
+    .td-price { color: var(--mid); font-weight: 600; font-family: 'Cormorant Garamond', serif; font-size: 1rem; }
+    .td-badge {
+        display: inline-block;
+        padding: 3px 12px;
+        border-radius: 50px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .td-avail { background: rgba(74,140,104,0.15); color: #2d6a4f; }
+    .td-limited { background: rgba(201,168,76,0.15); color: #8a6f1e; }
+    .td-pre { background: rgba(26,58,42,0.1); color: var(--ink); }
+
+    /* ══ FOOTER ══ */
+    .footer {
+        background: var(--forest);
+        padding: 80px 80px 40px;
+        border-top: 1px solid rgba(201,168,76,0.15);
+    }
+    .footer-logo {
+        font-family: 'Cinzel', serif;
+        color: var(--gold);
+        font-size: 1.4rem;
+        letter-spacing: 2.5px;
+        margin-bottom: 6px;
+    }
+    .footer-tagline {
+        font-family: 'Cormorant Garamond', serif;
+        color: rgba(255,255,255,0.35);
+        font-size: 0.82rem;
+        letter-spacing: 4px;
+        font-style: italic;
+        margin-bottom: 20px;
+    }
+    .footer-divider {
+        border: none;
+        border-top: 1px solid rgba(255,255,255,0.07);
+        margin: 36px 0 24px;
+    }
+    .footer-copy {
+        text-align: center;
+        color: rgba(255,255,255,0.28);
+        font-size: 0.76rem;
+        line-height: 1.8;
+    }
+
+    /* ══ FORM OVERRIDES ══ */
     .stTextInput > div > div > input,
-    .stTextArea > div > div > textarea,
-    .stSelectbox > div > div > select {
-        border-radius: 6px !important;
-        border-color: var(--parchment) !important;
+    .stTextArea > div > div > textarea {
+        border-radius: 8px !important;
+        border: 1px solid var(--parchment) !important;
         font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.9rem !important;
+        background: white !important;
+        transition: border-color 0.2s !important;
+        padding: 12px 16px !important;
+    }
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus {
+        border-color: var(--gold) !important;
+        box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+    }
+    .stSelectbox > div > div {
+        border-radius: 8px !important;
+        border: 1px solid var(--parchment) !important;
+    }
+    .stSelectbox > div > div:focus-within {
+        border-color: var(--gold) !important;
+        box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
     }
     [data-testid="stFormSubmitButton"] > button {
         background: linear-gradient(135deg, var(--gold), var(--gold-light)) !important;
         color: var(--forest) !important;
-        font-weight: 600 !important;
-        letter-spacing: 1.5px !important;
-        font-size: 0.85rem !important;
+        font-family: 'Cinzel', serif !important;
+        font-weight: 700 !important;
+        letter-spacing: 2px !important;
+        font-size: 0.78rem !important;
         text-transform: uppercase !important;
         border: none !important;
-        border-radius: 4px !important;
-        padding: 12px 24px !important;
+        border-radius: 6px !important;
+        padding: 14px 28px !important;
+        box-shadow: 0 6px 22px rgba(201,168,76,0.4) !important;
+        transition: all 0.25s !important;
+    }
+    [data-testid="stFormSubmitButton"] > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 32px rgba(201,168,76,0.55) !important;
     }
 
-    /* ══ ENQUIRE BUTTON IN PROPERTY CARDS ══ */
+    /* ══ INNER PAGE BUTTONS ══ */
     .stButton > button {
-        border-radius: 4px !important;
+        border-radius: 6px !important;
         font-family: 'DM Sans', sans-serif !important;
         font-weight: 500 !important;
+        transition: all 0.2s !important;
+    }
+    .stButton > button:hover { transform: translateY(-1px) !important; }
+
+    /* ══ DATAFRAME STYLING ══ */
+    [data-testid="stDataFrame"] {
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 4px 22px rgba(0,0,0,0.07) !important;
     }
 
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 768px) {
+        .hero { padding: 80px 24px 70px; min-height: auto; }
+        .sec { padding: 64px 24px; }
+        .stats-strip { grid-template-columns: repeat(3, 1fr); padding: 32px 24px; gap: 20px; }
+        .strip-item:not(:last-child)::after { display: none; }
+        .footer { padding: 56px 24px 32px; }
+        .top-nav { padding: 0 20px; }
+        .hero-h1 { font-size: 2.4rem !important; }
+    }
     </style>
     """, unsafe_allow_html=True)
 
 
-# ─── HELPERS ────────────────────────────────────────────────────────────────
+# ─── IMAGE HELPERS ───────────────────────────────────────────────────────────
 def load_img_b64(path):
-    """Return (b64_string, mime_type) if file exists, else None."""
     if not os.path.exists(path):
         return None
     with open(path, "rb") as f:
@@ -731,6 +1146,7 @@ def load_img_b64(path):
     mime = "image/png" if ext == "png" else "image/jpeg"
     return data, mime
 
+
 def img_tag(path, alt="", style="width:100%;display:block;"):
     result = load_img_b64(path)
     if result:
@@ -738,41 +1154,51 @@ def img_tag(path, alt="", style="width:100%;display:block;"):
         return f'<img src="data:{mime};base64,{b64}" alt="{alt}" style="{style}">'
     return None
 
+
 def prop_image(path, alt="", height=240):
-    """Return an image tag or None — never a visible placeholder."""
     result = load_img_b64(path)
     if result:
         b64, mime = result
         return f'<img src="data:{mime};base64,{b64}" alt="{alt}" style="width:100%;height:{height}px;object-fit:cover;display:block;">'
     return None
 
-def gallery_thumb_html(label):
-    return f"""
-    <div class="gallery-thumb">
-        <div class="gt-icon">📸</div>
-        <div class="gt-label">{label}</div>
-    </div>"""
+
+def get_first_img(paths, alt="", style=""):
+    for p in paths:
+        t = img_tag(p, alt, style)
+        if t:
+            return t
+    return None
 
 
-# ─── NAV ────────────────────────────────────────────────────────────────────
+# ─── NAVIGATION ─────────────────────────────────────────────────────────────
+PAGES = ["🏡 Home", "🌿 About", "🏘️ Properties", "📍 Location", "📞 Contact"]
+
+
 def render_navbar():
     st.markdown("""
     <div class="top-nav">
         <div class="nav-brand">
-            <div class="nav-brand-icon">🌿</div>
+            <div class="nav-brand-logo">🌿</div>
             <div>
                 <div class="nav-name">Aranya Farms</div>
                 <div class="nav-sub">Silver Oaks Agro Farms · Achampet, Toopran</div>
             </div>
         </div>
-        <a class="nav-contact-pill" href="tel:+919999999999">📞 Call Now</a>
+        <div class="nav-right">
+            <a class="nav-wa-btn" href="https://wa.me/919999999999" target="_blank">
+                💬 WhatsApp
+            </a>
+            <a class="nav-call-btn" href="tel:+919999999999">
+                📞 +91 99999 99999
+            </a>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-PAGES = ["🏡 Home", "🌿 About", "🏘️ Properties", "📍 Location", "📞 Contact"]
 
 def render_page_nav():
-    st.markdown("<div style='background:var(--cream,#faf7f0);padding:8px 40px;border-bottom:1px solid #e8dfc8;'>", unsafe_allow_html=True)
+    st.markdown("<div class='page-nav-outer'>", unsafe_allow_html=True)
     cols = st.columns(len(PAGES))
     for i, page in enumerate(PAGES):
         with cols[i]:
@@ -783,157 +1209,165 @@ def render_page_nav():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
+# ─── REUSABLE SECTION HELPERS ────────────────────────────────────────────────
+def section_header(eyebrow, title, subtitle=None, center=False, dark=False):
+    align = "center" if center else "left"
+    eyebrow_class = "eyebrow eyebrow-center" if center else "eyebrow"
+    h2_class = "sec-h2-white" if dark else "sec-h2"
+    lead_class = "sec-lead sec-lead-center" if center else "sec-lead"
+    sub_html = f'<p class="{lead_class}">{subtitle}</p>' if subtitle else ""
+    rule_html = '<div class="rule rule-center"></div>' if center else '<div class="rule"></div>'
+    st.markdown(f"""
+    <div style="text-align:{align};">
+        <div class="{eyebrow_class}">{eyebrow}</div>
+        <div class="{h2_class}">{title}</div>
+        {rule_html}
+        {sub_html}
+    </div>""", unsafe_allow_html=True)
+
+
+def hero_mini(eyebrow, title, subtitle):
+    st.markdown(f"""
+    <div class="hero" style="min-height:380px;padding:100px 80px 90px;">
+        <div class="hero-grid-lines"></div>
+        <div style="position:relative;z-index:2;">
+            <div class="hero-eyebrow">{eyebrow}</div>
+            <h1 class="hero-h1" style="font-size:clamp(2.4rem,4vw,4.2rem);">{title}</h1>
+            <p class="hero-para" style="max-width:480px;">{subtitle}</p>
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 1 — HOME
 # ═══════════════════════════════════════════════════════════════════════════
 def page_home():
     # ── HERO ──
-    col1, col2 = st.columns([1.1, 0.9], gap="large")
     st.markdown('<div class="hero">', unsafe_allow_html=True)
+    st.markdown('<div class="hero-grid-lines"></div>', unsafe_allow_html=True)
 
+    col1, col2 = st.columns([1.15, 0.85], gap="large")
     with col1:
         st.markdown("""
         <div style="position:relative;z-index:2;">
-        <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
-        <h1 class="hero-h1">Luxury Farm Living<br>at <em>Aranya Farms</em></h1>
-        <p class="hero-para">
-            Premium Farm Plots & 3-BHK Farm Houses at Achampet, Toopran.<br>
-            Where nature meets refined living — your perfect weekend escape.
-        </p>
-        <div class="badge-row">
-            <div class="stat-badge"><span class="sb-val">55</span><span class="sb-lbl">Acres</span></div>
-            <div class="stat-badge"><span class="sb-val">Gated</span><span class="sb-lbl">Community</span></div>
-            <div class="stat-badge"><span class="sb-val">3-BHK</span><span class="sb-lbl">Farm Houses</span></div>
-            <div class="stat-badge"><span class="sb-val">5 min</span><span class="sb-lbl">From RRR</span></div>
-            <div class="stat-badge"><span class="sb-val">30 min</span><span class="sb-lbl">From ORR</span></div>
-            <div class="stat-badge"><span class="sb-val">₹49L+</span><span class="sb-lbl">Starting</span></div>
-        </div>
-        <div class="cta-row">
-            <a class="btn-gold" href="#">📅 Book Site Visit</a>
-            <a class="btn-ghost" href="#">🏘️ View Properties</a>
-        </div>
+            <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
+            <h1 class="hero-h1">
+                <strong>Luxury</strong> Farm Living<br>at <em>Aranya Farms</em>
+            </h1>
+            <p class="hero-para">
+                A premium gated community across 55 acres of lush green land at Achampet, Toopran —
+                where nature's serenity meets refined, modern living.
+            </p>
+            <div class="badge-row">
+                <div class="stat-badge"><span class="sb-val">55</span><span class="sb-lbl">Acres</span></div>
+                <div class="stat-badge"><span class="sb-val">Gated</span><span class="sb-lbl">Community</span></div>
+                <div class="stat-badge"><span class="sb-val">3-BHK</span><span class="sb-lbl">Farm Houses</span></div>
+                <div class="stat-badge"><span class="sb-val">5 min</span><span class="sb-lbl">From RRR</span></div>
+                <div class="stat-badge"><span class="sb-val">30 min</span><span class="sb-lbl">From ORR</span></div>
+                <div class="stat-badge"><span class="sb-val">₹49L+</span><span class="sb-lbl">Starting</span></div>
+            </div>
+            <div class="cta-row">
+                <a class="btn-gold" href="#">📅 Book Site Visit</a>
+                <a class="btn-ghost" href="#">🏘️ View Properties</a>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
-        # Try to show real image; otherwise show nothing (clean hero)
-        hero_tag = None
-        for _p in ["images/land1.png", "images/land1.jpg", "images/land2.png", "images/land2.jpg"]:
-            hero_tag = img_tag(_p, "Aranya Farms", "width:100%;border-radius:16px;box-shadow:0 12px 56px rgba(0,0,0,0.4);")
-            if hero_tag:
-                break
-        if hero_tag:
-            st.markdown(f'<div style="position:relative;z-index:2;">{hero_tag}</div>', unsafe_allow_html=True)
+        hero_img = get_first_img(
+            ["images/land1.png","images/land1.jpg","images/land2.png","images/land2.jpg"],
+            "Aranya Farms",
+            "width:100%;border-radius:18px;box-shadow:0 20px 64px rgba(0,0,0,0.45);display:block;"
+        )
+        if hero_img:
+            st.markdown(f'<div style="position:relative;z-index:2;">{hero_img}</div>', unsafe_allow_html=True)
         else:
-            # Elegant decorative block instead of placeholder
             st.markdown("""
             <div style="position:relative;z-index:2;">
-            <div style="border:1px solid rgba(201,168,76,0.3);border-radius:16px;padding:60px 40px;text-align:center;backdrop-filter:blur(4px);background:rgba(255,255,255,0.04);">
-                <div style="font-family:'Cormorant Garamond',serif;font-size:3.5rem;color:var(--gold);opacity:0.4;line-height:1;">🌾</div>
-                <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-style:italic;color:rgba(255,255,255,0.6);margin-top:16px;">Aranya Farms</div>
-                <div style="font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-top:8px;">Achampet · Toopran</div>
-            </div>
-            </div>
-            """, unsafe_allow_html=True)
+                <div style="border:1px solid rgba(201,168,76,0.25);border-radius:18px;padding:80px 48px;
+                            text-align:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:6rem;
+                                color:var(--gold);opacity:0.25;line-height:1;">🌾</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;
+                                font-style:italic;color:rgba(255,255,255,0.55);margin-top:20px;">
+                        Aranya Farms
+                    </div>
+                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.28);
+                                letter-spacing:4px;text-transform:uppercase;margin-top:10px;">
+                        Achampet · Toopran · Telangana
+                    </div>
+                </div>
+            </div>""", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
     # ── STATS STRIP ──
     st.markdown("""
-    <div class="strip">
-        <div class="strip-item"><span class="strip-val">55+</span><span class="strip-lbl">Acres of Green</span></div>
-        <div class="strip-item"><span class="strip-val">200+</span><span class="strip-lbl">Happy Families</span></div>
-        <div class="strip-item"><span class="strip-val">15+</span><span class="strip-lbl">Amenities</span></div>
-        <div class="strip-item"><span class="strip-val">₹49L</span><span class="strip-lbl">Starting Price</span></div>
-        <div class="strip-item"><span class="strip-val">2024</span><span class="strip-lbl">Ready Possession</span></div>
+    <div class="stats-strip">
+        <div class="strip-item">
+            <span class="strip-val">55+</span>
+            <span class="strip-lbl">Acres of Green</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">200+</span>
+            <span class="strip-lbl">Happy Families</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">18+</span>
+            <span class="strip-lbl">World-Class Amenities</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">₹49L</span>
+            <span class="strip-lbl">Starting Price</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-val">2024</span>
+            <span class="strip-lbl">Ready Possession</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
     # ── WHY ARANYA ──
-    st.markdown("""
-    <div class="sec sec-cream">
-        <div class="eyebrow">Why Choose Us</div>
-        <div class="sec-h2">The Aranya Farms <em>Difference</em></div>
-        <div class="rule"></div>
-        <p class="sec-lead">A unique blend of luxury living and nature's serenity — thoughtfully designed for families who seek more than just a home.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
+        section_header("Why Choose Us", "The Aranya Farms <em>Difference</em>",
+                       "A unique blend of luxury living and nature's serenity — thoughtfully designed for families who seek more than just a home.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:var(--cream,#faf7f0);">', unsafe_allow_html=True)
+        st.markdown('<div style="padding:0 80px 88px;background:var(--cream);">', unsafe_allow_html=True)
         c1, c2, c3, c4 = st.columns(4, gap="medium")
         features = [
-            ("🌿", "Pure Nature", "Nestled in lush greenery with fresh air, organic surroundings and breathtaking sunrise views."),
+            ("🌿", "Pure Nature", "Lush greenery with fresh air, organic surroundings, and breathtaking sunrise views from your doorstep."),
             ("🏡", "Premium Homes", "Thoughtfully designed 3-BHK farm houses with modern architecture and natural aesthetics."),
-            ("🛡️", "Gated Security", "24×7 security, CCTV surveillance and managed entry for total peace of mind."),
+            ("🛡️", "Gated Security", "24×7 security, CCTV surveillance, and managed access for total peace of mind."),
             ("🌊", "Riverside Living", "Adjacent to the serene Haldi River — nature's own backyard at your doorstep."),
         ]
         for col, (icon, title, desc) in zip([c1, c2, c3, c4], features):
             with col:
                 st.markdown(f"""
                 <div class="feat-card">
-                    <span class="feat-icon">{icon}</span>
+                    <div class="feat-icon-wrap">{icon}</div>
                     <h4>{title}</h4>
                     <p>{desc}</p>
                 </div>""", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # ── LAND PHOTOS (only if images exist) ──
-    land_paths = [
-        ("images/land1.png","Farm Land View 1"),("images/land1.jpg","Farm Land View 1"),
-        ("images/land2.png","Farm Land View 2"),("images/land2.jpg","Farm Land View 2"),
-        ("images/land3.png","Farm Land View 3"),("images/land3.jpg","Farm Land View 3"),
-        ("images/land4.png","Farm Land View 4"),("images/land4.jpg","Farm Land View 4"),
-    ]
-    shown = {}
-    imgs_html = ""
-    for path, caption in land_paths:
-        key = caption
-        if key not in shown:
-            result = load_img_b64(path)
-            if result:
-                b64, mime = result
-                imgs_html += f"""
-                <div style="position:relative;overflow:hidden;border-radius:12px;flex:1;min-width:0;">
-                    <img src="data:{mime};base64,{b64}" alt="{caption}"
-                         style="width:100%;height:260px;object-fit:cover;display:block;">
-                    <div style="position:absolute;bottom:0;left:0;right:0;
-                                background:linear-gradient(transparent,rgba(10,26,16,0.75));
-                                padding:16px 14px 12px;">
-                        <div style="color:rgba(255,255,255,0.85);font-size:0.73rem;letter-spacing:1px;">🌿 {caption}</div>
-                    </div>
-                </div>"""
-                shown[key] = True
-
-    if imgs_html:
-        st.markdown(f"""
-        <div style="background:#0d1f15;padding:60px 72px;">
-            <div style="text-align:center;margin-bottom:32px;">
-                <div class="eyebrow" style="text-align:center;color:var(--gold-light);">The Land</div>
-                <div style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:#fff;">
-                    Aranya Farms in its <em style="font-style:italic;color:var(--gold-light);">Natural Glory</em>
-                </div>
-                <div style="width:56px;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));margin:16px auto 0;"></div>
-            </div>
-            <div style="display:flex;gap:14px;align-items:stretch;">{imgs_html}</div>
-        </div>""", unsafe_allow_html=True)
-
     # ── AMENITIES ──
-    st.markdown("""
-    <div class="sec sec-white">
-        <div class="eyebrow">World-Class Amenities</div>
-        <div class="sec-h2">Everything You Need to <em>Live Well</em></div>
-        <div class="rule"></div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="sec sec-white">', unsafe_allow_html=True)
+        section_header("World-Class Amenities", "Everything You Need to <em>Live Well</em>")
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:white;">', unsafe_allow_html=True)
+        st.markdown('<div style="padding:0 80px 88px;background:white;">', unsafe_allow_html=True)
         amenities = [
-            ("🏊","Swimming Pool"),("🎾","Sports Arena"),("🌿","Organic Farming"),
-            ("🐄","Goshala"),("🌸","Gazebo & Gardens"),("🏋️","Fitness Centre"),
-            ("🍽️","Clubhouse & Dining"),("🛕","Meditation Zone"),("🎠","Children's Play Area"),
-            ("🌳","Tree Plantation"),("🚗","Ample Parking"),("💧","24×7 Water Supply"),
+            ("🏊", "Swimming Pool"),     ("🎾", "Sports Arena"),
+            ("🌿", "Organic Farming"),   ("🐄", "Goshala"),
+            ("🌸", "Gazebo & Gardens"),  ("🏋️", "Fitness Centre"),
+            ("🍽️", "Clubhouse & Dining"), ("🛕", "Meditation Zone"),
+            ("🎠", "Children's Play Area"), ("🌳", "Tree Plantation"),
+            ("🚗", "Ample Parking"),     ("💧", "24×7 Water Supply"),
         ]
         rows = [amenities[i:i+4] for i in range(0, len(amenities), 4)]
         for row in rows:
@@ -946,11 +1380,15 @@ def page_home():
     # ── CTA BANNER ──
     st.markdown("""
     <div class="sec sec-dark" style="text-align:center;">
-        <div class="eyebrow" style="text-align:center;">Limited Plots Available</div>
-        <div class="sec-h2-white">Ready to Find Your Perfect <em>Farm Plot?</em></div>
+        <div class="eyebrow eyebrow-center">Limited Plots Available</div>
+        <div class="sec-h2-white" style="text-align:center;">
+            Ready to Find Your Perfect <em>Farm Plot?</em>
+        </div>
         <div class="rule rule-center"></div>
-        <p style="color:rgba(255,255,255,0.6);font-size:1rem;margin-bottom:36px;font-weight:300;">
-            Plots starting from ₹49 Lakhs. Register now for exclusive pre-launch pricing.
+        <p style="color:rgba(255,255,255,0.55);font-size:1.02rem;margin-bottom:40px;
+                  font-weight:300;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.8;">
+            Plots starting from ₹49 Lakhs. Register now for exclusive pre-launch pricing and a
+            complimentary site visit.
         </p>
         <div class="cta-row" style="justify-content:center;">
             <a class="btn-gold" href="#">📅 Book Free Site Visit</a>
@@ -965,110 +1403,102 @@ def page_home():
 #  PAGE 2 — ABOUT
 # ═══════════════════════════════════════════════════════════════════════════
 def page_about():
-    st.markdown("""
-    <div class="hero" style="min-height:380px;padding:90px 72px;">
-        <div style="position:relative;z-index:2;">
-            <div class="hero-eyebrow">Our Story</div>
-            <h1 class="hero-h1" style="font-size:3.8rem;">About <em>Aranya Farms</em></h1>
-            <p class="hero-para">Play · Live · Celebrate — A new way to belong to nature.</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    hero_mini("Our Story", "About <em>Aranya Farms</em>", "Play · Live · Celebrate — A new way to belong to nature.")
 
-    # Vision section
-    st.markdown("""
-    <div class="sec sec-cream">
-        <div class="eyebrow">The Vision</div>
-        <div class="sec-h2">Where Rural Richness Meets <em>Urban Comfort</em></div>
-        <div class="rule"></div>
-    </div>
-    """, unsafe_allow_html=True)
-
+    # ── VISION ──
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:var(--cream,#faf7f0);">', unsafe_allow_html=True)
+        st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
         col1, col2 = st.columns([1, 1], gap="large")
+
         with col1:
-            # Try images; skip if none
-            about_img = None
-            for _ap in ["images/land3.png","images/land3.jpg","images/land2.png","images/land2.jpg","images/land1.png","images/land1.jpg"]:
-                t = img_tag(_ap, "Aranya Farms Land", "width:100%;height:360px;object-fit:cover;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.15);")
-                if t:
-                    about_img = t
-                    break
+            about_img = get_first_img(
+                ["images/land3.png","images/land3.jpg","images/land2.png","images/land2.jpg","images/land1.png","images/land1.jpg"],
+                "Aranya Farms Land",
+                "width:100%;height:400px;object-fit:cover;border-radius:16px;box-shadow:0 12px 48px rgba(0,0,0,0.15);display:block;"
+            )
             if about_img:
                 st.markdown(about_img, unsafe_allow_html=True)
             else:
-                # Decorative quote block when no image
                 st.markdown("""
                 <div class="quote-block">
-                    <div class="quote-text">"Every family deserves a sanctuary where they can breathe freely, grow organically, and celebrate life."</div>
-                    <div style="color:var(--gold-light);font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;margin-top:20px;">— Silver Oaks Agro Farms</div>
+                    <div class="quote-text">"Every family deserves a sanctuary where they can breathe freely, grow organically, and celebrate life amid nature's abundance."</div>
+                    <div style="color:var(--gold-light);font-family:'Cinzel',serif;font-size:0.65rem;
+                                letter-spacing:3px;text-transform:uppercase;margin-top:28px;
+                                padding-top:20px;border-top:1px solid rgba(201,168,76,0.2);">
+                        — Silver Oaks Agro Farms
+                    </div>
                 </div>""", unsafe_allow_html=True)
 
         with col2:
+            section_header("The Vision", "Where Rural Richness Meets <em>Urban Comfort</em>")
             st.markdown("""
-            <div style="padding:10px 0;">
-            <p style="color:var(--moss);font-size:1.05rem;line-height:1.9;margin-bottom:20px;font-weight:300;">
-                <strong style="color:var(--ink);font-weight:600;">Aranya Farms</strong> is not just a real estate project — it is a lifestyle reimagined.
-                Spread across <strong style="color:var(--ink);">55 lush acres</strong> in Achampet, Toopran, Aranya Farms brings together the
-                warmth of rural living with the comforts of a premium gated community.
-            </p>
-            <p style="color:var(--moss);font-size:1.05rem;line-height:1.9;margin-bottom:20px;font-weight:300;">
-                Conceived by <strong style="color:var(--ink);">Silver Oaks Agro Farms</strong>, a trusted name in managed farmland
-                communities, this project is born from a simple belief: <em style="color:var(--mid);">every family deserves a sanctuary
-                where they can breathe freely, grow organically, and celebrate life.</em>
-            </p>
-            <p style="color:var(--moss);font-size:1.05rem;line-height:1.9;font-weight:300;">
-                Adjacent to the tranquil Haldi River and just 5 minutes from the Regional Ring Road (RRR),
-                Aranya Farms is the perfect balance of accessibility and escape.
-            </p>
+            <div style="padding-top:4px;">
+                <p style="color:var(--moss);font-size:1.02rem;line-height:1.92;margin-bottom:20px;font-weight:300;">
+                    <strong style="color:var(--ink);font-weight:600;">Aranya Farms</strong> is not just a real estate project —
+                    it is a lifestyle reimagined. Spread across
+                    <strong style="color:var(--mid);">55 lush acres</strong> in Achampet, Toopran, it brings together
+                    the warmth of rural living with the comforts of a premium gated community.
+                </p>
+                <p style="color:var(--moss);font-size:1.02rem;line-height:1.92;margin-bottom:20px;font-weight:300;">
+                    Conceived by <strong style="color:var(--ink);">Silver Oaks Agro Farms</strong>, a trusted name in
+                    managed farmland communities, this project is born from a simple belief:
+                    <em style="color:var(--mid);">every family deserves a sanctuary where they can breathe freely,
+                    grow organically, and celebrate life.</em>
+                </p>
+                <p style="color:var(--moss);font-size:1.02rem;line-height:1.92;font-weight:300;">
+                    Adjacent to the tranquil Haldi River and just 5 minutes from RRR, Aranya Farms
+                    is the perfect balance of accessibility and escape — a home you will look forward
+                    to returning to every single weekend.
+                </p>
             </div>
             """, unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Philosophy pillars
-    st.markdown("""
-    <div class="sec sec-white" style="text-align:center;">
-        <div class="eyebrow" style="text-align:center;">Our Philosophy</div>
-        <div class="sec-h2" style="text-align:center;">Play · Live · <em>Celebrate</em></div>
-        <div class="rule rule-center"></div>
-    </div>
-    """, unsafe_allow_html=True)
+    # ── PHILOSOPHY PILLARS ──
+    with st.container():
+        st.markdown('<div class="sec sec-white">', unsafe_allow_html=True)
+        section_header("Our Philosophy", "Play · Live · <em>Celebrate</em>", center=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:white;">', unsafe_allow_html=True)
+        st.markdown('<div style="padding:0 80px 88px;background:white;">', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3, gap="medium")
         pillars = [
-            ("🎠","PLAY","Sports arenas, swimming pool, children's zones, nature trails — because life is meant to be enjoyed at every age, every weekend."),
-            ("🏡","LIVE","Thoughtfully crafted farm houses and plots designed for wholesome family living. Wake up to birdsong, grow your own food, breathe clean air."),
-            ("🎉","CELEBRATE","From festive gatherings at the clubhouse to quiet birthday mornings in the gazebo — every milestone is better amid nature."),
+            ("🎠", "01", "PLAY",
+             "Sports arenas, swimming pool, children's zones, and nature trails — because life is meant to be enjoyed at every age, every weekend, every season."),
+            ("🏡", "02", "LIVE",
+             "Thoughtfully crafted farm houses and plots designed for wholesome family living. Wake up to birdsong, grow your own food, breathe truly clean air."),
+            ("🎉", "03", "CELEBRATE",
+             "From festive gatherings at the clubhouse to quiet birthday mornings in the gazebo — every milestone is profoundly better amid nature."),
         ]
-        for col, (icon, title, desc) in zip([c1, c2, c3], pillars):
+        for col, (icon, num, title, desc) in zip([c1, c2, c3], pillars):
             with col:
                 st.markdown(f"""
                 <div class="pillar-card">
+                    <div class="pillar-num">{num}</div>
                     <span class="pillar-icon">{icon}</span>
                     <h4>{title}</h4>
                     <p>{desc}</p>
                 </div>""", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Lifestyle
-    st.markdown("""
-    <div class="sec sec-sand">
-        <div class="eyebrow">Lifestyle & Wellness</div>
-        <div class="sec-h2">Designed for Every <em>Chapter of Life</em></div>
-        <div class="rule"></div>
-    </div>
-    """, unsafe_allow_html=True)
+    # ── LIFESTYLE ──
+    with st.container():
+        st.markdown('<div class="sec sec-sand">', unsafe_allow_html=True)
+        section_header("Lifestyle & Wellness", "Designed for Every <em>Chapter of Life</em>")
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:var(--sand,#f0ead8);">', unsafe_allow_html=True)
+        st.markdown('<div style="padding:0 80px 88px;background:var(--sand);">', unsafe_allow_html=True)
         lifestyles = [
-            ("👨‍👩‍👧‍👦","Family Lifestyle","Spacious plots with dedicated zones for kids, elders, and togetherness. A community where neighbours become extended family."),
-            ("🧘","Wellness Retreat","Yoga pavilion, meditation zones, organic garden walks, and fresh-air mornings — your personal wellness sanctuary."),
-            ("🏡","Weekend Homes","Just 30 minutes from ORR — the ideal weekend getaway that feels a world away. Rent-ready investment properties."),
-            ("🌱","Organic Living","Farm-to-table living. Grow your own vegetables, herbs, and fruits on your private plot with managed farming support."),
+            ("👨‍👩‍👧‍👦", "Family Lifestyle",
+             "Spacious plots with dedicated zones for kids, elders, and togetherness. A community where neighbours become extended family."),
+            ("🧘", "Wellness Retreat",
+             "Yoga pavilion, meditation zones, organic garden walks, and fresh-air mornings — your personal wellness sanctuary awaits."),
+            ("🏡", "Weekend Homes",
+             "Just 30 minutes from ORR — the ideal weekend getaway that feels a world away. Perfectly suited as rent-ready investments."),
+            ("🌱", "Organic Living",
+             "Farm-to-table living. Grow your own vegetables, herbs, and fruits on your private plot with full managed farming support."),
         ]
         c1, c2 = st.columns(2, gap="medium")
         for i, (icon, title, desc) in enumerate(lifestyles):
@@ -1083,18 +1513,40 @@ def page_about():
                 </div>""", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Developer
+    # ── DEVELOPER ──
     st.markdown("""
     <div class="sec sec-dark" style="text-align:center;">
-        <div class="eyebrow" style="text-align:center;">About the Developer</div>
+        <div class="eyebrow eyebrow-center">About the Developer</div>
         <div class="sec-h2-white" style="text-align:center;">Silver Oaks <em>Agro Farms</em></div>
         <div class="rule rule-center"></div>
-        <p style="color:rgba(255,255,255,0.68);font-size:1rem;line-height:1.9;max-width:760px;margin:0 auto;font-weight:300;">
+        <p style="color:rgba(255,255,255,0.62);font-size:1rem;line-height:1.92;max-width:740px;
+                  margin:0 auto 44px;font-weight:300;">
             Silver Oaks Agro Farms, operating under <strong style="color:var(--gold-light);">Silver Oaks Realty</strong>,
             is a Hyderabad-based premium farmland developer with a decade of experience in creating
             managed agro-communities. With a commitment to transparency, DTCP-approved layouts, and
             world-class amenities, Silver Oaks has helped over 500+ families find their perfect green sanctuary.
         </p>
+        <div class="developer-strip">
+            <div class="dev-icon">🌳</div>
+            <div class="dev-stats">
+                <div class="dev-stat">
+                    <span class="ds-val">500+</span>
+                    <span class="ds-lbl">Families Served</span>
+                </div>
+                <div class="dev-stat">
+                    <span class="ds-val">10+</span>
+                    <span class="ds-lbl">Years Experience</span>
+                </div>
+                <div class="dev-stat">
+                    <span class="ds-val">5+</span>
+                    <span class="ds-lbl">Projects Delivered</span>
+                </div>
+                <div class="dev-stat">
+                    <span class="ds-val">DTCP</span>
+                    <span class="ds-lbl">Approved Layouts</span>
+                </div>
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1103,149 +1555,156 @@ def page_about():
 #  PAGE 3 — PROPERTIES
 # ═══════════════════════════════════════════════════════════════════════════
 def page_properties():
-    st.markdown("""
-    <div class="hero" style="min-height:360px;padding:90px 72px;">
-        <div style="position:relative;z-index:2;">
-            <div class="hero-eyebrow">Properties & Plots</div>
-            <h1 class="hero-h1" style="font-size:3.8rem;">Find Your <em>Perfect Space</em></h1>
-            <p class="hero-para">Farm plots, 3-BHK homes, premium villas — choose what suits your dream.</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    hero_mini("Properties & Plots", "Find Your <em>Perfect Space</em>",
+              "Farm plots, 3-BHK homes, premium villas — each designed for a life well lived.")
 
-    st.markdown("""
-    <div class="sec sec-cream">
-        <div class="eyebrow">Available Properties</div>
-        <div class="sec-h2">Explore Our <em>Offerings</em></div>
-        <div class="rule"></div>
-        <p class="sec-lead">All properties are within the 55-acre gated community with access to all amenities.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    # ── PROPERTY CARDS ──
+    with st.container():
+        st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
+        section_header("Available Properties", "Explore Our <em>Offerings</em>",
+                       "All properties are within the 55-acre gated community with full access to world-class amenities.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
     properties = [
         {
             "badge": "Best Seller",
-            "title": "Farm Plots",
+            "title": "Farm <em>Plots</em>",
             "price": "Starting ₹49 Lakhs",
             "specs": ["300 sq. yds", "605 sq. yds", "640 sq. yds", "753 sq. yds"],
-            "desc": "Open farm plots in a gated, amenity-rich community. Build your dream home or enjoy managed farming. Clear titles, DTCP approved layout.",
+            "features": ["DTCP Approved", "Clear Titles", "Gated Community", "All Amenities Included"],
+            "desc": "Open farm plots in a fully gated, amenity-rich community. Build your dream home or enjoy managed farming. Clear titles, DTCP approved layout.",
             "img_paths": ["images/land1.png", "images/land1.jpg"],
         },
         {
             "badge": "Most Popular",
-            "title": "3-BHK Farm Houses",
+            "title": "3-BHK <em>Farm Houses</em>",
             "price": "Starting ₹65 Lakhs",
             "specs": ["685 sft BUA", "1480 sft BUA", "1500 sft BUA"],
-            "desc": "Ready-to-move 3-BHK farm houses with contemporary architecture, private garden space, and complete modern amenities.",
+            "features": ["3 Bedrooms", "Private Garden", "Modern Kitchen", "Ready Soon"],
+            "desc": "Ready-to-move 3-BHK farm houses with contemporary architecture, private garden space, and complete modern amenities for comfortable family living.",
             "img_paths": ["images/land2.png", "images/land2.jpg"],
         },
         {
             "badge": "Luxury",
-            "title": "Premium Villas",
+            "title": "Premium <em>Villas</em>",
             "price": "Starting ₹90 Lakhs",
             "specs": ["2250 sft BUA", "Large Plot", "Private Garden"],
-            "desc": "Exclusive premium villas with expansive built-up areas, landscaped private gardens, and premium finishes for the discerning buyer.",
+            "features": ["Exclusive Layout", "Premium Finishes", "Landscaped Garden", "High Ceilings"],
+            "desc": "Exclusive premium villas with expansive built-up areas, landscaped private gardens, and premium finishes for the truly discerning buyer.",
             "img_paths": ["images/land3.png", "images/land3.jpg"],
         },
         {
             "badge": "Investment",
-            "title": "Larger Farm Lands",
+            "title": "Larger <em>Farm Lands</em>",
             "price": "On Request",
             "specs": ["1+ Acre", "Custom Layout", "Managed Option"],
-            "desc": "Bulk farmland parcels ideal for families or investor groups looking for larger green footprints with full community access.",
+            "features": ["Bulk Parcels", "Custom Design", "Managed Farming", "Community Access"],
+            "desc": "Bulk farmland parcels ideal for families or investor groups seeking larger green footprints with full community access and managed farming support.",
             "img_paths": ["images/land4.png", "images/land4.jpg"],
         },
     ]
 
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:var(--cream,#faf7f0);">', unsafe_allow_html=True)
-        c1, c2 = st.columns(2, gap="medium")
+        st.markdown('<div style="padding:0 80px 88px;background:var(--cream);">', unsafe_allow_html=True)
+        c1, c2 = st.columns(2, gap="large")
         for i, prop in enumerate(properties):
             with (c1 if i % 2 == 0 else c2):
-                # Get image if it exists — no fallback placeholder shown
-                card_img_html = ""
-                for img_path in prop["img_paths"]:
-                    t = prop_image(img_path, prop["title"], 240)
-                    if t:
-                        card_img_html = f'<div style="overflow:hidden;">{t}</div>'
-                        break
-                # If no image, card just starts with the body (clean look)
                 specs_html = "".join(f'<span class="spec-pill">{s}</span>' for s in prop["specs"])
+                feats_html = "".join(f'<div class="prop-feature-item">{f}</div>' for f in prop["features"])
                 st.markdown(f"""
                 <div class="prop-card">
-                    {card_img_html}
-                    <div class="prop-body">
+                    <div class="prop-card-header">
                         <div class="prop-badge">{prop["badge"]}</div>
                         <h3>{prop["title"]}</h3>
                         <div class="prop-price">{prop["price"]}</div>
+                    </div>
+                    <div class="prop-body">
+                        <p class="prop-desc">{prop["desc"]}</p>
                         <div class="prop-specs">{specs_html}</div>
-                        <p>{prop["desc"]}</p>
+                        <div class="prop-features">{feats_html}</div>
                     </div>
                 </div>""", unsafe_allow_html=True)
-                st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
-                if st.button(f"📩 Enquire — {prop['title']}", key=f"prop_btn_{i}", use_container_width=True):
+                st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
+                if st.button(f"📩 Enquire — {prop['title'].replace('<em>','').replace('</em>','')}", key=f"prop_btn_{i}", use_container_width=True):
                     st.session_state.page = "📞 Contact"
                     st.rerun()
-                st.markdown("<div style='height:20px'></div>", unsafe_allow_html=True)
+                st.markdown("<div style='height:28px'></div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Plot size table
-    st.markdown("""
-    <div class="sec sec-white">
-        <div class="eyebrow">Plot Dimensions</div>
-        <div class="sec-h2">Plot Sizes at a <em>Glance</em></div>
-        <div class="rule"></div>
-    </div>
-    """, unsafe_allow_html=True)
+    # ── COMPARISON TABLE ──
+    with st.container():
+        st.markdown('<div class="sec sec-white">', unsafe_allow_html=True)
+        section_header("Plot Dimensions", "Complete Pricing at a <em>Glance</em>",
+                       "All prices are indicative. Contact our sales team for current pricing and availability.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:white;">', unsafe_allow_html=True)
-        import pandas as pd
+        st.markdown('<div style="padding:0 80px 88px;background:white;">', unsafe_allow_html=True)
         df = pd.DataFrame({
-            "Type": ["Farm Plot – Compact","Farm Plot – Standard","Farm Plot – Large","Farm Plot – Premium","Farm House – 3 BHK (A)","Farm House – 3 BHK (B)","Farm House – 3 BHK (C)","Premium Villa"],
-            "Plot Size": ["300 sq. yds","605 sq. yds","640 sq. yds","753 sq. yds","Included","Included","Included","Large"],
-            "Built-up Area": ["—","—","—","—","685 sft","1480 sft","1500 sft","2250 sft"],
-            "Starting Price": ["₹49 Lakhs","₹55 Lakhs","₹60 Lakhs","₹68 Lakhs","₹65 Lakhs","₹72 Lakhs","₹78 Lakhs","₹90 Lakhs"],
-            "Status": ["Available","Limited","Available","Limited","Available","Ready Soon","Available","Pre-launch"],
+            "Type": [
+                "Farm Plot – Compact", "Farm Plot – Standard", "Farm Plot – Large",
+                "Farm Plot – Premium", "Farm House – 3 BHK (A)", "Farm House – 3 BHK (B)",
+                "Farm House – 3 BHK (C)", "Premium Villa"
+            ],
+            "Plot Size": ["300 sq. yds", "605 sq. yds", "640 sq. yds", "753 sq. yds",
+                          "Included", "Included", "Included", "Large"],
+            "Built-up Area": ["—", "—", "—", "—", "685 sft", "1480 sft", "1500 sft", "2250 sft"],
+            "Starting Price": ["₹49 Lakhs", "₹55 Lakhs", "₹60 Lakhs", "₹68 Lakhs",
+                               "₹65 Lakhs", "₹72 Lakhs", "₹78 Lakhs", "₹90 Lakhs"],
+            "Availability": ["Available", "Limited", "Available", "Limited",
+                             "Available", "Ready Soon", "Available", "Pre-launch"],
         })
         st.dataframe(df, use_container_width=True, hide_index=True)
         st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── BOTTOM CTA ──
+    with st.container():
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.markdown("""
+            <div style="text-align:center;padding:60px 0 80px;background:var(--cream);">
+                <div class="eyebrow eyebrow-center">Exclusive Offer</div>
+                <div class="sec-h2" style="text-align:center;">Get Pre-Launch <em>Pricing</em></div>
+                <div class="rule rule-center"></div>
+                <p style="color:var(--moss);font-size:0.95rem;line-height:1.8;margin-bottom:28px;font-weight:300;">
+                    Register your interest today for access to special pre-launch rates and complimentary site visit.
+                </p>
+                <div class="cta-row" style="justify-content:center;">
+                    <a class="btn-gold" href="#">📅 Register Interest</a>
+                    <a class="btn-wa" href="https://wa.me/919999999999" target="_blank">💬 WhatsApp Us</a>
+                </div>
+            </div>""", unsafe_allow_html=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 #  PAGE 4 — LOCATION
 # ═══════════════════════════════════════════════════════════════════════════
 def page_location():
-    st.markdown("""
-    <div class="hero" style="min-height:360px;padding:90px 72px;">
-        <div style="position:relative;z-index:2;">
-            <div class="hero-eyebrow">Find Us</div>
-            <h1 class="hero-h1" style="font-size:3.8rem;">Location & <em>Connectivity</em></h1>
-            <p class="hero-para">Strategically located in Achampet, Toopran — nature close, city closer.</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    hero_mini("Find Us", "Location & <em>Connectivity</em>",
+              "Strategically placed in Achampet, Toopran — nature close, city even closer.")
 
+    # ── LOCATION HIGHLIGHTS + MAP ──
     with st.container():
         st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
         col1, col2 = st.columns([1, 1], gap="large")
 
         with col1:
-            st.markdown("""
-            <div class="eyebrow">How to Reach</div>
-            <div class="sec-h2">Location <em>Highlights</em></div>
-            <div class="rule"></div>
-            """, unsafe_allow_html=True)
-
+            section_header("How to Reach", "Location <em>Highlights</em>")
             highlights = [
-                ("📍","Exact Location","Achampet Village, Toopran Mandal, Medchal-Malkajgiri District, Telangana"),
-                ("🛣️","Near RRR","Only 5 minutes from the Regional Ring Road (RRR) entry point"),
-                ("🔄","Near ORR","Approx. 30 minutes from the Outer Ring Road (ORR), Hyderabad"),
-                ("🏙️","NH-44 Access","Adjacent to the Hyderabad–Medchal Highway (NH-44)"),
-                ("🌊","Riverside","Adjacent to the scenic Haldi River — beautiful water views"),
-                ("🏘️","Near Masaipet","Close to Masaipet town — easy access to local markets and services"),
-                ("✈️","Airport","Approx. 40–50 minutes from Rajiv Gandhi International Airport"),
-                ("🏥","Healthcare","Multiple hospitals and clinics within 15–20 km radius"),
+                ("📍", "Exact Location",
+                 "Achampet Village, Toopran Mandal, Medchal-Malkajgiri District, Telangana"),
+                ("🛣️", "Near RRR",
+                 "Only 5 minutes from the Regional Ring Road (RRR) entry point"),
+                ("🔄", "Near ORR",
+                 "Approx. 30 minutes from the Outer Ring Road (ORR), Hyderabad"),
+                ("🏙️", "NH-44 Access",
+                 "Adjacent to the Hyderabad–Medchal Highway (NH-44)"),
+                ("🌊", "Riverside",
+                 "Adjacent to the scenic Haldi River — beautiful water views year-round"),
+                ("🏘️", "Near Masaipet",
+                 "Close to Masaipet town for easy access to local markets and services"),
+                ("✈️", "Airport",
+                 "Approx. 40–50 minutes from Rajiv Gandhi International Airport"),
             ]
             for icon, title, desc in highlights:
                 st.markdown(f"""
@@ -1255,65 +1714,100 @@ def page_location():
                 </div>""", unsafe_allow_html=True)
 
         with col2:
-            st.markdown("""
-            <div class="eyebrow">Map</div>
-            <div class="sec-h2">View on <em>Map</em></div>
-            <div class="rule"></div>
-            """, unsafe_allow_html=True)
-
-            sat_result = load_img_b64("images/satellite.png") or load_img_b64("images/satellite.jpg")
+            section_header("Interactive Map", "View on <em>Map</em>")
+            sat_result = None
+            for sp in ["images/satellite.png", "images/satellite.jpg"]:
+                sat_result = load_img_b64(sp)
+                if sat_result:
+                    break
             if sat_result:
                 b64, mime = sat_result
                 st.markdown(f"""
-                <div style="position:relative;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.18);">
+                <div class="map-embed-block">
                     <img src="data:{mime};base64,{b64}" alt="Satellite View – Aranya Farms"
-                         style="width:100%;height:380px;object-fit:cover;display:block;">
-                    <div style="position:absolute;bottom:0;left:0;right:0;
-                                background:linear-gradient(transparent,rgba(14,35,24,0.88));
-                                padding:20px 24px 18px;">
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <span style="font-size:1.4rem;">🛰️</span>
-                            <div>
-                                <div style="color:var(--gold-light);font-weight:600;font-size:0.85rem;letter-spacing:1px;">SATELLITE VIEW</div>
-                                <div style="color:rgba(255,255,255,0.7);font-size:0.76rem;">Aranya Farms · Achampet, Toopran</div>
-                            </div>
+                         style="width:100%;height:420px;object-fit:cover;display:block;">
+                    <div class="map-overlay-badge">
+                        <div class="mob-dot"></div>
+                        <div class="mob-text">
+                            Aranya Farms
+                            <small>Achampet · Toopran · Telangana</small>
                         </div>
                     </div>
                 </div>""", unsafe_allow_html=True)
             else:
                 st.markdown("""
-                <div class="map-block">
-                    <div class="mb-icon">🗺️</div>
-                    <div class="mb-title">Google Maps — Aranya Farms</div>
-                    <div class="mb-sub">Achampet, Toopran<br>Medchal-Malkajgiri Dist., Telangana</div>
+                <div class="map-embed-block">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3808.7!2d78.1!3d17.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9c0000000001%3A0x1!2sAchampet%2C%20Toopran%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000"
+                        width="100%" height="420"
+                        style="border:0;"
+                        allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="map-overlay-badge">
+                        <div class="mob-dot"></div>
+                        <div class="mob-text">
+                            Aranya Farms
+                            <small>Achampet · Toopran · Telangana</small>
+                        </div>
+                    </div>
                 </div>""", unsafe_allow_html=True)
 
             st.markdown("""
             <div style="margin-top:20px;">
-                <a class="btn-green" href="https://maps.google.com/?q=Achampet+Toopran+Telangana" target="_blank" style="display:inline-block;">
+                <a class="btn-green" href="https://maps.google.com/?q=Achampet+Toopran+Telangana"
+                   target="_blank" style="display:inline-flex;">
                     🗺️ Open in Google Maps
                 </a>
             </div>""", unsafe_allow_html=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
 
-    # Distance table
-    st.markdown("""
-    <div class="sec sec-white">
-        <div class="eyebrow">Distances</div>
-        <div class="sec-h2">Key Distances from <em>Aranya Farms</em></div>
-        <div class="rule"></div>
-    </div>
-    """, unsafe_allow_html=True)
+    # ── CONNECTIVITY CARDS ──
+    with st.container():
+        st.markdown('<div class="sec sec-white">', unsafe_allow_html=True)
+        section_header("Connectivity", "Key Distances from <em>Aranya Farms</em>", center=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with st.container():
-        st.markdown('<div style="padding:0 72px 72px;background:white;">', unsafe_allow_html=True)
-        import pandas as pd
+        st.markdown('<div style="padding:0 80px 88px;background:white;">', unsafe_allow_html=True)
+        connections = [
+            ("🛣️", "RRR", "~5 min", "State Highway"),
+            ("🔄", "ORR", "~30 min", "NH-44 + RRR"),
+            ("🏙️", "Kompally", "~28 min", "NH-44"),
+            ("🏘️", "Medchal", "~18 min", "NH-44"),
+            ("🌆", "Hyderabad City", "~40 min", "NH-44 + ORR"),
+            ("✈️", "Airport RGIA", "~50 min", "ORR + Shamshabad"),
+        ]
+        c1, c2, c3, c4, c5, c6 = st.columns(6, gap="small")
+        for col, (icon, dest, time, via) in zip([c1,c2,c3,c4,c5,c6], connections):
+            with col:
+                st.markdown(f"""
+                <div class="conn-card">
+                    <span class="cc-icon">{icon}</span>
+                    <div class="cc-dest">{dest}</div>
+                    <span class="cc-time">{time}</span>
+                    <div class="cc-via">{via}</div>
+                </div>""", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── DISTANCE TABLE ──
+    with st.container():
+        st.markdown('<div class="sec sec-sand">', unsafe_allow_html=True)
+        section_header("Distances", "Full Distance <em>Reference</em>")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with st.container():
+        st.markdown('<div style="padding:0 80px 88px;background:var(--sand);">', unsafe_allow_html=True)
         df = pd.DataFrame({
-            "Destination": ["RRR (Regional Ring Road)","ORR (Outer Ring Road)","Kompally","Medchal Town","Hyderabad City Centre","RGIA Airport","Masaipet","Haldi River"],
-            "Distance": ["~5 km","~30 km","~28 km","~18 km","~38 km","~48 km","~3 km","Adjacent"],
-            "Travel Time": ["~5 mins","~30 mins","~28 mins","~18 mins","~40 mins","~50 mins","~5 mins","Walking"],
-            "Via": ["State Highway","NH-44 + RRR","NH-44","NH-44","NH-44 + ORR","ORR + Shamshabad","Local Road","—"],
+            "Destination": [
+                "RRR (Regional Ring Road)", "ORR (Outer Ring Road)", "Kompally",
+                "Medchal Town", "Hyderabad City Centre", "RGIA Airport",
+                "Masaipet", "Haldi River"
+            ],
+            "Distance": ["~5 km", "~30 km", "~28 km", "~18 km", "~38 km", "~48 km", "~3 km", "Adjacent"],
+            "Travel Time": ["~5 mins", "~30 mins", "~28 mins", "~18 mins", "~40 mins", "~50 mins", "~5 mins", "Walking"],
+            "Route": ["State Highway", "NH-44 + RRR", "NH-44", "NH-44", "NH-44 + ORR", "ORR + Shamshabad", "Local Road", "—"],
         })
         st.dataframe(df, use_container_width=True, hide_index=True)
         st.markdown("</div>", unsafe_allow_html=True)
@@ -1323,26 +1817,15 @@ def page_location():
 #  PAGE 5 — CONTACT
 # ═══════════════════════════════════════════════════════════════════════════
 def page_contact():
-    st.markdown("""
-    <div class="hero" style="min-height:360px;padding:90px 72px;">
-        <div style="position:relative;z-index:2;">
-            <div class="hero-eyebrow">Get in Touch</div>
-            <h1 class="hero-h1" style="font-size:3.8rem;">Contact <em>Us</em></h1>
-            <p class="hero-para">We'd love to hear from you. Let's find your perfect farm plot.</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    hero_mini("Get in Touch", "Let's Find Your <em>Dream Plot</em>",
+              "Our expert team is ready to guide you. Book a visit or simply send us an enquiry.")
 
     with st.container():
         st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
-        col1, col2 = st.columns([1.2, 0.8], gap="large")
+        col1, col2 = st.columns([1.3, 0.7], gap="large")
 
         with col1:
-            st.markdown("""
-            <div class="eyebrow">Send Enquiry</div>
-            <div class="sec-h2" style="font-size:2rem;">Let's <em>Talk</em></div>
-            <div class="rule"></div>
-            """, unsafe_allow_html=True)
+            section_header("Send Enquiry", "Let's <em>Talk</em>")
 
             with st.form("enquiry_form", clear_on_submit=True):
                 cf1, cf2 = st.columns(2)
@@ -1350,7 +1833,6 @@ def page_contact():
                     name = st.text_input("Full Name *", placeholder="Your full name")
                 with cf2:
                     phone = st.text_input("Phone Number *", placeholder="+91 XXXXX XXXXX")
-
                 email = st.text_input("Email Address", placeholder="your@email.com")
                 interest = st.selectbox("Interested In *", [
                     "Select an option…",
@@ -1368,12 +1850,13 @@ def page_contact():
                     if not name or not phone or interest == "Select an option…":
                         st.error("Please fill in Name, Phone, and select your Interest.")
                     else:
-                        st.success(f"✅ Thank you, {name}! Your enquiry has been received. Our team will call you within 24 hours.")
+                        st.success(f"✅ Thank you, {name}! We've received your enquiry and will call you within 24 hours.")
                         st.balloons()
 
             st.markdown("""
-            <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;">
-                <a class="btn-wa" href="https://wa.me/919999999999?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms." target="_blank">💬 WhatsApp Us</a>
+            <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a class="btn-wa" href="https://wa.me/919999999999?text=Hi!%20I%20am%20interested%20in%20Aranya%20Farms."
+                   target="_blank">💬 WhatsApp Us</a>
                 <a class="btn-call" href="tel:+919999999999">📞 Call Now</a>
                 <a class="btn-green" href="mailto:info@silveroaksrealty.com">📧 Email Us</a>
             </div>""", unsafe_allow_html=True)
@@ -1382,9 +1865,10 @@ def page_contact():
             st.markdown("""
             <div class="contact-info-box">
                 <h3>Silver Oaks Realty</h3>
+                <span class="cib-tagline">Aranya Farms Sales Office</span>
 
                 <div class="contact-line">
-                    <div class="ci-icon">📍</div>
+                    <div class="ci-icon-wrap">📍</div>
                     <div class="ci-text">
                         <strong>Corporate Office</strong>
                         2nd & 3rd Floor, 14-A,<br>
@@ -1394,7 +1878,7 @@ def page_contact():
                 </div>
 
                 <div class="contact-line">
-                    <div class="ci-icon">🏡</div>
+                    <div class="ci-icon-wrap">🏡</div>
                     <div class="ci-text">
                         <strong>Project Site Office</strong>
                         Aranya Farms, Achampet Village,<br>
@@ -1403,7 +1887,7 @@ def page_contact():
                 </div>
 
                 <div class="contact-line">
-                    <div class="ci-icon">📞</div>
+                    <div class="ci-icon-wrap">📞</div>
                     <div class="ci-text">
                         <strong>Phone / WhatsApp</strong>
                         +91 99999 99999<br>
@@ -1412,7 +1896,7 @@ def page_contact():
                 </div>
 
                 <div class="contact-line">
-                    <div class="ci-icon">📧</div>
+                    <div class="ci-icon-wrap">📧</div>
                     <div class="ci-text">
                         <strong>Email</strong>
                         info@silveroaksrealty.com<br>
@@ -1421,7 +1905,7 @@ def page_contact():
                 </div>
 
                 <div class="contact-line">
-                    <div class="ci-icon">⏰</div>
+                    <div class="ci-icon-wrap">⏰</div>
                     <div class="ci-text">
                         <strong>Office Hours</strong>
                         Mon – Sat: 9:00 AM – 7:00 PM<br>
@@ -1429,11 +1913,13 @@ def page_contact():
                     </div>
                 </div>
 
-                <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:24px 0;">
-                <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;line-height:1.7;margin:0;">
-                    🌿 Site visits available 7 days a week.<br>
-                    Complimentary pickup from Kompally for groups.
-                </p>
+                <div style="margin-top:6px;padding:16px;background:rgba(201,168,76,0.08);
+                            border-radius:10px;border:1px solid rgba(201,168,76,0.18);">
+                    <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;line-height:1.75;margin:0;">
+                        🌿 Site visits available 7 days a week.<br>
+                        Complimentary pickup from Kompally for groups of 4+.
+                    </p>
+                </div>
             </div>""", unsafe_allow_html=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
@@ -1445,31 +1931,62 @@ def page_contact():
 def render_footer():
     st.markdown("""
     <div class="footer">
-        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:36px;">
+        <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 1.2fr;gap:52px;margin-bottom:0;">
             <div>
                 <div class="footer-logo">🌿 Aranya Farms</div>
                 <div class="footer-tagline">Play · Live · Celebrate</div>
-                <p style="color:rgba(255,255,255,0.4);font-size:0.85rem;line-height:1.85;max-width:320px;font-weight:300;">
+                <p style="color:rgba(255,255,255,0.38);font-size:0.84rem;line-height:1.9;
+                          max-width:300px;font-weight:300;">
                     A premium gated farmland community by Silver Oaks Agro Farms, set across
                     55 acres of lush greenery at Achampet, Toopran, Telangana.
                 </p>
+                <div style="margin-top:24px;display:flex;gap:10px;">
+                    <a href="https://wa.me/919999999999" target="_blank"
+                       style="width:36px;height:36px;border-radius:50%;background:rgba(37,211,102,0.15);
+                              border:1px solid rgba(37,211,102,0.3);display:flex;align-items:center;
+                              justify-content:center;font-size:1rem;text-decoration:none;">💬</a>
+                    <a href="tel:+919999999999"
+                       style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,0.1);
+                              border:1px solid rgba(201,168,76,0.25);display:flex;align-items:center;
+                              justify-content:center;font-size:1rem;text-decoration:none;">📞</a>
+                    <a href="mailto:info@silveroaksrealty.com"
+                       style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.05);
+                              border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;
+                              justify-content:center;font-size:1rem;text-decoration:none;">📧</a>
+                </div>
             </div>
             <div>
-                <p style="color:var(--gold-light);font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;font-family:'Cinzel',serif;">Pages</p>
-                <p style="color:rgba(255,255,255,0.45);font-size:0.88rem;line-height:2.4;font-weight:300;">
+                <p style="color:var(--gold-light);font-family:'Cinzel',serif;font-size:0.65rem;
+                          letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;">Pages</p>
+                <p style="color:rgba(255,255,255,0.4);font-size:0.87rem;line-height:2.6;font-weight:300;">
                     Home<br>About<br>Properties<br>Location<br>Contact
                 </p>
             </div>
             <div>
-                <p style="color:var(--gold-light);font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;font-family:'Cinzel',serif;">Properties</p>
-                <p style="color:rgba(255,255,255,0.45);font-size:0.88rem;line-height:2.4;font-weight:300;">
+                <p style="color:var(--gold-light);font-family:'Cinzel',serif;font-size:0.65rem;
+                          letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;">Properties</p>
+                <p style="color:rgba(255,255,255,0.4);font-size:0.87rem;line-height:2.6;font-weight:300;">
                     Farm Plots<br>3-BHK Farm Houses<br>Premium Villas<br>Farm Lands<br>Book Site Visit
                 </p>
             </div>
+            <div>
+                <p style="color:var(--gold-light);font-family:'Cinzel',serif;font-size:0.65rem;
+                          letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;">Contact</p>
+                <p style="color:rgba(255,255,255,0.4);font-size:0.87rem;line-height:2.0;font-weight:300;">
+                    +91 99999 99999<br>
+                    +91 88888 88888<br>
+                    info@silveroaksrealty.com<br><br>
+                    <span style="font-size:0.8rem;">Mon–Sat: 9AM – 7PM</span><br>
+                    <span style="font-size:0.8rem;">Sunday: 10AM – 5PM</span>
+                </p>
+            </div>
         </div>
+        <hr class="footer-divider">
         <div class="footer-copy">
             © 2024 Aranya Farms by Silver Oaks Agro Farms · Silver Oaks Realty · Hyderabad, Telangana<br>
-            <span style="font-size:0.7rem;opacity:0.45;">All dimensions and prices are indicative and subject to change. Please contact the sales team for current pricing.</span>
+            <span style="font-size:0.7rem;opacity:0.55;">
+                All dimensions and prices are indicative and subject to change. Please contact our sales team for current pricing and availability.
+            </span>
         </div>
     </div>
     """, unsafe_allow_html=True)
