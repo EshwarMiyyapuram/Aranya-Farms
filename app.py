@@ -1373,106 +1373,41 @@ def page_home():
     <div class="hero">
         <div class="hero-grid-lines"></div>
         <div style="position:relative;z-index:2;width:100%;display:flex;align-items:center;gap:60px;">
-
-            <!-- LEFT CONTENT -->
             <div style="flex:1.15;min-width:0;">
-
-                <!-- WELCOME BADGE -->
-                <div style="
-                    background: rgba(45,106,79,0.45);
-                    border: 1px solid rgba(122,191,148,0.5);
-                    border-radius: 12px;
-                    padding: 16px 26px;
-                    margin-bottom: 28px;
-                    display: inline-block;
-                    backdrop-filter: blur(10px);
-                ">
-                    <div style="
-                        font-family: 'Cinzel', serif;
-                        font-size: 0.62rem;
-                        letter-spacing: 5px;
-                        color: rgba(255,255,255,0.65);
-                        text-transform: uppercase;
-                        margin-bottom: 7px;
-                    ">Welcome to</div>
-                    <div style="
-                        font-family: 'Cormorant Garamond', serif;
-                        font-size: 1.55rem;
-                        font-weight: 600;
-                        color: #7abf94;
-                        letter-spacing: 2px;
-                        line-height: 1.2;
-                    ">🌿 Silver Oak Agro Farms</div>
+                <div style="background:rgba(45,106,79,0.45);border:1px solid rgba(122,191,148,0.5);border-radius:12px;padding:16px 26px;margin-bottom:28px;display:inline-block;backdrop-filter:blur(10px);">
+                    <div style="font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:5px;color:rgba(255,255,255,0.65);text-transform:uppercase;margin-bottom:7px;">Welcome to</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;color:#7abf94;letter-spacing:2px;line-height:1.2;">&#127807; Silver Oak Agro Farms</div>
                 </div>
-
-                <!-- EYEBROW -->
                 <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
-
-                <!-- MAIN HEADING -->
                 <h1 class="hero-h1">
                     <strong style="color:#000000;">Luxury</strong>
                     <span style="color:#000000;"> Farm Living</span><br>
                     at <em>Aranya Farms</em>
                 </h1>
-
-                <!-- PARA -->
                 <p class="hero-para">
                     A premium gated community across 55 acres of lush green land at Achampet, Toopran —
                     where nature's serenity meets refined, modern living.
                 </p>
-
-                <!-- BADGE ROW -->
                 <div class="badge-row">
-                    <div class="stat-badge">
-                        <span class="sb-val" style="color:#000000;">55</span>
-                        <span class="sb-lbl" style="color:#000000;">Acres</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span class="sb-val" style="color:#000000;">Gated</span>
-                        <span class="sb-lbl" style="color:#000000;">Community</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span class="sb-val" style="color:#000000;">3-BHK</span>
-                        <span class="sb-lbl" style="color:#000000;">Farm Houses</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span class="sb-val" style="color:#000000;">5 min</span>
-                        <span class="sb-lbl" style="color:#000000;">From RRR</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span class="sb-val" style="color:#000000;">30 min</span>
-                        <span class="sb-lbl" style="color:#000000;">From ORR</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span class="sb-val" style="color:#000000;">₹49L+</span>
-                        <span class="sb-lbl" style="color:#000000;">Starting</span>
-                    </div>
+                    <div class="stat-badge"><span class="sb-val" style="color:#000000;">55</span><span class="sb-lbl" style="color:#000000;">Acres</span></div>
+                    <div class="stat-badge"><span class="sb-val" style="color:#000000;">Gated</span><span class="sb-lbl" style="color:#000000;">Community</span></div>
+                    <div class="stat-badge"><span class="sb-val" style="color:#000000;">3-BHK</span><span class="sb-lbl" style="color:#000000;">Farm Houses</span></div>
+                    <div class="stat-badge"><span class="sb-val" style="color:#000000;">5 min</span><span class="sb-lbl" style="color:#000000;">From RRR</span></div>
+                    <div class="stat-badge"><span class="sb-val" style="color:#000000;">30 min</span><span class="sb-lbl" style="color:#000000;">From ORR</span></div>
+                    <div class="stat-badge"><span class="sb-val" style="color:#000000;">&#8377;49L+</span><span class="sb-lbl" style="color:#000000;">Starting</span></div>
                 </div>
-
-                <!-- CTA BUTTONS -->
                 <div class="cta-row">
-                    <a class="btn-gold" href="#">📅 Book Site Visit</a>
-                    <a class="btn-ghost" href="#">🏘️ View Properties</a>
+                    <a class="btn-gold" href="#">&#128197; Book Site Visit</a>
+                    <a class="btn-ghost" href="#">&#127960;&#65039; View Properties</a>
                 </div>
             </div>
-
-            <!-- RIGHT IMAGE PLACEHOLDER -->
             <div style="flex:0.85;min-width:0;">
-                <div style="border:1px solid rgba(201,168,76,0.25);border-radius:18px;padding:80px 48px;
-                            text-align:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
-                    <div style="font-family:'Cormorant Garamond',serif;font-size:6rem;
-                                color:var(--gold);opacity:0.25;line-height:1;">🌾</div>
-                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;
-                                font-style:italic;color:rgba(255,255,255,0.55);margin-top:20px;">
-                        Aranya Farms
-                    </div>
-                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.28);
-                                letter-spacing:4px;text-transform:uppercase;margin-top:10px;">
-                        Achampet · Toopran · Telangana
-                    </div>
+                <div style="border:1px solid rgba(201,168,76,0.25);border-radius:18px;padding:80px 48px;text-align:center;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);">
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:6rem;color:var(--gold);opacity:0.25;line-height:1;">&#127806;</div>
+                    <div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-style:italic;color:rgba(255,255,255,0.55);margin-top:20px;">Aranya Farms</div>
+                    <div style="font-size:0.65rem;color:rgba(255,255,255,0.28);letter-spacing:4px;text-transform:uppercase;margin-top:10px;">Achampet &middot; Toopran &middot; Telangana</div>
                 </div>
             </div>
-
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -2373,7 +2308,7 @@ def render_footer():
                 <p style="color:var(--gold-light);font-family:'Cinzel',serif;font-size:0.65rem;
                           letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;">Contact</p>
                 <p style="color:rgba(255,255,255,0.4);font-size:0.87rem;line-height:2.0;font-weight:300;">
-                    +91 96402 22238<br>
+                    +91 96402 22237<br>
                     info@silveroaksrealty.com<br><br>
                     <span style="font-size:0.8rem;">Mon–Sat: 9AM – 7PM</span><br>
                     <span style="font-size:0.8rem;">Sunday: 10AM – 5PM</span>
