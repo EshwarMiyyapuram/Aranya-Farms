@@ -23,7 +23,7 @@ def inject_css():
         scroll-behavior: smooth;
     }
     .main .block-container {
-        padding: 60px 0 80px 0 !important;
+        padding: 0 0 40px 0 !important;
         max-width: 480px !important;
         margin: 0 auto !important;
     }
@@ -60,48 +60,14 @@ def inject_css():
         align-items: center;
         justify-content: space-between;
         height: 60px;
-        position: fixed;
+        position: sticky;
         top: 0;
-        z-index: 10000;
+        z-index: 999;
         border-bottom: 1px solid rgba(201,168,76,0.2);
         backdrop-filter: blur(12px);
         box-shadow: 0 2px 16px rgba(0,0,0,0.3);
         max-width: 480px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-    }
-    /* Push content below fixed top-nav */
-    .main .block-container > div:first-child { padding-top: 60px; }
-
-    /* Style nav buttons inside the sticky bar */
-    #top-nav-bar button {
-        background: transparent !important;
-        border: 1px solid transparent !important;
-        color: #3d5a45 !important;
-        font-family: 'Cinzel', serif !important;
-        font-size: 0.55rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 1px !important;
-        text-transform: uppercase !important;
-        border-radius: 50px !important;
-        padding: 5px 4px !important;
-        min-height: 36px !important;
-        line-height: 1.2 !important;
-        transition: all 0.2s !important;
-        box-shadow: none !important;
-        width: 100% !important;
-    }
-    #top-nav-bar button:hover {
-        background: rgba(45,106,79,0.09) !important;
-        border-color: rgba(201,168,76,0.3) !important;
-        color: #2d6a4f !important;
-    }
-    #top-nav-bar [data-testid="stColumns"] {
-        width: 100%;
-        gap: 2px !important;
-    }
-    #top-nav-bar > div {
+        margin: 0 auto;
         width: 100%;
     }
     .nav-brand { display:flex; align-items:center; gap:10px; }
@@ -127,86 +93,8 @@ def inject_css():
         display: inline-flex; align-items: center; gap: 4px;
     }
 
-    /* ══ BOTTOM NAV ══ */
-    .bottom-nav {
-        position: fixed; bottom: 0; left: 0; right: 0;
-        background: rgba(10,31,18,0.97);
-        border-top: 1px solid rgba(201,168,76,0.25);
-        display: flex; z-index: 1000;
-        max-width: 480px; margin: 0 auto;
-        backdrop-filter: blur(16px);
-    }
-    .bnav-item {
-        flex: 1; display: flex; flex-direction: column; align-items: center;
-        justify-content: center; padding: 10px 4px 8px;
-        text-decoration: none; cursor: pointer;
-        border: none; background: transparent;
-        transition: all 0.2s;
-    }
-    .bnav-icon { font-size: 1.3rem; line-height: 1; }
-    .bnav-label {
-        font-family: 'Cinzel', serif; font-size: 0.45rem;
-        color: rgba(255,255,255,0.45); letter-spacing: 1.5px;
-        text-transform: uppercase; margin-top: 3px;
-    }
-    .bnav-active .bnav-label { color: var(--gold); }
-    .bnav-active .bnav-icon { filter: drop-shadow(0 0 6px rgba(201,168,76,0.6)); }
-
-    /* ══ HORIZONTAL NAV MENU ══ */
-    .navbar-wrapper {
-        position: sticky;
-        top: 60px;
-        z-index: 9999;
-        background: rgba(250,247,240,0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding: 10px 0;
-        margin-top: 0 !important;
-        margin-bottom: 0;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        border-bottom: 1px solid rgba(201,168,76,0.15);
-        max-width: 480px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .navbar-row {
-        display: flex;
-        justify-content: center;
-        gap: 4px;
-        flex-wrap: wrap;
-        padding: 0 8px;
-    }
-    .navbar-btn {
-        font-family: 'Cinzel', serif;
-        font-size: 0.58rem;
-        font-weight: 600;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        color: var(--moss);
-        background: transparent;
-        border: 1px solid transparent;
-        border-radius: 50px;
-        padding: 6px 10px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        transition: all 0.2s ease;
-        white-space: nowrap;
-    }
-    .navbar-btn:hover {
-        color: var(--mid);
-        background: rgba(45,106,79,0.07);
-        border-color: rgba(201,168,76,0.25);
-    }
-    .navbar-btn-active {
-        color: var(--forest);
-        background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.08));
-        border-color: rgba(201,168,76,0.4);
-        box-shadow: 0 2px 8px rgba(201,168,76,0.15);
-    }
+    /* ══ BOTTOM NAV — REMOVED ══ */
+    .bottom-nav { display: none !important; }
 
     /* ══ HERO MOBILE ══ */
     .hero {
@@ -318,6 +206,20 @@ def inject_css():
         text-decoration: none; display: inline-flex; align-items: center;
         gap: 6px; width: 100%; justify-content: center;
         box-shadow: 0 4px 12px rgba(21,101,192,0.4);
+    }
+    .btn-brochure {
+        background: rgba(201,168,76,0.12); color: var(--gold-light);
+        padding: 13px 20px; border-radius: 6px;
+        font-weight: 600; font-size: 0.72rem; letter-spacing: 1.5px;
+        text-transform: uppercase; border: 1px solid rgba(201,168,76,0.45);
+        cursor: pointer; text-decoration: none; display: inline-flex;
+        align-items: center; gap: 6px; width: 100%; justify-content: center;
+        font-family: 'Cinzel', serif;
+        transition: all 0.2s ease;
+    }
+    .btn-brochure:hover {
+        background: rgba(201,168,76,0.2);
+        border-color: rgba(201,168,76,0.7);
     }
     .cta-stack { display: flex; flex-direction: column; gap: 10px; }
 
@@ -587,6 +489,27 @@ def inject_css():
         width: 100% !important;
     }
 
+    /* ══ BROCHURE DOWNLOAD BUTTON ══ */
+    [data-testid="stDownloadButton"] > button {
+        background: rgba(201,168,76,0.12) !important;
+        color: #e8c97e !important;
+        border: 1px solid rgba(201,168,76,0.5) !important;
+        border-radius: 6px !important;
+        font-family: 'Cinzel', serif !important;
+        font-weight: 600 !important;
+        font-size: 0.72rem !important;
+        letter-spacing: 1.5px !important;
+        text-transform: uppercase !important;
+        padding: 14px 20px !important;
+        width: 100% !important;
+        transition: all 0.2s !important;
+    }
+    [data-testid="stDownloadButton"] > button:hover {
+        background: rgba(201,168,76,0.22) !important;
+        border-color: rgba(201,168,76,0.75) !important;
+        color: #f5e9c5 !important;
+    }
+
     /* ══ ADMIN ══ */
     .admin-stat-card {
         background: #fff; border-radius: 12px; padding: 18px 16px;
@@ -682,9 +605,6 @@ PAGE_ICONS = ["🏡", "🌿", "🏘️", "📍", "📞"]
 PAGE_LABELS = ["Home", "About", "Properties", "Location", "Contact"]
 
 def render_navbar():
-    current = st.session_state.get("page", "🏡 Home")
-
-    # Top bar (logo + WhatsApp)
     st.markdown("""
     <div class="top-nav">
         <div class="nav-brand">
@@ -696,81 +616,7 @@ def render_navbar():
         </div>
         <a class="nav-wa-btn" href="https://wa.me/919640222237" target="_blank">💬 Chat</a>
     </div>
-    <div class="navbar-wrapper">
-        <div class="navbar-row-label">Navigation</div>
-    </div>
     """, unsafe_allow_html=True)
-
-    # Inject CSS to style the columns block that follows as the sticky nav menu
-    st.markdown("""
-    <style>
-    /* Style the nav columns block as the sticky horizontal navbar */
-    div[data-testid="stColumns"].top-nav-cols {
-        position: sticky !important;
-        top: 60px !important;
-        z-index: 9999 !important;
-    }
-    .nav-col-block {
-        position: sticky;
-        top: 60px;
-        z-index: 9999;
-        background: rgba(250,247,240,0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding: 8px 6px;
-        margin-top: -12px !important;
-        margin-bottom: 0 !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        border-bottom: 1px solid rgba(201,168,76,0.15);
-        display: flex;
-        justify-content: center;
-        gap: 2px;
-        flex-wrap: nowrap;
-    }
-    /* Override Streamlit column button styles for the top nav */
-    .top-nav-button-area div[data-testid="stColumns"] {
-        gap: 4px !important;
-    }
-    .top-nav-button-area button[kind="secondary"] {
-        background: transparent !important;
-        border: 1px solid transparent !important;
-        color: var(--moss) !important;
-        font-family: 'Cinzel', serif !important;
-        font-size: 0.58rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 1.2px !important;
-        text-transform: uppercase !important;
-        border-radius: 50px !important;
-        padding: 5px 8px !important;
-        min-height: 0 !important;
-        height: auto !important;
-        transition: all 0.2s !important;
-    }
-    .top-nav-button-area button[kind="secondary"]:hover {
-        background: rgba(45,106,79,0.07) !important;
-        border-color: rgba(201,168,76,0.25) !important;
-        color: var(--mid) !important;
-    }
-    </style>
-    <div class="nav-col-block" id="top-nav-bar">
-    """, unsafe_allow_html=True)
-
-    cols = st.columns(5)
-    for i, (icon, label, page) in enumerate(zip(PAGE_ICONS, PAGE_LABELS, PAGES)):
-        with cols[i]:
-            is_active = current == page
-            btn_style = (
-                "background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.08));"
-                "border:1px solid rgba(201,168,76,0.4) !important;"
-                "color:var(--forest) !important;"
-                "box-shadow:0 2px 8px rgba(201,168,76,0.15);"
-            ) if is_active else ""
-
-            if st.button(f"{icon}\n{label}", key=f"topnav_{i}", use_container_width=True):
-                st.session_state.page = page
-                st.rerun()
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
 def render_bottom_nav():
     current = st.session_state.get("page", "🏡 Home")
@@ -844,6 +690,7 @@ def page_home():
             <div class="cta-stack">
                 <a class="btn-gold" href="tel:+919640222237">&#128197; Book Free Site Visit</a>
                 <a class="btn-wa" href="https://wa.me/919640222237" target="_blank">&#128172; WhatsApp Us</a>
+                <a class="btn-brochure" href="images/Aranya Farms - Brochure.pdf" download="Aranya_Farms_Brochure.pdf">&#128196; Download Brochure</a>
             </div>
         </div>
     </div>
@@ -857,6 +704,22 @@ def page_home():
         <div class="strip-item"><span class="strip-val">18+</span><span class="strip-lbl">Amenities</span></div>
     </div>
     """, unsafe_allow_html=True)
+
+    # BROCHURE DOWNLOAD — uses Streamlit's native download_button for reliable file serving
+    brochure_path = "images/Aranya Farms - Brochure.pdf"
+    if os.path.exists(brochure_path):
+        with open(brochure_path, "rb") as f:
+            brochure_bytes = f.read()
+        st.markdown('<div style="padding:16px 20px 0;">', unsafe_allow_html=True)
+        st.download_button(
+            label="📄  Download Brochure  —  Aranya Farms",
+            data=brochure_bytes,
+            file_name="Aranya_Farms_Brochure.pdf",
+            mime="application/pdf",
+            use_container_width=True,
+            key="brochure_download_home",
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # WHY ARANYA
     st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
@@ -1375,7 +1238,6 @@ def main():
         page_contact()
 
     render_footer()
-    render_bottom_nav()
 
 
 if __name__ == "__main__":
