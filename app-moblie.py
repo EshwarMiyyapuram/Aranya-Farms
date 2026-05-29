@@ -96,6 +96,46 @@ def inject_css():
     /* ══ BOTTOM NAV — REMOVED ══ */
     .bottom-nav { display: none !important; }
 
+    /* ══ HORIZONTAL NAV BAR (below header) ══ */
+    .horiz-nav {
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+        background: rgba(250,247,240,0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(201,168,76,0.2);
+        box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+        padding: 6px 8px;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    .horiz-nav [data-testid="stColumns"] {
+        gap: 2px !important;
+    }
+    .horiz-nav button {
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        color: #3d5a45 !important;
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.52rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 1px !important;
+        text-transform: uppercase !important;
+        border-radius: 50px !important;
+        padding: 6px 2px !important;
+        min-height: 40px !important;
+        line-height: 1.3 !important;
+        box-shadow: none !important;
+        transition: all 0.18s !important;
+        width: 100% !important;
+    }
+    .horiz-nav button:hover {
+        background: rgba(45,106,79,0.08) !important;
+        border-color: rgba(201,168,76,0.3) !important;
+        color: #2d6a4f !important;
+    }
+
     /* ══ HERO MOBILE ══ */
     .hero {
         background: linear-gradient(170deg, var(--forest) 0%, #0f2416 40%, #1a3d27 100%);
@@ -510,6 +550,37 @@ def inject_css():
         color: #f5e9c5 !important;
     }
 
+    /* ══ BROCHURE DOWNLOAD BUTTON ══ */
+    [data-testid="stDownloadButton"] > button {
+        background: rgba(201,168,76,0.1) !important;
+        color: #c9a84c !important;
+        border: 1px solid rgba(201,168,76,0.5) !important;
+        border-radius: 6px !important;
+        font-family: 'Cinzel', serif !important;
+        font-weight: 700 !important;
+        font-size: 0.72rem !important;
+        letter-spacing: 2px !important;
+        text-transform: uppercase !important;
+        padding: 14px 20px !important;
+        width: 100% !important;
+        box-shadow: 0 2px 12px rgba(201,168,76,0.15) !important;
+        transition: all 0.2s !important;
+    }
+    [data-testid="stDownloadButton"] > button:hover {
+        background: rgba(201,168,76,0.2) !important;
+        border-color: rgba(201,168,76,0.8) !important;
+        box-shadow: 0 4px 18px rgba(201,168,76,0.25) !important;
+    }
+    .btn-brochure-dl {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        background: rgba(201,168,76,0.1);
+        color: #c9a84c; border: 1px solid rgba(201,168,76,0.5);
+        border-radius: 6px; padding: 14px 20px;
+        font-family: 'Cinzel', serif; font-weight: 700;
+        font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+        text-decoration: none; width: 100%; box-sizing: border-box;
+    }
+
     /* ══ ADMIN ══ */
     .admin-stat-card {
         background: #fff; border-radius: 12px; padding: 18px 16px;
@@ -605,6 +676,9 @@ PAGE_ICONS = ["🏡", "🌿", "🏘️", "📍", "📞"]
 PAGE_LABELS = ["Home", "About", "Properties", "Location", "Contact"]
 
 def render_navbar():
+    current = st.session_state.get("page", "🏡 Home")
+
+    # Logo / top bar
     st.markdown("""
     <div class="top-nav">
         <div class="nav-brand">
@@ -617,6 +691,16 @@ def render_navbar():
         <a class="nav-wa-btn" href="https://wa.me/919640222237" target="_blank">💬 Chat</a>
     </div>
     """, unsafe_allow_html=True)
+
+    # Horizontal page-navigation buttons directly below the header
+    st.markdown('<div class="horiz-nav">', unsafe_allow_html=True)
+    cols = st.columns(5)
+    for i, (icon, label, page) in enumerate(zip(PAGE_ICONS, PAGE_LABELS, PAGES)):
+        with cols[i]:
+            if st.button(f"{icon}\n{label}", key=f"hnav_{i}", use_container_width=True):
+                st.session_state.page = page
+                st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 def render_bottom_nav():
     current = st.session_state.get("page", "🏡 Home")
@@ -705,21 +789,26 @@ def page_home():
     </div>
     """, unsafe_allow_html=True)
 
-    # BROCHURE DOWNLOAD — uses Streamlit's native download_button for reliable file serving
+    # BROCHURE DOWNLOAD
     brochure_path = "images/Aranya Farms - Brochure.pdf"
+    st.markdown('<div style="padding:16px 20px 4px;">', unsafe_allow_html=True)
     if os.path.exists(brochure_path):
         with open(brochure_path, "rb") as f:
             brochure_bytes = f.read()
-        st.markdown('<div style="padding:16px 20px 0;">', unsafe_allow_html=True)
         st.download_button(
-            label="📄  Download Brochure  —  Aranya Farms",
+            label="📄  Download Brochure",
             data=brochure_bytes,
             file_name="Aranya_Farms_Brochure.pdf",
             mime="application/pdf",
             use_container_width=True,
-            key="brochure_download_home",
+            key="brochure_dl",
         )
-        st.markdown('</div>', unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <a class="btn-brochure-dl" href="#" onclick="alert('Brochure PDF not found. Please add: images/Aranya Farms - Brochure.pdf')">
+            📄 Download Brochure
+        </a>""", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
     # WHY ARANYA
     st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
