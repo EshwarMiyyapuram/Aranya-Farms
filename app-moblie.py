@@ -23,7 +23,7 @@ def inject_css():
         scroll-behavior: smooth;
     }
     .main .block-container {
-        padding: 0 0 80px 0 !important;
+        padding: 60px 0 80px 0 !important;
         max-width: 480px !important;
         margin: 0 auto !important;
     }
@@ -60,14 +60,48 @@ def inject_css():
         align-items: center;
         justify-content: space-between;
         height: 60px;
-        position: sticky;
+        position: fixed;
         top: 0;
-        z-index: 999;
+        z-index: 10000;
         border-bottom: 1px solid rgba(201,168,76,0.2);
         backdrop-filter: blur(12px);
         box-shadow: 0 2px 16px rgba(0,0,0,0.3);
         max-width: 480px;
-        margin: 0 auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+    }
+    /* Push content below fixed top-nav */
+    .main .block-container > div:first-child { padding-top: 60px; }
+
+    /* Style nav buttons inside the sticky bar */
+    #top-nav-bar button {
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        color: #3d5a45 !important;
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.55rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 1px !important;
+        text-transform: uppercase !important;
+        border-radius: 50px !important;
+        padding: 5px 4px !important;
+        min-height: 36px !important;
+        line-height: 1.2 !important;
+        transition: all 0.2s !important;
+        box-shadow: none !important;
+        width: 100% !important;
+    }
+    #top-nav-bar button:hover {
+        background: rgba(45,106,79,0.09) !important;
+        border-color: rgba(201,168,76,0.3) !important;
+        color: #2d6a4f !important;
+    }
+    #top-nav-bar [data-testid="stColumns"] {
+        width: 100%;
+        gap: 2px !important;
+    }
+    #top-nav-bar > div {
         width: 100%;
     }
     .nav-brand { display:flex; align-items:center; gap:10px; }
@@ -117,6 +151,62 @@ def inject_css():
     }
     .bnav-active .bnav-label { color: var(--gold); }
     .bnav-active .bnav-icon { filter: drop-shadow(0 0 6px rgba(201,168,76,0.6)); }
+
+    /* ══ HORIZONTAL NAV MENU ══ */
+    .navbar-wrapper {
+        position: sticky;
+        top: 60px;
+        z-index: 9999;
+        background: rgba(250,247,240,0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 10px 0;
+        margin-top: 0 !important;
+        margin-bottom: 0;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-bottom: 1px solid rgba(201,168,76,0.15);
+        max-width: 480px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .navbar-row {
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+        flex-wrap: wrap;
+        padding: 0 8px;
+    }
+    .navbar-btn {
+        font-family: 'Cinzel', serif;
+        font-size: 0.58rem;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--moss);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 50px;
+        padding: 6px 10px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .navbar-btn:hover {
+        color: var(--mid);
+        background: rgba(45,106,79,0.07);
+        border-color: rgba(201,168,76,0.25);
+    }
+    .navbar-btn-active {
+        color: var(--forest);
+        background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.08));
+        border-color: rgba(201,168,76,0.4);
+        box-shadow: 0 2px 8px rgba(201,168,76,0.15);
+    }
 
     /* ══ HERO MOBILE ══ */
     .hero {
@@ -592,6 +682,9 @@ PAGE_ICONS = ["🏡", "🌿", "🏘️", "📍", "📞"]
 PAGE_LABELS = ["Home", "About", "Properties", "Location", "Contact"]
 
 def render_navbar():
+    current = st.session_state.get("page", "🏡 Home")
+
+    # Top bar (logo + WhatsApp)
     st.markdown("""
     <div class="top-nav">
         <div class="nav-brand">
@@ -603,7 +696,81 @@ def render_navbar():
         </div>
         <a class="nav-wa-btn" href="https://wa.me/919640222237" target="_blank">💬 Chat</a>
     </div>
+    <div class="navbar-wrapper">
+        <div class="navbar-row-label">Navigation</div>
+    </div>
     """, unsafe_allow_html=True)
+
+    # Inject CSS to style the columns block that follows as the sticky nav menu
+    st.markdown("""
+    <style>
+    /* Style the nav columns block as the sticky horizontal navbar */
+    div[data-testid="stColumns"].top-nav-cols {
+        position: sticky !important;
+        top: 60px !important;
+        z-index: 9999 !important;
+    }
+    .nav-col-block {
+        position: sticky;
+        top: 60px;
+        z-index: 9999;
+        background: rgba(250,247,240,0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 8px 6px;
+        margin-top: -12px !important;
+        margin-bottom: 0 !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-bottom: 1px solid rgba(201,168,76,0.15);
+        display: flex;
+        justify-content: center;
+        gap: 2px;
+        flex-wrap: nowrap;
+    }
+    /* Override Streamlit column button styles for the top nav */
+    .top-nav-button-area div[data-testid="stColumns"] {
+        gap: 4px !important;
+    }
+    .top-nav-button-area button[kind="secondary"] {
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        color: var(--moss) !important;
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.58rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 1.2px !important;
+        text-transform: uppercase !important;
+        border-radius: 50px !important;
+        padding: 5px 8px !important;
+        min-height: 0 !important;
+        height: auto !important;
+        transition: all 0.2s !important;
+    }
+    .top-nav-button-area button[kind="secondary"]:hover {
+        background: rgba(45,106,79,0.07) !important;
+        border-color: rgba(201,168,76,0.25) !important;
+        color: var(--mid) !important;
+    }
+    </style>
+    <div class="nav-col-block" id="top-nav-bar">
+    """, unsafe_allow_html=True)
+
+    cols = st.columns(5)
+    for i, (icon, label, page) in enumerate(zip(PAGE_ICONS, PAGE_LABELS, PAGES)):
+        with cols[i]:
+            is_active = current == page
+            btn_style = (
+                "background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.08));"
+                "border:1px solid rgba(201,168,76,0.4) !important;"
+                "color:var(--forest) !important;"
+                "box-shadow:0 2px 8px rgba(201,168,76,0.15);"
+            ) if is_active else ""
+
+            if st.button(f"{icon}\n{label}", key=f"topnav_{i}", use_container_width=True):
+                st.session_state.page = page
+                st.rerun()
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
 def render_bottom_nav():
     current = st.session_state.get("page", "🏡 Home")
