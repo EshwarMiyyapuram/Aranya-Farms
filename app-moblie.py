@@ -624,6 +624,99 @@ def inject_css():
     /* ══ SECTION DIVIDER ══ */
     .sec-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent); margin: 0; }
 
+    /* ══ GALLERY PAGE ══ */
+    .gallery-hero {
+        background: linear-gradient(160deg, var(--forest) 0%, #0a1f12 40%, #162e1e 100%);
+        padding: 44px 20px 36px;
+        position: relative; overflow: hidden;
+        border-bottom: 1px solid rgba(201,168,76,0.18);
+    }
+    .gallery-hero::before {
+        content:''; position:absolute; bottom:-60px; left:-40px;
+        width:260px; height:260px; border-radius:50%;
+        background: radial-gradient(circle, rgba(201,168,76,0.10) 0%, transparent 65%);
+    }
+    .gallery-hero-title {
+        font-family:'Cormorant Garamond',serif; font-size:2.4rem; font-weight:300;
+        color:#faf7f0; line-height:1.1; margin-bottom:12px; letter-spacing:-0.5px;
+        position:relative; z-index:2;
+    }
+    .gallery-hero-title em { color:var(--gold-light); font-style:italic; }
+    .gallery-hero-sub {
+        color:rgba(250,247,240,0.68); font-size:0.88rem; line-height:1.8;
+        font-weight:300; position:relative; z-index:2; margin:0;
+    }
+
+    .gallery-section {
+        padding: 32px 16px 8px;
+        background: var(--cream);
+    }
+    .gallery-section-title {
+        font-family:'Cormorant Garamond',serif; font-size:1.7rem; font-weight:400;
+        color:var(--ink); margin-bottom:4px; line-height:1.2;
+    }
+    .gallery-section-title em { color:var(--mid); font-style:italic; }
+    .gallery-rule {
+        width:36px; height:2px;
+        background:linear-gradient(90deg, var(--gold), var(--gold-light));
+        border-radius:2px; margin:10px 0 20px;
+    }
+
+    .gallery-img-card {
+        border-radius:12px; overflow:hidden;
+        box-shadow:0 4px 20px rgba(0,0,0,0.10);
+        border:1px solid rgba(201,168,76,0.15);
+        margin-bottom:14px;
+        transition:transform 0.28s ease, box-shadow 0.28s ease;
+        background:#fff;
+    }
+    .gallery-img-card:hover {
+        transform:scale(1.025);
+        box-shadow:0 10px 36px rgba(0,0,0,0.18);
+    }
+    .gallery-img-card img {
+        width:100%; display:block;
+        aspect-ratio:4/3; object-fit:cover;
+    }
+    .gallery-img-label {
+        font-family:'Cinzel',serif; font-size:0.56rem;
+        letter-spacing:2px; text-transform:uppercase;
+        color:var(--gold); padding:8px 12px;
+        background:linear-gradient(to right, rgba(10,31,18,0.03), transparent);
+    }
+
+    .gallery-video-card {
+        background:#fff;
+        border-radius:14px; overflow:hidden;
+        box-shadow:0 4px 22px rgba(0,0,0,0.10);
+        border:1px solid rgba(201,168,76,0.18);
+        margin-bottom:18px;
+    }
+    .gallery-video-header {
+        background:linear-gradient(135deg, var(--deep), #1f4632);
+        padding:14px 16px 12px;
+        display:flex; align-items:center; gap:10px;
+        border-bottom:1px solid rgba(201,168,76,0.15);
+    }
+    .gallery-video-icon {
+        width:34px; height:34px; border-radius:50%;
+        background:linear-gradient(135deg, var(--gold), var(--gold-light));
+        display:flex; align-items:center; justify-content:center;
+        font-size:0.9rem; flex-shrink:0;
+    }
+    .gallery-video-title {
+        font-family:'Cinzel',serif; color:var(--gold-light);
+        font-size:0.62rem; letter-spacing:2.5px; text-transform:uppercase;
+    }
+    .gallery-video-body { padding:14px; }
+
+    .gallery-divider {
+        height:1px;
+        background:linear-gradient(90deg, transparent, rgba(201,168,76,0.18), transparent);
+        margin:4px 0 0;
+    }
+    
+
     </style>
     """, unsafe_allow_html=True)
 
@@ -678,9 +771,9 @@ def load_enquiries():
 
 
 # ─── NAVIGATION ──────────────────────────────────────────────────────────────
-PAGES = ["🏡 Home", "🌿 About", "🏘️ Properties", "📍 Location", "📞 Contact"]
-PAGE_ICONS = ["🏡", "🌿", "🏘️", "📍", "📞"]
-PAGE_LABELS = ["Home", "About", "Properties", "Location", "Contact"]
+PAGES = ["🏡 Home", "🌿 About", "🏘️ Properties", "🖼️ Gallery", "📍 Location", "📞 Contact"]
+PAGE_ICONS = ["🏡", "🌿", "🏘️", "🖼️", "📍", "📞"]
+PAGE_LABELS = ["Home", "About", "Properties", "Gallery", "Location", "Contact"]
 
 def render_navbar():
     current = st.session_state.get("page", "🏡 Home")
@@ -701,7 +794,7 @@ def render_navbar():
 
     # Horizontal page-navigation buttons directly below the header
     st.markdown('<div class="horiz-nav">', unsafe_allow_html=True)
-    cols = st.columns(5)
+    cols = st.columns(6)
     for i, (icon, label, page) in enumerate(zip(PAGE_ICONS, PAGE_LABELS, PAGES)):
         with cols[i]:
             if st.button(f"{icon}\n{label}", key=f"hnav_{i}", use_container_width=True):
@@ -711,7 +804,7 @@ def render_navbar():
 
 def render_bottom_nav():
     current = st.session_state.get("page", "🏡 Home")
-    cols = st.columns(5)
+    cols = st.columns(6)
     st.markdown('<div class="bottom-nav">', unsafe_allow_html=True)
     for i, (icon, label, page) in enumerate(zip(PAGE_ICONS, PAGE_LABELS, PAGES)):
         with cols[i]:
@@ -1151,6 +1244,137 @@ def page_contact():
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+#  PAGE — GALLERY
+# ═══════════════════════════════════════════════════════════════════════════
+def page_gallery():
+    GALLERY_DIR = "image-2"
+
+    def safe_image(filename, alt=""):
+        """Return (b64, mime) tuple or None if file missing."""
+        path = os.path.join(GALLERY_DIR, filename)
+        if not os.path.exists(path):
+            return None
+        try:
+            with open(path, "rb") as f:
+                data = base64.b64encode(f.read()).decode()
+            ext = filename.rsplit(".", 1)[-1].lower()
+            mime = "image/png" if ext == "png" else "image/jpeg"
+            return data, mime
+        except Exception:
+            return None
+
+    def gallery_img_card(filename, label):
+        result = safe_image(filename)
+        if result is None:
+            return
+        b64, mime = result
+        st.markdown(f"""
+        <div class="gallery-img-card">
+            <img src="data:{mime};base64,{b64}" alt="{label}" />
+            <div class="gallery-img-label">{label}</div>
+        </div>""", unsafe_allow_html=True)
+
+    def gallery_video_card(filename, title, number):
+        path = os.path.join(GALLERY_DIR, filename)
+        if not os.path.exists(path):
+            return
+        st.markdown(f"""
+        <div class="gallery-video-card">
+            <div class="gallery-video-header">
+                <div class="gallery-video-icon">▶</div>
+                <div>
+                    <div class="gallery-video-title">Video {number} · {title}</div>
+                </div>
+            </div>
+            <div class="gallery-video-body">
+        """, unsafe_allow_html=True)
+        st.video(path)
+        st.markdown("</div></div>", unsafe_allow_html=True)
+
+    # ── HERO ──────────────────────────────────────────────────────────────────
+    st.markdown("""
+    <div class="gallery-hero">
+        <div class="hero-grid-lines"></div>
+        <div style="position:relative;z-index:2;">
+            <div class="hero-eyebrow">Visual Tour</div>
+            <div class="gallery-hero-title">Aranya Farms <em>Gallery</em></div>
+            <p class="gallery-hero-sub">
+                Explore the entrance, roads, landscapes and on-site development
+                through our latest project visuals.
+            </p>
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+    # ── SECTION 1: Grand Entrance ─────────────────────────────────────────────
+    st.markdown("""
+    <div class="gallery-section">
+        <div class="hero-eyebrow">Section 01</div>
+        <div class="gallery-section-title"><em>Grand</em> Entrance</div>
+        <div class="gallery-rule"></div>
+    </div>""", unsafe_allow_html=True)
+
+    with st.container():
+        col1, col2 = st.columns(2, gap="small")
+        with col1:
+            gallery_img_card("gate1.jpeg", "Main Gate · View 1")
+        with col2:
+            gallery_img_card("gate2.jpeg", "Main Gate · View 2")
+
+    st.markdown('<div class="gallery-divider"></div>', unsafe_allow_html=True)
+
+    # ── SECTION 2: Internal Roads & Layout ───────────────────────────────────
+    st.markdown("""
+    <div class="gallery-section">
+        <div class="hero-eyebrow">Section 02</div>
+        <div class="gallery-section-title">Internal Roads <em>&amp; Layout</em></div>
+        <div class="gallery-rule"></div>
+    </div>""", unsafe_allow_html=True)
+
+    with st.container():
+        st.markdown('<div style="padding:0 16px 16px;">', unsafe_allow_html=True)
+        gallery_img_card("way1.jpeg", "Internal Road · Layout View")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="gallery-divider"></div>', unsafe_allow_html=True)
+
+    # ── SECTION 3: Land Views ────────────────────────────────────────────────
+    st.markdown("""
+    <div class="gallery-section">
+        <div class="hero-eyebrow">Section 03</div>
+        <div class="gallery-section-title"><em>Land</em> Views</div>
+        <div class="gallery-rule"></div>
+    </div>""", unsafe_allow_html=True)
+
+    with st.container():
+        col1, col2 = st.columns(2, gap="small")
+        with col1:
+            gallery_img_card("land1.png", "Land View 1")
+            gallery_img_card("land3.png", "Land View 3")
+        with col2:
+            gallery_img_card("land2.png", "Land View 2")
+            gallery_img_card("land4.png", "Land View 4")
+
+    st.markdown('<div class="gallery-divider"></div>', unsafe_allow_html=True)
+
+    # ── SECTION 4: Project Videos ────────────────────────────────────────────
+    st.markdown("""
+    <div class="gallery-section">
+        <div class="hero-eyebrow">Section 04</div>
+        <div class="gallery-section-title">Project <em>Videos</em></div>
+        <div class="gallery-rule"></div>
+    </div>""", unsafe_allow_html=True)
+
+    with st.container():
+        st.markdown('<div style="padding:0 16px 8px;">', unsafe_allow_html=True)
+        gallery_video_card("video-1.mp4", "Site Walkthrough", 1)
+        gallery_video_card("video-2.mp4", "Project Overview",  2)
+        gallery_video_card("video-3.mp4", "Aerial View",       3)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown('<div style="height:20px;"></div>', unsafe_allow_html=True)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 #  ADMIN SECTION
 # ═══════════════════════════════════════════════════════════════════════════
 def render_admin_section():
@@ -1308,6 +1532,8 @@ def main():
         page_about()
     elif page == "🏘️ Properties":
         page_properties()
+    elif page == "🖼️ Gallery":
+        page_gallery()
     elif page == "📍 Location":
         page_location()
     elif page == "📞 Contact":
