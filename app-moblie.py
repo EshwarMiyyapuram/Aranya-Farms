@@ -579,6 +579,13 @@ def inject_css():
         font-family: 'Cinzel', serif; font-weight: 700;
         font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
         text-decoration: none; width: 100%; box-sizing: border-box;
+        transition: all 0.2s ease;
+    }
+    .btn-brochure-dl:hover {
+        background: rgba(201,168,76,0.22);
+        border-color: rgba(201,168,76,0.8);
+        color: #e8c97e;
+        box-shadow: 0 4px 18px rgba(201,168,76,0.25);
     }
 
     /* ══ ADMIN ══ */
@@ -789,25 +796,23 @@ def page_home():
     </div>
     """, unsafe_allow_html=True)
 
-    # BROCHURE DOWNLOAD
-    brochure_path = "images/Aranya Farms - Brochure.pdf"
+    # BROCHURE DOWNLOAD — robust path resolution for Streamlit Cloud
+    _here = os.path.dirname(os.path.abspath(__file__))
+    brochure_path = os.path.join(_here, "images", "Aranya Farms - Brochure.pdf")
     st.markdown('<div style="padding:16px 20px 4px;">', unsafe_allow_html=True)
     if os.path.exists(brochure_path):
         with open(brochure_path, "rb") as f:
             brochure_bytes = f.read()
-        st.download_button(
-            label="📄  Download Brochure",
-            data=brochure_bytes,
-            file_name="Aranya_Farms_Brochure.pdf",
-            mime="application/pdf",
-            use_container_width=True,
-            key="brochure_dl",
-        )
-    else:
-        st.markdown("""
-        <a class="btn-brochure-dl" href="#" onclick="alert('Brochure PDF not found. Please add: images/Aranya Farms - Brochure.pdf')">
-            📄 Download Brochure
+        # Use base64 inline href — works on all platforms, no empty-file issue
+        b64_pdf = base64.b64encode(brochure_bytes).decode()
+        st.markdown(f"""
+        <a class="btn-brochure-dl"
+           href="data:application/pdf;base64,{b64_pdf}"
+           download="Aranya_Farms_Brochure.pdf">
+            📄 &nbsp; Download Brochure
         </a>""", unsafe_allow_html=True)
+    else:
+        st.warning("⚠️ Brochure PDF not found at: images/Aranya Farms - Brochure.pdf")
     st.markdown('</div>', unsafe_allow_html=True)
 
     # WHY ARANYA
