@@ -781,7 +781,6 @@ def page_home():
             <div class="cta-stack">
                 <a class="btn-gold" href="tel:+919640222237">&#128197; Book Free Site Visit</a>
                 <a class="btn-wa" href="https://wa.me/919640222237" target="_blank">&#128172; WhatsApp Us</a>
-                <a class="btn-brochure" href="images/Aranya Farms - Brochure.pdf" download="Aranya_Farms_Brochure.pdf">&#128196; Download Brochure</a>
             </div>
         </div>
     </div>
@@ -796,24 +795,7 @@ def page_home():
     </div>
     """, unsafe_allow_html=True)
 
-    # BROCHURE DOWNLOAD — robust path resolution for Streamlit Cloud
-    _here = os.path.dirname(os.path.abspath(__file__))
-    brochure_path = os.path.join(_here, "images", "Aranya Farms - Brochure.pdf")
-    st.markdown('<div style="padding:16px 20px 4px;">', unsafe_allow_html=True)
-    if os.path.exists(brochure_path):
-        with open(brochure_path, "rb") as f:
-            brochure_bytes = f.read()
-        # Use base64 inline href — works on all platforms, no empty-file issue
-        b64_pdf = base64.b64encode(brochure_bytes).decode()
-        st.markdown(f"""
-        <a class="btn-brochure-dl"
-           href="data:application/pdf;base64,{b64_pdf}"
-           download="Aranya_Farms_Brochure.pdf">
-            📄 &nbsp; Download Brochure
-        </a>""", unsafe_allow_html=True)
-    else:
-        st.warning("⚠️ Brochure PDF not found at: images/Aranya Farms - Brochure.pdf")
-    st.markdown('</div>', unsafe_allow_html=True)
+
 
     # WHY ARANYA
     st.markdown('<div class="sec sec-cream">', unsafe_allow_html=True)
