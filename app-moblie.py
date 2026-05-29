@@ -661,18 +661,18 @@ def page_home():
             </div>
             <div class="hero-eyebrow">Silver Oaks Agro Farms Presents</div>
             <h1 class="hero-h1">
-                <strong style="color:#000000;">Luxury</strong>
-                <span style="color:#000000;"> Farm Living</span><br>
+                <strong style="color:#e8c97;">Luxury</strong>
+                <span style="color:#f5e9c5;"> Farm Living</span><br>
                 at <em>Aranya Farms</em>
             </h1>
             <p class="hero-para">A premium gated community across 55 acres of lush green land at Achampet, Toopran — where nature meets refined living.</p>
             <div class="badge-grid">
-                <div class="stat-badge"><span class="sb-val" style="color:#000;">55</span><span class="sb-lbl" style="color:#000;">Acres</span></div>
-                <div class="stat-badge"><span class="sb-val" style="color:#000;">Gated</span><span class="sb-lbl" style="color:#000;">Community</span></div>
-                <div class="stat-badge"><span class="sb-val" style="color:#000;">3-BHK</span><span class="sb-lbl" style="color:#000;">Farm Houses</span></div>
-                <div class="stat-badge"><span class="sb-val" style="color:#000;">5 min</span><span class="sb-lbl" style="color:#000;">From RRR</span></div>
-                <div class="stat-badge"><span class="sb-val" style="color:#000;">30 min</span><span class="sb-lbl" style="color:#000;">From ORR</span></div>
-                <div class="stat-badge"><span class="sb-val" style="color:#000;">&#8377;49L+</span><span class="sb-lbl" style="color:#000;">Starting</span></div>
+                <div class="stat-badge"><span class="sb-val" style="color:#e8c97e;">55</span><span class="sb-lbl" style="color:#f5e9c5;">Acres</span></div>
+                <div class="stat-badge"><span class="sb-val" style="color:#e8c97e;">Gated</span><span class="sb-lbl" style="color:#f5e9c5;">Community</span></div>
+                <div class="stat-badge"><span class="sb-val" style="color:#e8c97e;">3-BHK</span><span class="sb-lbl" style="color:#f5e9c5;">Farm Houses</span></div>
+                <div class="stat-badge"><span class="sb-val" style="color:#e8c97e;">5 min</span><span class="sb-lbl" style="color:#f5e9c5;">From RRR</span></div>
+                <div class="stat-badge"><span class="sb-val" style="color:#e8c97e;">30 min</span><span class="sb-lbl" style="color:#f5e9c5;">From ORR</span></div>
+                <div class="stat-badge"><span class="sb-val" style="color:#e8c97e;">&#8377;49L+</span><span class="sb-lbl" style="color:#f5e9c5;">Starting</span></div>
             </div>
             <div class="cta-stack">
                 <a class="btn-gold" href="tel:+919640222237">&#128197; Book Free Site Visit</a>
